@@ -1,0 +1,24 @@
+Import('BaseEnv')
+
+env = BaseEnv.Clone()
+env['CPPPATH'] = ['.','QtSoap']
+env.EnableQt4Modules(['QtCore','QtXml','QtNetwork'])
+
+Sources = ['baseconverters.cpp','comunicationmanager.cpp',
+           'QtSoap/qtsoap.cpp']
+
+Headers = ['QRemoteSignal','absservice.h','baseconverters.h',
+           'comunicationmanager.h','QtSoap/qtsoap.h',
+           'QtSoap/QtSoapArray','QtSoap/QtSoapArrayIterator',
+           'QtSoap/QtSoapMessage','QtSoap/QtSoapNamespace',
+           'QtSoap/QtSoapQName','QtSoap/QtSoapSimpleType',
+           'QtSoap/QtSoapStruct','QtSoap/QtSoapStructIterator',
+           'QtSoap/QtSoapType','QtSoap/QtSoapTypeConstructor',
+           'QtSoap/QtSoapTypeConstructorBase',
+           'QtSoap/QtSoapTypeFactory']
+
+libs = {}
+libs['shared'] = env.SharedLibrary('QRemoteSignal',Sources)
+libs['static'] = env.Library('QRemoteSignal',Sources)
+
+Return('libs')

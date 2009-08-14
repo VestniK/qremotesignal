@@ -1,0 +1,12 @@
+Import('BaseEnv')
+
+env = BaseEnv.Clone()
+env['CPPPATH']=['.']
+env.EnableQt4Modules(['QtCore','QtXml','QtXmlPatterns'])
+
+Resources=['templates.qrc']
+Sources=['xic.cpp','qtextserializer.cpp','interfacedocument.cpp',
+         'interfacecompiler.cpp','xicconfig.cpp']
+Sources += env.Qrc(Resources)
+
+env.Program('xic',Sources)

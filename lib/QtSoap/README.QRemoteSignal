@@ -1,0 +1,7 @@
+The Qt SOAP library is not a part of the QRemoteSignal project.
+It's third party opensource library which is disigned to be
+included inside the project. Original license agreements are
+included to this directory.
+
+See official library page for more detales:
+http://www.qtsoftware.com/products/appdev/add-on-products/catalog/4/Utilities/qtsoap/

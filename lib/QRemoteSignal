@@ -1,0 +1,9 @@
+#ifndef _QtSoapSignal_H
+#define _QtSoapSignal_H
+
+#include <qtsoap.h>
+#include "absservice.h"
+#include "comunicationmanager.h"
+#include "baseconverters.h"
+
+#endif

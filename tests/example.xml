@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<service>
+   <interface name="Example" uri="urn:Example"/>
+   <method name="intMethod">
+      <param type="int" name="num"/>
+   </method>
+   <method name="strMethod">
+      <param type="QString" name="str"/>
+   </method>
+   <method name="intVectorMethod">
+      <param type='QVector&lt;int>' name="vector"/>
+   </method>
+   <method name="mixedMethod">
+      <param type="QString" name="str"/>
+      <param type="int" name="num"/>
+   </method>
+</service>

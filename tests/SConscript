@@ -1,0 +1,31 @@
+import os
+
+Import('BaseEnv')
+Import('libs')
+env = BaseEnv.Clone()
+env['CPPPATH']=['.','#lib','#lib/QtSoap']
+env.EnableQt4Modules(['QtCore','QtXml','QtXmlPatterns','QtNetwork','QtTest'])
+env ['LIBS']+=libs['static']
+
+def compile_interface(env,source):
+   xic = File('#xic/xic')
+   files = Split( os.popen(str(xic)+' -f '+source).read() )
+   path = os.path.dirname( os.path.abspath(str(source)) )
+   resNodes = [File(os.path.join(path,f)) for f in files]
+   env.Command(files,source,str(xic)+" -d " + path + " $SOURCE");
+   # if sources have noot been yet generated automoc will not
+   # generate Moc4 targets
+   for f in [x for x in resNodes if os.path.splitext(str(x))[1]=='.cpp']:
+      if not os.path.exists(str(f)):
+         resNodes += env.Moc4( os.path.splitext(str(f))[0]+'.h' )
+   return resNodes
+
+env.AddMethod(compile_interface,"Xic")
+
+Files = env.Xic('example.xml')
+
+Sources = [f for f in Files if os.path.splitext(str(f))[1]=='.cpp']
+Sources += ['libtests.cpp']
+
+env.Program('libtests',Sources)
+env.Program('qtsoaptests','qtsoaptests.cpp')
