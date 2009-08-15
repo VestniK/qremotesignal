@@ -10,7 +10,7 @@
 
 #include <QtSoapType>
 
-namespace QRemoteSignal {
+namespace qrs {
 
    QtSoapType* createArg(const QString name, int val);
    bool getArgValue(const QtSoapType& arg, int& res);

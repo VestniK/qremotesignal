@@ -9,7 +9,7 @@
 
 #include <QtSoapSimpleType>
 
-namespace QRemoteSignal {
+namespace qrs {
    // int
    QtSoapType* createArg(const QString name, int val) {
       return new QtSoapSimpleType(QtSoapQName(name,""), val);

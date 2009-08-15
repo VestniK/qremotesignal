@@ -14,6 +14,8 @@
 #define ERROR_POS_NAME "pos"
 #define UNKNOWN_URI "Services for '%1' are not supported"
 
+using namespace qrs;
+
 ComunicationManager::ComunicationManager(QObject *parent): QObject(parent) {
 }
 
