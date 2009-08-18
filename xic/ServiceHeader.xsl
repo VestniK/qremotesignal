@@ -8,23 +8,27 @@
 #include &lt;QtSoapType&gt;
 #include &lt;QRemoteSignal&gt;
 
-class <xsl:value-of select="//interface/@name"/>Service : public AbsService {
-   Q_OBJECT
-   public:
-      <xsl:value-of select="//interface/@name"/>Service ( QObject* parent=0 ): AbsService ( parent ) {};
-      <xsl:value-of select="//interface/@name"/>Service ( ComunicationManager* parent );
-      virtual ~<xsl:value-of select="//interface/@name"/>Service() {};
+namespace qrs {
 
-      virtual const QString&amp; getUri() const {return uri;};
-      virtual void processMessage ( const QtSoapType&amp; method )
-            throw(IncorrectMethodException);
-   signals:
+   class <xsl:value-of select="//interface/@name"/>Service : public AbsService {
+      Q_OBJECT
+      public:
+         <xsl:value-of select="//interface/@name"/>Service ( QObject* parent=0 ): AbsService ( parent ) {};
+         <xsl:value-of select="//interface/@name"/>Service ( ComunicationManager* parent );
+         virtual ~<xsl:value-of select="//interface/@name"/>Service() {};
+
+         virtual const QString&amp; getUri() const {return uri;};
+         virtual void processMessage ( const QtSoapType&amp; method )
+               throw(IncorrectMethodException);
+      signals:
 <xsl:for-each select="//method">
-      void <xsl:value-of select="./@name"/>(<xsl:for-each select="./param"><xsl:value-of select="./@type"/><xsl:text> </xsl:text><xsl:value-of select="./@name"/><xsl:if test="position()!=last()">, </xsl:if></xsl:for-each>);</xsl:for-each>
+         void <xsl:value-of select="./@name"/>(<xsl:for-each select="./param"><xsl:value-of select="./@type"/><xsl:text> </xsl:text><xsl:value-of select="./@name"/><xsl:if test="position()!=last()">, </xsl:if></xsl:for-each>);</xsl:for-each>
 
-   private:
-      static const QString uri;
-};
+      private:
+         static const QString uri;
+   };
+
+}
 
 #endif
 </xsl:template>

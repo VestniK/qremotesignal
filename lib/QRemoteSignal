@@ -5,5 +5,7 @@
 #include "absservice.h"
 #include "comunicationmanager.h"
 #include "baseconverters.h"
+#include "remotecall.h"
+#include "absremotecallserializer.h"
 
 #endif

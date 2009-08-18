@@ -7,26 +7,30 @@
 #include &lt;QtCore&gt;
 #include &lt;QRemoteSignal&gt;
 
-class <xsl:value-of select="//interface/@name"/>Client : public QObject {
-   Q_OBJECT
-   public:
-      <xsl:value-of select="//interface/@name"/>Client ( QObject* parent=0 ): QObject(parent) {mCManager = 0;};
-      <xsl:value-of select="//interface/@name"/>Client ( ComunicationManager* parent ): QObject(parent) {mCManager = parent;};
-      virtual ~<xsl:value-of select="//interface/@name"/>Client() {};
+namespace qrs {
 
-      void setManager(ComunicationManager* manager) {mCManager = manager;};
-      ComunicationManager* getManager() {return mCManager;};
-      const ComunicationManager* getManager() const {return mCManager;};
+   class <xsl:value-of select="//interface/@name"/>Client : public QObject {
+      Q_OBJECT
+      public:
+         <xsl:value-of select="//interface/@name"/>Client ( QObject* parent=0 ): QObject(parent) {mCManager = 0;};
+         <xsl:value-of select="//interface/@name"/>Client ( ComunicationManager* parent ): QObject(parent) {mCManager = parent;};
+         virtual ~<xsl:value-of select="//interface/@name"/>Client() {};
 
-      virtual const QString&amp; getUri() const {return uri;};
-   public slots:
+         void setManager(ComunicationManager* manager) {mCManager = manager;};
+         ComunicationManager* getManager() {return mCManager;};
+         const ComunicationManager* getManager() const {return mCManager;};
+
+         virtual const QString&amp; getUri() const {return uri;};
+      public slots:
 <xsl:for-each select="//method">
-      void <xsl:value-of select="./@name"/>(<xsl:for-each select="./param">const <xsl:value-of select="./@type"/>&amp; <xsl:value-of select="./@name"/><xsl:if test="position()!=last()">, </xsl:if></xsl:for-each>);</xsl:for-each>
+         void <xsl:value-of select="./@name"/>(<xsl:for-each select="./param">const <xsl:value-of select="./@type"/>&amp; <xsl:value-of select="./@name"/><xsl:if test="position()!=last()">, </xsl:if></xsl:for-each>);</xsl:for-each>
 
-   private:
-      ComunicationManager *mCManager;
-      static const QString uri;
-};
+      private:
+         ComunicationManager *mCManager;
+         static const QString uri;
+   };
+
+}
 
 #endif
 </xsl:template>

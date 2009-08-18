@@ -8,27 +8,19 @@
 #ifndef _AbsService_H
 #define _AbsService_H
 
-#include <exception>
-
 #include <QtCore>
 #include <QtSoapType>
+
+#include "baseexception.h"
 
 namespace qrs {
 
    /**
     * @brief Exception to be thrown on attempt to call unknown method
     */
-   class IncorrectMethodException: public std::exception {
+   class IncorrectMethodException: public BaseException {
       public:
-         virtual const char* what() const throw() {
-            return error.toLocal8Bit().constData();
-         };
-
-         IncorrectMethodException(const QString& msg) {error = msg;};
-         virtual ~IncorrectMethodException() throw() {};
-         const QString& getError() const {return error;};
-      private:
-         QString error;
+         IncorrectMethodException(const QString& msg):BaseException(msg) {};
    };
 
    /**

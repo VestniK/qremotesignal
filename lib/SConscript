@@ -8,14 +8,9 @@ Sources = ['baseconverters.cpp','comunicationmanager.cpp',
            'QtSoap/qtsoap.cpp']
 
 Headers = ['QRemoteSignal','absservice.h','baseconverters.h',
-           'comunicationmanager.h','QtSoap/qtsoap.h',
-           'QtSoap/QtSoapArray','QtSoap/QtSoapArrayIterator',
-           'QtSoap/QtSoapMessage','QtSoap/QtSoapNamespace',
-           'QtSoap/QtSoapQName','QtSoap/QtSoapSimpleType',
-           'QtSoap/QtSoapStruct','QtSoap/QtSoapStructIterator',
-           'QtSoap/QtSoapType','QtSoap/QtSoapTypeConstructor',
-           'QtSoap/QtSoapTypeConstructorBase',
-           'QtSoap/QtSoapTypeFactory']
+           'comunicationmanager.h','baseexception.h',
+           'remotecall.h','absremotecallserializer.h',
+           'soapserializer.h']
 
 libs = {}
 libs['shared'] = env.SharedLibrary('QRemoteSignal',Sources)

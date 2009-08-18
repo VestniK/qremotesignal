@@ -51,7 +51,7 @@ void ComunicationManager::recieve(const QString& msg) {
          QtSoapMessage error;
          error.setMethod( message.method().name() );
          error.setFaultCode(QtSoapMessage::Client);
-         error.setFaultString( err.getError() );
+         error.setFaultString( err.getReason() );
          emit send(error.toXmlString());
          return;
       }

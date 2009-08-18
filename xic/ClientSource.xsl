@@ -11,6 +11,8 @@
 <xsl:for-each select="//customTypes">
 #include "<xsl:value-of select="./@header"/>"</xsl:for-each>
 
+using namespace qrs;
+
 const QString <xsl:value-of select="//interface/@name"/>Client::uri = "<xsl:value-of select="//interface/@uri"/>";
 
 <xsl:for-each select="//method">void <xsl:value-of select="//interface/@name"/>Client::<xsl:value-of select="./@name"/>(<xsl:for-each select="./param">const <xsl:value-of select="./@type"/>&amp; <xsl:value-of select="./@name"/><xsl:if test="position()!=last()">, </xsl:if></xsl:for-each>) {
@@ -19,7 +21,7 @@ const QString <xsl:value-of select="//interface/@name"/>Client::uri = "<xsl:valu
    }
    QtSoapMessage msg;
    msg.setMethod("<xsl:value-of select="./@name"/>",uri);
-<xsl:for-each select="./param">   msg.addMethodArgument( QRemoteSignal::createArg("<xsl:value-of select="./@name"/>",<xsl:value-of select="./@name"/>) );
+<xsl:for-each select="./param">   msg.addMethodArgument( qrs::createArg("<xsl:value-of select="./@name"/>",<xsl:value-of select="./@name"/>) );
 </xsl:for-each>
    mCManager->sendMessage(msg);
 }

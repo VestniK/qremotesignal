@@ -14,19 +14,19 @@
 
 Q_DECLARE_METATYPE(QVector<int>);
 
-class LibTests: public QObject {
+class RemoteSignalTests: public QObject {
    Q_OBJECT
    private slots:
       /// Prepare test environment
       void initTestCase() {
-         serverManager = new ComunicationManager;
-         clientManager = new ComunicationManager;
+         serverManager = new qrs::ComunicationManager;
+         clientManager = new qrs::ComunicationManager;
          connect(serverManager,SIGNAL(send(QString)),
                  clientManager,SLOT(recieve(const QString&)));
          connect(clientManager,SIGNAL(send(QString)),
                  serverManager,SLOT(recieve(const QString&)));
-         client = new ExampleClient(clientManager);
-         service = new ExampleService(serverManager);
+         client = new qrs::ExampleClient(clientManager);
+         service = new qrs::ExampleService(serverManager);
       }
       /// Cleanup test environment
       void cleanupTestCase() {
@@ -117,11 +117,11 @@ class LibTests: public QObject {
       }
 
    private:
-      ComunicationManager *serverManager,*clientManager;
-      ExampleClient *client;
-      ExampleService *service;
+      qrs::ComunicationManager *serverManager,*clientManager;
+      qrs::ExampleClient *client;
+      qrs::ExampleService *service;
 };
 
-QTEST_MAIN(LibTests);
+QTEST_MAIN(RemoteSignalTests);
 
-#include "libtests.moc"
+#include "remotesignaltests.moc"

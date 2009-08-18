@@ -25,7 +25,7 @@ env.AddMethod(compile_interface,"Xic")
 Files = env.Xic('example.xml')
 
 Sources = [f for f in Files if os.path.splitext(str(f))[1]=='.cpp']
-Sources += ['libtests.cpp']
+Sources += ['remotesignaltests.cpp']
 
-env.Program('libtests',Sources)
+env.Program('remotesignaltests',Sources)
 env.Program('qtsoaptests','qtsoaptests.cpp')
