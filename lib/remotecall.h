@@ -8,6 +8,8 @@
 #ifndef _RemoteCall_H
 #define _RemoteCall_H
 
+#include <memory>
+
 #include <QtCore>
 
 namespace qrs {
@@ -32,29 +34,30 @@ namespace qrs {
           * @param val new service name
           * @sa service
           */
-         void setService ( const QString& val ) {service = val;};
+         void setService ( const QString& val ) {mService = val;};
          /**
           * @brief Returns service name
           * @return current service name
           * @sa service
           */
-         const QString& getService() const {return service;};
+         const QString& service() const {return mService;};
 
          /**
           * @brief Sets method name
           * @param val new method name
           * @sa method
           */
-         void setMethod ( const QString& val ) {method = val;};
+         void setMethod ( const QString& val ) {mMethod = val;};
          /**
           * @brief Returns method name
           * @return current method name
           * @sa method
           */
-         const QString& getMethod() const {return method;}
+         const QString& method() const {return mMethod;}
 
-         const QMap<QString,QVariant>& params() const {return paramsMap;};
-         QMap<QString,QVariant>& params() {return paramsMap;};
+         const QVariantMap& params() const {return mParams;};
+         QVariantMap& params() {return mParams;};
+         void setParams(const QVariantMap& val) {mParams = val;};
 
       private:
          /**
@@ -71,7 +74,7 @@ namespace qrs {
           * @sa getService
           * @sa setService
           */
-         QString service;
+         QString mService;
          /**
           * @brief method name
           *
@@ -80,10 +83,11 @@ namespace qrs {
           * @sa getMethod
           * @sa setMethod
           */
-         QString method;
-         QMap<QString,QVariant> paramsMap;
+         QString mMethod;
+         QVariantMap mParams;
    };
 
+   typedef std::auto_ptr<RemoteCall> RemoteCallAP;
 }
 
 #endif

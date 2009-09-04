@@ -36,50 +36,50 @@ int main(int argc, char *argv[]) {
    conf.addFlag(PRINT_FILES_FLAG,conf.tr("Print output files names and exit"),'f');
    conf.addOption(OUT_DIR_OPTION,conf.tr("Specify output directory"),'d');
    if ( ! conf.parse() ) {
-      err << conf.getErrorMessage() << endl;
-      out << conf.getHelpStr();
+      err << conf.errorMessage() << endl;
+      out << conf.helpStr();
       return 1;
    }
    // Print info if requested
-   if ( conf.getFlags()[HELP_FLAG] ) {
-      out << conf.getHelpStr();
+   if ( conf.flags()[HELP_FLAG] ) {
+      out << conf.helpStr();
       return 0;
    }
-   if ( conf.getFlags()[QT_VERSION_FLAG] ) {
+   if ( conf.flags()[QT_VERSION_FLAG] ) {
       out << conf.tr("Compiled with Qt: %1").arg(QT_VERSION_STR) << endl;
       out << conf.tr("Running with Qt version: %1").arg(qVersion()) << endl;
    }
-   if ( conf.getFlags()[VERSION_FLAG] ) {
+   if ( conf.flags()[VERSION_FLAG] ) {
       out << conf.tr("%1 version: %2").arg(app.applicationName(),app.applicationVersion()) << endl;
       return 0;
    }
-   if ( conf.getArguments().isEmpty() ) {
+   if ( conf.arguments().isEmpty() ) {
       err << conf.tr("Error: Input file not specified!") << endl;
-      out << conf.getHelpStr();
+      out << conf.helpStr();
       return 1;
    }
    // Compile document
-   InterfaceDocument inputDoc( conf.getArguments().first() );
+   InterfaceDocument inputDoc( conf.arguments().first() );
    InterfaceCompiler compiler(&inputDoc);
 
-   QString prefix = conf.getOptions()[OUT_DIR_OPTION];
+   QString prefix = conf.options()[OUT_DIR_OPTION];
    if ( prefix != QString() ) {
       QFileInfo outDir(prefix);
       if ( ! outDir.isDir() ) {
          err << conf.tr("%1 is not a directory").arg(prefix) << endl;
          return 1;
       }
-      inputDoc.setServiceHeader( outDir.filePath() + '/' + inputDoc.getServiceHeader() );
-      inputDoc.setServiceSource( outDir.filePath() + '/' + inputDoc.getServiceSource() );
-      inputDoc.setClientHeader( outDir.filePath() + '/' + inputDoc.getClientHeader() );
-      inputDoc.setClientSource( outDir.filePath() + '/' + inputDoc.getClientSource() );
+      inputDoc.setServiceHeader( outDir.filePath() + '/' + inputDoc.serviceHeader() );
+      inputDoc.setServiceSource( outDir.filePath() + '/' + inputDoc.serviceSource() );
+      inputDoc.setClientHeader( outDir.filePath() + '/' + inputDoc.clientHeader() );
+      inputDoc.setClientSource( outDir.filePath() + '/' + inputDoc.clientSource() );
    }
 
-   if ( conf.getFlags()[PRINT_FILES_FLAG] ) {
-      out << inputDoc.getServiceHeader() << endl
-          << inputDoc.getServiceSource() << endl
-          << inputDoc.getClientHeader() << endl
-          << inputDoc.getClientSource() << endl;
+   if ( conf.flags()[PRINT_FILES_FLAG] ) {
+      out << inputDoc.serviceHeader() << endl
+          << inputDoc.serviceSource() << endl
+          << inputDoc.clientHeader() << endl
+          << inputDoc.clientSource() << endl;
       return 0;
    }
 

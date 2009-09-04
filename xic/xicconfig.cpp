@@ -75,7 +75,7 @@ bool XicConfig::parse() {
    return true;
 }
 
-QString XicConfig::getHelpStr() const {
+QString XicConfig::helpStr() const {
    QString res;
    QTextStream out(&res,QIODevice::WriteOnly);
    out << qApp->applicationName() << endl;

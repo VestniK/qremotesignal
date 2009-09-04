@@ -16,22 +16,22 @@ class InterfaceDocument {
       ~InterfaceDocument() {};
 
       QIODevice* getIODevice() {return &mInterfaseFile;};
-      const QString& getName() const {return mName;};
+      const QString& name() const {return mName;};
 
-      const QString& getServiceHeader() const {return mServiceHeader;};
+      const QString& serviceHeader() const {return mServiceHeader;};
       void setServiceHeader(const QString& val) {mServiceHeader = val;};
 
-      const QString& getServiceSource() const {return mServiceSource;};
+      const QString& serviceSource() const {return mServiceSource;};
       void setServiceSource(const QString& val) {mServiceSource = val;};
 
-      const QString& getClientHeader() const {return mClientHeader;}
+      const QString& clientHeader() const {return mClientHeader;}
       void setClientHeader(const QString& val) {mClientHeader = val;}
 
-      const QString& getClientSource() const {return mClientSource;}
+      const QString& clientSource() const {return mClientSource;}
       void setClientSource(const QString& val) {mClientSource = val;}
 
       bool isValid() const {return mValid;}
-      const QString& getError() const {return mError;};
+      const QString& error() const {return mError;};
    private:
       QFile mInterfaseFile;
       QString mName;

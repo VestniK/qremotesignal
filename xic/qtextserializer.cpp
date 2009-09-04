@@ -8,8 +8,8 @@
 #include "qtextserializer.h"
 
 QTextSerializer::QTextSerializer (const QXmlQuery & query, QIODevice * outputDevice) {
-   out = outputDevice;
-   txtCodec = QTextCodec::codecForName("UTF-8");
+   mOut = outputDevice;
+   mTxtCodec = QTextCodec::codecForName("UTF-8");
 }
 
 void QTextSerializer::startElement(const QXmlName &name) {
@@ -32,7 +32,7 @@ void QTextSerializer::comment(const QString &value) {
 }
 
 void QTextSerializer::characters(const QStringRef &value) {
-   out->write( txtCodec->fromUnicode(value.unicode(),value.count()) );
+   mOut->write( mTxtCodec->fromUnicode(value.unicode(),value.count()) );
 }
 
 void QTextSerializer::startDocument() {

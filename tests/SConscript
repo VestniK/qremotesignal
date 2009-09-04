@@ -3,9 +3,10 @@ import os
 Import('BaseEnv')
 Import('libs')
 env = BaseEnv.Clone()
-env['CPPPATH']=['.','#lib','#lib/QtSoap']
+env['CPPPATH']=['.','#lib']
 env.EnableQt4Modules(['QtCore','QtXml','QtXmlPatterns','QtNetwork','QtTest'])
-env ['LIBS']+=libs['static']
+env['LIBS']+=libs['static']
+env.ParseConfig('pkg-config --libs QJson')
 
 def compile_interface(env,source):
    xic = File('#xic/xic')
@@ -28,4 +29,3 @@ Sources = [f for f in Files if os.path.splitext(str(f))[1]=='.cpp']
 Sources += ['remotesignaltests.cpp']
 
 env.Program('remotesignaltests',Sources)
-env.Program('qtsoaptests','qtsoaptests.cpp')

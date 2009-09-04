@@ -1,16 +1,17 @@
 Import('BaseEnv')
 
 env = BaseEnv.Clone()
-env['CPPPATH'] = ['.','QtSoap']
+env.ParseConfig('pkg-config --cflags --libs QJson')
+env['CPPPATH'] += ['.','QtSoap']
 env.EnableQt4Modules(['QtCore','QtXml','QtNetwork'])
 
 Sources = ['baseconverters.cpp','comunicationmanager.cpp',
-           'QtSoap/qtsoap.cpp']
+           'jsonserializer.cpp']
 
 Headers = ['QRemoteSignal','absservice.h','baseconverters.h',
            'comunicationmanager.h','baseexception.h',
            'remotecall.h','absremotecallserializer.h',
-           'soapserializer.h']
+           'soapserializer.h','jsonserializer.h']
 
 libs = {}
 libs['shared'] = env.SharedLibrary('QRemoteSignal',Sources)

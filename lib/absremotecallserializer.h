@@ -25,10 +25,13 @@ namespace qrs {
    class AbsRemoteCallSerializer: public QObject {
       public:
          AbsRemoteCallSerializer(QObject* parent = 0): QObject(parent) {};
-         virtual ~AbsRemoteCallSerializer() = 0;
+         virtual ~AbsRemoteCallSerializer() {};
 
          /**
           * @brief Serealize RemoteCall
+          *
+          * @throw UnsupportedTypeException if remote call object contain data
+          * which can't be converted to the underlying protocol message
           *
           * @sa deserialize
           *
@@ -36,17 +39,20 @@ namespace qrs {
           * @return string representation of a remote call (SOAP, XML-RPC,
           * JSON ...)
           */
-         virtual QString serialize(const RemoteCall& rc)
+         virtual QByteArray serialize(const RemoteCall& rc)
                throw(UnsupportedTypeException) = 0;
          /**
           * @brief Serealize RemoteCall
+          *
+          * @throw MessageParsingException in case of error during message parsing
+          * @throw ErrorMessageException if the message recieved is error message
           *
           * @sa serialize
           *
           * @param msg remote call string representation (SOAP, XML-RPC, JSON ...)
           * @return RemoteCall class instance
           */
-         virtual RemoteCall deserialize(const QString& msg)
+         virtual RemoteCallAP deserialize(const QByteArray& msg)
                throw(MessageParsingException,ErrorMessageException) = 0;
    };
 

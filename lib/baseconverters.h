@@ -8,75 +8,15 @@
 #ifndef _BaseConverters_H
 #define _BaseConverters_H
 
-#include <QtSoapType>
+#include "remotecall.h"
 
 namespace qrs {
 
-   QtSoapType* createArg(const QString name, int val);
-   bool getArgValue(const QtSoapType& arg, int& res);
+   void appendArg(RemoteCall& rc, const QString& name, int val);
+   bool getArgValue(const RemoteCall& rc,const QString& name, int& res);
 
-   QtSoapType* createArg(const QString name, const QString& val);
-   bool getArgValue(const QtSoapType& arg, QString& res);
-
-   // Lists,vectors and other stuff
-
-   template<class T>
-   QtSoapType* createArg(const QString& name, const QList<T>& val) {
-      QtSoapArray* res = new QtSoapArray(QtSoapQName(name,""));
-      for(int i = 0; i<val.size(); i++) {
-         res->append(createArg(QString::number(i),val[i]));
-      }
-      return res;
-   }
-
-   template<class T>
-   bool getArgValue(const QtSoapType& arg, QList<T>& res) {
-      if ( ! arg.isValid() ) {
-         return false;
-      }
-      const QtSoapArray *array = dynamic_cast<const QtSoapArray*>( &arg );
-      if ( array == 0 ) {
-         return false;
-      }
-      res.clear();
-      for (int i=0; i<array->count(); i++) {
-         T t;
-         if ( !getArgValue(array->at(i), t) ) {
-            return false;
-         }
-         res.append(t);
-      }
-      return true;
-   }
-
-   template<class T>
-   QtSoapType* createArg(const QString& name, const QVector<T>& val) {
-      QtSoapArray* res = new QtSoapArray(QtSoapQName(name,""));
-      for(int i = 0; i<val.size(); i++) {
-         res->append(createArg(QString::number(i),val[i]));
-      }
-      return res;
-   }
-
-   template<class T>
-   bool getArgValue(const QtSoapType& arg, QVector<T>& res) {
-      if ( ! arg.isValid() ) {
-         return false;
-      }
-      const QtSoapArray *array = dynamic_cast<const QtSoapArray*>( &arg );
-      if ( array == 0 ) {
-         return false;
-      }
-      res.clear();
-      for (int i=0; i<array->count(); i++) {
-         T t;
-         if ( !getArgValue(array->at(i), t) ) {
-            return false;
-         }
-         res.append(t);
-      }
-      return true;
-   }
+   void appendArg(RemoteCall& rc, const QString& name, const QString& val);
+   bool getArgValue(const RemoteCall& rc,const QString& name, QString& res);
 
 }
 

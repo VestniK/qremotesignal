@@ -13,12 +13,12 @@
 
 class QTextSerializer : public QAbstractXmlReceiver {
    public:
-      QTextSerializer (const QXmlQuery & query, QIODevice * outputDevice);
+      QTextSerializer (const QXmlQuery& query, QIODevice* outputDevice);
       virtual ~QTextSerializer() {};
 
-      const QTextCodec * codec () const {return txtCodec;};
-      QIODevice * outputDevice () const;
-      void setCodec ( const QTextCodec * outputCodec ) {txtCodec = outputCodec;};
+      const QTextCodec * codec () const {return mTxtCodec;};
+      QIODevice* outputDevice () const;
+      void setCodec ( const QTextCodec* val ) {mTxtCodec = val;};
 
       virtual void startElement(const QXmlName &name);
       virtual void endElement();
@@ -37,8 +37,8 @@ class QTextSerializer : public QAbstractXmlReceiver {
       virtual void startOfSequence();
       virtual void endOfSequence();
    private:
-      QIODevice* out;
-      const QTextCodec* txtCodec;
+      QIODevice* mOut;
+      const QTextCodec* mTxtCodec;
 };
 
 #endif

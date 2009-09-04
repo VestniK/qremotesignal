@@ -1,11 +1,9 @@
-#ifndef _QtSoapSignal_H
-#define _QtSoapSignal_H
+#ifndef _QRemoteSignal_H
+#define _QRemoteSignal_H
 
-#include <qtsoap.h>
 #include "absservice.h"
 #include "comunicationmanager.h"
 #include "baseconverters.h"
-#include "remotecall.h"
 #include "absremotecallserializer.h"
 
 #endif

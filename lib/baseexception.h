@@ -19,16 +19,16 @@ namespace qrs {
     */
    class BaseException : public std::exception {
       public:
-         BaseException(const QString& msg) {reason = msg;};
+         BaseException(const QString& msg) {mReason = msg;};
          virtual ~BaseException() throw() {};
 
-         /// Returns C string encoding determined from locale
+         /// Returns C string. Encoding is determined from locale
          virtual const char* what() throw() {
-            return reason.toLocal8Bit().constData();
+            return mReason.toLocal8Bit().constData();
          }
-         const QString& getReason() {return reason;};
+         const QString& reason() {return mReason;};
       private:
-         QString reason;
+         QString mReason;
    };
 
 }

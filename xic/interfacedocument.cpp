@@ -9,7 +9,7 @@
 
 #include <QtXml>
 
-#define INTERFACE_ELEMENT_NAME "interface"
+#define SERVICE_ELEMENT_NAME "service"
 #define NAME_ATTRIBUTE "name"
 
 InterfaceDocument::InterfaceDocument(const QString& path):mInterfaseFile(path) {
@@ -19,7 +19,7 @@ InterfaceDocument::InterfaceDocument(const QString& path):mInterfaseFile(path) {
    QXmlStreamReader xml(&mInterfaseFile);
    while ( !xml.atEnd() ) {
       if ( xml.readNext() == QXmlStreamReader::StartElement ) {
-         if ( xml.name() == INTERFACE_ELEMENT_NAME ) {
+         if ( xml.name() == SERVICE_ELEMENT_NAME ) {
             mName.append(xml.attributes().value(NAME_ATTRIBUTE));
             break;
          }

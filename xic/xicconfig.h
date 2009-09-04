@@ -28,15 +28,15 @@ class XicConfig: public QObject {
                      const QString& defaultVal = QString());
 
       bool parse();
-      const QString& getErrorMessage() {return mError;};
+      const QString& errorMessage() {return mError;};
 
-      QString getHelpStr() const;
+      QString helpStr() const;
 
-      const QMap<QString,bool>& getFlags() const {return mFlags;};
-      const QMap<QString,QString>& getOptions() const {return mOptions;};
-      const QStringList& getArguments() const {return mArguments;};
-      const QString& getExecStr() const {return mExecStr;};
-      const QString& getExecutableName() const {return mExecutableName;};
+      const QMap<QString,bool>& flags() const {return mFlags;};
+      const QMap<QString,QString>& options() const {return mOptions;};
+      const QStringList& arguments() const {return mArguments;};
+      const QString& execStr() const {return mExecStr;};
+      const QString& executableName() const {return mExecutableName;};
 
    private:
       QMap<QString,bool> mFlags;

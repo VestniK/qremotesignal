@@ -7,37 +7,35 @@
  */
 #include "baseconverters.h"
 
-#include <QtSoapSimpleType>
-
 namespace qrs {
    // int
-   QtSoapType* createArg(const QString name, int val) {
-      return new QtSoapSimpleType(QtSoapQName(name,""), val);
+   void appendArg(RemoteCall& rc, const QString& name, int val) {
+      rc.params().insert(name,QVariant(val));
    }
 
-   bool getArgValue(const QtSoapType& arg, int& res) {
-      if ( !arg.isValid() ) {
+   bool getArgValue(const RemoteCall& rc,const QString& name, int& res) {
+      if ( !rc.params().contains(name) ) {
          return false;
       }
-      if ( !arg.value().canConvert<int>() ) {
+      if ( !rc.params()[name].canConvert<int>() ) {
          return false;
       }
-      res = arg.value().value<int>();
+      res = rc.params()[name].value<int>();
       return true;
    }
    // string
-   QtSoapType* createArg(const QString name, const QString& val) {
-      return new QtSoapSimpleType(QtSoapQName(name,""), val);
+   void appendArg(RemoteCall& rc, const QString& name, const QString& val) {
+      rc.params().insert(name,QVariant(val));
    }
 
-   bool getArgValue(const QtSoapType& arg, QString& res) {
-      if ( !arg.isValid() ) {
+   bool getArgValue(const RemoteCall& rc,const QString& name, QString& res) {
+      if ( !rc.params().contains(name) ) {
          return false;
       }
-      if ( !arg.value().canConvert<QString>() ) {
+      if ( !rc.params()[name].canConvert<QString>() ) {
          return false;
       }
-      res = arg.value().value<QString>();
+      res = rc.params()[name].value<QString>();
       return true;
    }
 

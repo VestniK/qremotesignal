@@ -14,7 +14,7 @@
 
 bool InterfaceCompiler::compileServiceHeader() {
    QFile xsltFile(":/ServiceHeader.xsl");
-   QFile out(mInterface->getServiceHeader());
+   QFile out(mInterface->serviceHeader());
    xsltFile.open(QIODevice::ReadOnly | QIODevice::Text);
    out.open(QIODevice::WriteOnly | QIODevice::Text | QIODevice::Truncate);
 
@@ -33,13 +33,13 @@ bool InterfaceCompiler::compileServiceHeader() {
 
 bool InterfaceCompiler::compileServiceSource() {
    QFile xsltFile(":/ServiceSource.xsl");
-   QFile out(mInterface->getServiceSource());
+   QFile out(mInterface->serviceSource());
    xsltFile.open(QIODevice::ReadOnly | QIODevice::Text);
    out.open(QIODevice::WriteOnly | QIODevice::Text | QIODevice::Truncate);
 
    mInterface->getIODevice()->seek(0);
    QXmlQuery query(QXmlQuery::XSLT20);
-   query.bindVariable( "ServiceHeader",QXmlItem(QVariant(mInterface->getServiceHeader())) );
+   query.bindVariable( "ServiceHeader",QXmlItem(QVariant(mInterface->serviceHeader())) );
    query.setFocus(mInterface->getIODevice());
    query.setQuery(&xsltFile);
 
@@ -53,7 +53,7 @@ bool InterfaceCompiler::compileServiceSource() {
 
 bool InterfaceCompiler::compileClientHeader() {
    QFile xsltFile(":/ClientHeader.xsl");
-   QFile out(mInterface->getClientHeader());
+   QFile out(mInterface->clientHeader());
    xsltFile.open(QIODevice::ReadOnly | QIODevice::Text);
    out.open(QIODevice::WriteOnly | QIODevice::Text | QIODevice::Truncate);
 
@@ -72,13 +72,13 @@ bool InterfaceCompiler::compileClientHeader() {
 
 bool InterfaceCompiler::compileClientSource() {
    QFile xsltFile(":/ClientSource.xsl");
-   QFile out(mInterface->getClientSource());
+   QFile out(mInterface->clientSource());
    xsltFile.open(QIODevice::ReadOnly | QIODevice::Text);
    out.open(QIODevice::WriteOnly | QIODevice::Text | QIODevice::Truncate);
 
    mInterface->getIODevice()->seek(0);
    QXmlQuery query(QXmlQuery::XSLT20);
-   query.bindVariable( "ClientHeader",QXmlItem(QVariant(mInterface->getClientHeader())) );
+   query.bindVariable( "ClientHeader",QXmlItem(QVariant(mInterface->clientHeader())) );
    query.setFocus(mInterface->getIODevice());
    query.setQuery(&xsltFile);
 

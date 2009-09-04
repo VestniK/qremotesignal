@@ -9,9 +9,10 @@
 #define _ComunicationManager_H
 
 #include <QtCore>
-#include <QtSoapMessage>
 
 #include "absservice.h"
+#include "absremotecallserializer.h"
+#include "remotecall.h"
 
 namespace qrs {
 
@@ -22,13 +23,16 @@ namespace qrs {
          virtual ~ComunicationManager() {};
 
          void registerService(AbsService* service);
-         void sendMessage(const QtSoapMessage& msg);
+         void send(const RemoteCall& msg);
+
+         void setSerializer(AbsRemoteCallSerializer* val) {mSerializer = val;};
       public slots:
-         void recieve(const QString& msg);
+         void recieve(const QByteArray& msg);
       signals:
-         void send(QString msg);
+         void send(QByteArray msg);
       private:
-         QMap<QString,AbsService*> services;
+         QMap< QString,AbsService*> mServices;
+         AbsRemoteCallSerializer *mSerializer;
    };
 
 }

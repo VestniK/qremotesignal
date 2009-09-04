@@ -11,27 +11,29 @@
 #include "comunicationmanager.h"
 #include "exampleclient.h"
 #include "exampleservice.h"
-
-Q_DECLARE_METATYPE(QVector<int>);
+#include "jsonserializer.h"
 
 class RemoteSignalTests: public QObject {
    Q_OBJECT
    private slots:
       /// Prepare test environment
       void initTestCase() {
-         serverManager = new qrs::ComunicationManager;
-         clientManager = new qrs::ComunicationManager;
-         connect(serverManager,SIGNAL(send(QString)),
-                 clientManager,SLOT(recieve(const QString&)));
-         connect(clientManager,SIGNAL(send(QString)),
-                 serverManager,SLOT(recieve(const QString&)));
-         client = new qrs::ExampleClient(clientManager);
-         service = new qrs::ExampleService(serverManager);
+         mSerializer = new qrs::JsonSerializer;
+         mServerManager = new qrs::ComunicationManager;
+         mClientManager = new qrs::ComunicationManager;
+         mServerManager->setSerializer(mSerializer);
+         mClientManager->setSerializer(mSerializer);
+         connect(mServerManager,SIGNAL(send(QByteArray)),
+                 mClientManager,SLOT(recieve(const QByteArray&)));
+         connect(mClientManager,SIGNAL(send(QByteArray)),
+                 mServerManager,SLOT(recieve(const QByteArray&)));
+         mClient = new qrs::ExampleClient(mClientManager);
+         mService = new qrs::ExampleService(mServerManager);
       }
       /// Cleanup test environment
       void cleanupTestCase() {
-         delete serverManager;
-         delete clientManager;
+         delete mServerManager;
+         delete mClientManager;
       }
 
       /// Data provider for test of QString sending
@@ -46,9 +48,9 @@ class RemoteSignalTests: public QObject {
       /// Test of QString sending
       void remoteCallStrTest() {
          QFETCH(QString,param);
-         QSignalSpy spy(service,SIGNAL(strMethod(QString)));
+         QSignalSpy spy(mService,SIGNAL(strMethod(QString)));
 
-         client->strMethod(param);
+         mClient->strMethod(param);
 
          QCOMPARE(spy.count() , 1);
          QCOMPARE(spy.first().at(0).toString() , param);
@@ -66,33 +68,12 @@ class RemoteSignalTests: public QObject {
       /// Test of int sending
       void remoteCallIntTest() {
          QFETCH(int,param);
-         QSignalSpy spy(service,SIGNAL(intMethod(int)));
+         QSignalSpy spy(mService,SIGNAL(intMethod(int)));
 
-         client->intMethod(param);
+         mClient->intMethod(param);
 
          QCOMPARE(spy.count() , 1);
          QCOMPARE(spy.first().at(0).toInt() , param);
-      }
-
-      /// Test of QVector of int sending
-      void remoteCallVectorIntTest() {
-         qRegisterMetaType< QVector<int> >();
-         QVector<int> param;
-         param << 1 << 2 << 6;
-         QSignalSpy spy(service,SIGNAL(intVectorMethod(QVector<int>)));
-
-         client->intVectorMethod(param);
-
-         QCOMPARE(spy.count() , 1);
-         QVERIFY( spy.first().at(0).canConvert< QVector<int> >() );
-         QVector<int> ret = spy.first().at(0).value< QVector<int> >();
-         for (int i=0; i<ret.size(); i++) {
-            qDebug("[%d]=\t%d",i,ret[i]);
-         }
-         QCOMPARE(ret.size(), param.size());
-         for (int i=0; i<param.size(); i++) {
-            QCOMPARE(ret[i], param[i]);
-         }
       }
 
       /// Data provider for mixed type parameters sending test
@@ -107,9 +88,9 @@ class RemoteSignalTests: public QObject {
       void remoteCallMixedTest() {
          QFETCH(QString,str);
          QFETCH(int,num);
-         QSignalSpy spy(service,SIGNAL(mixedMethod(QString,int)));
+         QSignalSpy spy(mService,SIGNAL(mixedMethod(QString,int)));
 
-         client->mixedMethod(str,num);
+         mClient->mixedMethod(str,num);
 
          QCOMPARE(spy.count() , 1);
          QCOMPARE(spy.first().at(0).toString() , str);
@@ -117,9 +98,10 @@ class RemoteSignalTests: public QObject {
       }
 
    private:
-      qrs::ComunicationManager *serverManager,*clientManager;
-      qrs::ExampleClient *client;
-      qrs::ExampleService *service;
+      qrs::ComunicationManager *mServerManager,*mClientManager;
+      qrs::ExampleClient *mClient;
+      qrs::ExampleService *mService;
+      qrs::JsonSerializer *mSerializer;
 };
 
 QTEST_MAIN(RemoteSignalTests);

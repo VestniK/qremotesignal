@@ -7,68 +7,41 @@
  */
 #include "comunicationmanager.h"
 
-#include <QtNetwork>
-#include <QtSoapMessage>
-
-#define ERROR_LINE_NAME "line"
-#define ERROR_POS_NAME "pos"
-#define UNKNOWN_URI "Services for '%1' are not supported"
-
 using namespace qrs;
 
 ComunicationManager::ComunicationManager(QObject *parent): QObject(parent) {
+   mSerializer = 0;
 }
 
-void ComunicationManager::recieve(const QString& msg) {
-   QDomDocument xml;
-   QString err;
-   int line,pos;
-   if ( ! xml.setContent(msg,true,&err,&line,&pos) ) {
-      QtSoapMessage error;
-      error.setFaultCode(QtSoapMessage::Client);
-      error.setFaultString(err);
-      QtSoapType *detail = new QtSoapSimpleType(QtSoapQName(ERROR_LINE_NAME,""),line);
-      error.addFaultDetail(detail);
-      detail = new QtSoapSimpleType(QtSoapQName(ERROR_POS_NAME,""),pos);
-      error.addFaultDetail(detail);
-      emit send(error.toXmlString());
+void ComunicationManager::recieve(const QByteArray& msg) {
+   RemoteCallAP message;
+   try {
+      message = mSerializer->deserialize(msg);
+   } catch (const ErrorMessageException& e) {
+      /// @todo Create error handler class and process recieved error
+      return;
+   } catch (const MessageParsingException& e) {
+      /// @todo Send error message here.
       return;
    }
-   QtSoapMessage message;
-   if ( ! message.setContent(xml) ) {
-      emit send(message.toXmlString());
-      return;
-   }
-   if ( message.isFault() ) {
-      /// @todo add fault messages support
-      return;
-   }
-   QMap<QString,AbsService*>::iterator res = services.find( message.method().name().uri() );
-   if ( res != services.end() ) {
+   QMap<QString,AbsService*>::iterator res = mServices.find(message->service());
+   if ( res != mServices.end() ) {
       try {
-         (*res)->processMessage( message.method() );
+         (*res)->processMessage(*message);
       } catch ( IncorrectMethodException& err ) {
-         QtSoapMessage error;
-         error.setMethod( message.method().name() );
-         error.setFaultCode(QtSoapMessage::Client);
-         error.setFaultString( err.getReason() );
-         emit send(error.toXmlString());
+         /// @todo Send error message here.
          return;
       }
    } else {
-      QtSoapMessage error;
-      error.setFaultCode(QtSoapMessage::Client);
-      err = UNKNOWN_URI;
-      error.setFaultString( err.arg(message.method().name().uri()) );
-      emit send(error.toXmlString());
+      /// @todo Send error message here.
       return;
    }
 }
 
 void ComunicationManager::registerService(AbsService* service) {
-   services[service->getUri()] = service;
+   mServices[service->name()] = service;
 }
 
-void ComunicationManager::sendMessage(const QtSoapMessage& msg) {
-   emit send( msg.toXmlString() );
+void ComunicationManager::send(const RemoteCall& msg) {
+   emit send( mSerializer->serialize(msg) );
 }

@@ -9,9 +9,9 @@
 #define _AbsService_H
 
 #include <QtCore>
-#include <QtSoapType>
 
 #include "baseexception.h"
+#include "remotecall.h"
 
 namespace qrs {
 
@@ -35,9 +35,9 @@ namespace qrs {
          AbsService(QObject *parent = 0): QObject(parent) {};
          virtual ~AbsService() {};
 
-         virtual void processMessage(const QtSoapType& method)
+         virtual void processMessage(const RemoteCall& rc)
                throw(IncorrectMethodException) = 0;
-         virtual const QString& getUri() const = 0;
+         virtual const QString& name() const = 0;
    };
 
 }
