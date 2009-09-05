@@ -11,10 +11,14 @@ Sources = ['baseconverters.cpp','communicationmanager.cpp',
 Headers = ['QRemoteSignal','absservice.h','baseconverters.h',
            'communicationmanager.h','baseexception.h',
            'message.h','absmessageserializer.h',
-           'soapserializer.h','jsonserializer.h']
+           'jsonserializer.h']
 
 libs = {}
 libs['shared'] = env.SharedLibrary('QRemoteSignal',Sources)
 libs['static'] = env.Library('QRemoteSignal',Sources)
+
+env.Install(env['PREFIX']+'/lib/',libs['shared'])
+env.Install(env['PREFIX']+'/lib/',libs['static'])
+env.Install(env['PREFIX']+'/include/qremotesignal',Headers)
 
 Return('libs')

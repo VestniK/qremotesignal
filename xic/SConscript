@@ -9,4 +9,5 @@ Sources=['xic.cpp','qtextserializer.cpp','interfacedocument.cpp',
          'interfacecompiler.cpp','xicconfig.cpp']
 Sources += env.Qrc(Resources)
 
-env.Program('xic',Sources)
+xic = env.Program('xic',Sources)
+env.Install(env['PREFIX']+'/bin/',xic)

@@ -15,6 +15,7 @@ BaseEnv['CCFLAGS']=Split( ARGUMENTS.get('CCFLAGS','') )
 BaseEnv['CPPFLAGS']=Split( ARGUMENTS.get('CPPFLAGS','') )
 BaseEnv['CXXFLAGS']=Split( ARGUMENTS.get('CXXFLAGS','') )
 BaseEnv['LINKFLAGS']=Split( ARGUMENTS.get('LDFLAGS','') )
+BaseEnv['PREFIX']=ARGUMENTS.get('prefix','/usr/local')
 
 if not (ARGUMENTS.get('nocheck') or GetOption('clean') or GetOption('help') ) :
    conf = Configure(BaseEnv.Clone(),
@@ -39,6 +40,7 @@ SConscript('xic/SConscript')
 libs = SConscript('lib/SConscript')
 Default('xic')
 Default('lib')
+BaseEnv.Alias('install',BaseEnv['PREFIX'])
 
 Export('libs')
 SConscript('tests/SConscript')
