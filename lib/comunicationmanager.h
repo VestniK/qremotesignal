@@ -11,8 +11,8 @@
 #include <QtCore>
 
 #include "absservice.h"
-#include "absremotecallserializer.h"
-#include "remotecall.h"
+#include "absmessageserializer.h"
+#include "message.h"
 
 namespace qrs {
 
@@ -23,16 +23,20 @@ namespace qrs {
          virtual ~ComunicationManager() {};
 
          void registerService(AbsService* service);
-         void send(const RemoteCall& msg);
+         void send(const Message& msg);
 
-         void setSerializer(AbsRemoteCallSerializer* val) {mSerializer = val;};
+         void setSerializer(AbsMessageSerializer* val) {mSerializer = val;};
       public slots:
          void recieve(const QByteArray& msg);
       signals:
          void send(QByteArray msg);
+         /**
+          * This signal is emmited if error message recieved.
+          */
+         void error();
       private:
          QMap< QString,AbsService*> mServices;
-         AbsRemoteCallSerializer *mSerializer;
+         AbsMessageSerializer *mSerializer;
    };
 
 }

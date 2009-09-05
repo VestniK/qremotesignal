@@ -26,7 +26,7 @@ namespace qrs {
          virtual const char* what() throw() {
             return mReason.toLocal8Bit().constData();
          }
-         const QString& reason() {return mReason;};
+         virtual const QString& reason() const {return mReason;};
       private:
          QString mReason;
    };

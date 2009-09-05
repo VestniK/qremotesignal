@@ -8,19 +8,19 @@
 #ifndef qrsjsonserializer_h
 #define qrsjsonserializer_h
 
-#include "absremotecallserializer.h"
+#include "absmessageserializer.h"
 
 namespace qrs {
 
-   class JsonSerializer: public AbsRemoteCallSerializer {
+   class JsonSerializer: public AbsMessageSerializer {
       public:
-         JsonSerializer (QObject *parent=0):AbsRemoteCallSerializer(parent) {};
+         JsonSerializer (QObject *parent=0):AbsMessageSerializer(parent) {};
          virtual ~JsonSerializer() {};
 
-         virtual QByteArray serialize ( const RemoteCall& rc )
+         virtual QByteArray serialize ( const Message& msg )
                throw(UnsupportedTypeException);
-         virtual RemoteCallAP deserialize ( const QByteArray& msg )
-               throw(MessageParsingException,ErrorMessageException);
+         virtual MessageAP deserialize ( const QByteArray& msg )
+               throw(MessageParsingException);
    };
 
 }

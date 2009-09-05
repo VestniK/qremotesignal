@@ -14,26 +14,40 @@ ComunicationManager::ComunicationManager(QObject *parent): QObject(parent) {
 }
 
 void ComunicationManager::recieve(const QByteArray& msg) {
-   RemoteCallAP message;
+   MessageAP message;
    try {
       message = mSerializer->deserialize(msg);
-   } catch (const ErrorMessageException& e) {
-      /// @todo Create error handler class and process recieved error
-      return;
    } catch (const MessageParsingException& e) {
-      /// @todo Send error message here.
+      Message err;
+      err.setErrorType(e.mErrorType);
+      err.setError( e.reason() );
+      emit mSerializer->serialize(err);
+      return;
+   }
+   if ( message->type() == Message::Error ) {
+      /// @todo Create error handler class and process recieved error
+      emit error();
       return;
    }
    QMap<QString,AbsService*>::iterator res = mServices.find(message->service());
    if ( res != mServices.end() ) {
       try {
          (*res)->processMessage(*message);
-      } catch ( IncorrectMethodException& err ) {
-         /// @todo Send error message here.
+      } catch ( IncorrectMethodException& e ) {
+         Message err;
+         err.setErrorType(Message::IncorrectMethod);
+         err.setError(e.reason());
+         err.setService(message->service());
+         err.setMethod(message->method());
+         emit send( mSerializer->serialize(err) );
          return;
       }
    } else {
-      /// @todo Send error message here.
+      Message err;
+      err.setErrorType(Message::UnknownService);
+      err.setError(QString("Unknown service: \"%1\"").arg(message->service()));
+      err.setService(message->service());
+      emit send( mSerializer->serialize(err) );
       return;
    }
 }
@@ -42,6 +56,6 @@ void ComunicationManager::registerService(AbsService* service) {
    mServices[service->name()] = service;
 }
 
-void ComunicationManager::send(const RemoteCall& msg) {
+void ComunicationManager::send(const Message& msg) {
    emit send( mSerializer->serialize(msg) );
 }

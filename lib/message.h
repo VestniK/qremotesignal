@@ -1,12 +1,12 @@
 /**
- * @file remotecall.h
- * @brief RemoteCall class
+ * @file message.h
+ * @brief Message class
  *
  * @author VestniK (Sergey N.Vidyuk) sir.vestnik@gmail.com
  * @date 10 Jul 2009
  */
-#ifndef _RemoteCall_H
-#define _RemoteCall_H
+#ifndef _Message_H
+#define _Message_H
 
 #include <memory>
 
@@ -15,19 +15,54 @@
 namespace qrs {
 
    /**
-    * @brief Remote call representation
+    * @brief Message representation
     *
     * This class contains all necessary information about slot to be called.
     * It's used by the QRemoteSignal library as internall remote call
     * representation. It's serealized to a string or deserealized from a
-    * string by one of AbsRemoteCallSerializer derived classes.
+    * string by one of AbsMessageSerializer derived classes.
     *
-    * @sa AbsRemoteCallSerializer
+    * @sa AbsMessageSerializer
     */
-   class RemoteCall {
+   class Message {
       public:
-         RemoteCall() {};
-         ~RemoteCall() {};
+         Message() {mType = RemoteCall;};
+         ~Message() {};
+
+         enum MsgType {RemoteCall,Error};
+         enum ErrorType {
+            /// if recieved error code is not described here or not recieved
+            UnknownErrorCode = -1,
+            /// Incorrect mesage from underlying protocol point of view
+            ProtocolError = 1,
+            /// Message type not specified
+            UnknownMsgType,
+            /**
+             * Service name not specified or this application doesn't share
+             * such service
+             */
+            UnknownService,
+            /**
+             * Method name not specified, no such methon in this service or
+             * incorrect parameters given for this method.
+             */
+            IncorrectMethod,
+         };
+
+         MsgType type() const {return mType;};
+         void setType(MsgType val) {mType = val;};
+
+         ErrorType errorType() const {return mErrorType;};
+         void setErrorType(ErrorType val) {mType = Error; mErrorType = val;};
+
+         /**
+          * @brief Returns error description
+          */
+         const QString& error() const {return mError;};
+         /**
+          * @brief Sets error description and change message type to Message::Error
+          */
+         void setError(const QString& val) {mError = val; mType = Error;};
 
          /**
           * @brief Sets service name
@@ -85,9 +120,19 @@ namespace qrs {
           */
          QString mMethod;
          QVariantMap mParams;
+
+         MsgType mType;
+         ErrorType mErrorType;
+
+         /**
+          * @brief Error description.
+          *
+          * Contains description of the recieved error message
+          */
+         QString mError;
    };
 
-   typedef std::auto_ptr<RemoteCall> RemoteCallAP;
+   typedef std::auto_ptr<Message> MessageAP;
 }
 
 #endif

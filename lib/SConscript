@@ -10,7 +10,7 @@ Sources = ['baseconverters.cpp','comunicationmanager.cpp',
 
 Headers = ['QRemoteSignal','absservice.h','baseconverters.h',
            'comunicationmanager.h','baseexception.h',
-           'remotecall.h','absremotecallserializer.h',
+           'message.h','absmessageserializer.h',
            'soapserializer.h','jsonserializer.h']
 
 libs = {}

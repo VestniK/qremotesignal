@@ -11,7 +11,7 @@
 #include <QtCore>
 
 #include "baseexception.h"
-#include "remotecall.h"
+#include "message.h"
 
 namespace qrs {
 
@@ -35,7 +35,7 @@ namespace qrs {
          AbsService(QObject *parent = 0): QObject(parent) {};
          virtual ~AbsService() {};
 
-         virtual void processMessage(const RemoteCall& rc)
+         virtual void processMessage(const Message& msg)
                throw(IncorrectMethodException) = 0;
          virtual const QString& name() const = 0;
    };

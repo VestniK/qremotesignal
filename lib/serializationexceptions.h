@@ -9,13 +9,14 @@
 #define _SerializationExceptions_H
 
 #include "baseexception.h"
+#include "message.h"
 
 namespace qrs{
 
    /**
     * @brief Unsupported type exception
     *
-    * Exception to be thrown by AbsRemoteCallSerializer::serealize if remote
+    * Exception to be thrown by AbsMessageSerializer::serealize if remote
     * call object contains data types not supported by underlying protocol or
     * current serializer realization.
     */
@@ -27,24 +28,16 @@ namespace qrs{
    /**
     * @brief Error during message parsing exception
     *
-    * Exception to be thrown by AbsRemoteCallSerializer::deserealize if
+    * Exception to be thrown by AbsMessageSerializer::deserealize if
     * message given as parameter is not valid underlying protocol message.
     */
    class MessageParsingException: public BaseException {
       public:
-         MessageParsingException(const QString& msg):BaseException(msg) {};
-   };
+         MessageParsingException(const QString& msg,Message::ErrorType val):BaseException(msg) {
+            mErrorType = val;
+         }
 
-   /**
-    * @brief Error message recieved exception
-    *
-    * Exception to be thrown by AbsRemoteCallSerializer::deserealize if
-    * is valid underlying protocol message but representing an error instead
-    * of remote call.
-    */
-   class ErrorMessageException: public BaseException {
-      public:
-         ErrorMessageException(const QString& msg): BaseException(msg) {};
+         Message::ErrorType mErrorType;
    };
 
 }
