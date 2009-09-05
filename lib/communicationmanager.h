@@ -1,12 +1,12 @@
 /**
- * @file comunicationmanager.h
- * @brief ComunicationManager class
+ * @file communicationmanager.h
+ * @brief CommunicationManager class
  *
  * @author VestniK (Sergey N.Vidyuk) sir.vestnik@gmail.com
  * @date 10 Jul 2009
  */
-#ifndef _ComunicationManager_H
-#define _ComunicationManager_H
+#ifndef _CommunicationManager_H
+#define _CommunicationManager_H
 
 #include <QtCore>
 
@@ -16,11 +16,11 @@
 
 namespace qrs {
 
-   class ComunicationManager : public QObject {
+   class CommunicationManager : public QObject {
       Q_OBJECT
       public:
-         ComunicationManager(QObject *parent = 0);
-         virtual ~ComunicationManager() {};
+         CommunicationManager(QObject *parent = 0);
+         virtual ~CommunicationManager() {};
 
          void registerService(AbsService* service);
          void send(const Message& msg);

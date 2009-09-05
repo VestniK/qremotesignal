@@ -15,12 +15,12 @@ namespace qrs {
       Q_OBJECT
       public:
          <xsl:value-of select="/service/@name"/>Client ( QObject* parent=0 ): QObject(parent) {mCManager = 0;};
-         <xsl:value-of select="/service/@name"/>Client ( ComunicationManager* parent ): QObject(parent) {mCManager = parent;};
+         <xsl:value-of select="/service/@name"/>Client ( CommunicationManager* parent ): QObject(parent) {mCManager = parent;};
          virtual ~<xsl:value-of select="/service/@name"/>Client() {};
 
-         void setManager(ComunicationManager* val) {mCManager = val;};
-         ComunicationManager* manager() {return mCManager;};
-         const ComunicationManager* manager() const {return mCManager;};
+         void setManager(CommunicationManager* val) {mCManager = val;};
+         CommunicationManager* manager() {return mCManager;};
+         const CommunicationManager* manager() const {return mCManager;};
 
          virtual const QString&amp; name() const {return mName;};
       public slots:
@@ -28,7 +28,7 @@ namespace qrs {
          void <xsl:value-of select="./@name"/>(<xsl:for-each select="./param">const <xsl:value-of select="./@type"/>&amp; <xsl:value-of select="./@name"/><xsl:if test="position()!=last()">, </xsl:if></xsl:for-each>);</xsl:for-each>
 
       private:
-         ComunicationManager *mCManager;
+         CommunicationManager *mCManager;
          static const QString mName;
    };
 

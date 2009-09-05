@@ -12,7 +12,7 @@ using namespace qrs;
 
 const QString <xsl:value-of select="/service/@name"/>Service::mName = "<xsl:value-of select="/service/@name"/>";
 
-<xsl:value-of select="/service/@name"/>Service::<xsl:value-of select="/service/@name"/>Service ( ComunicationManager* parent ): AbsService ( parent ) {
+<xsl:value-of select="/service/@name"/>Service::<xsl:value-of select="/service/@name"/>Service ( CommunicationManager* parent ): AbsService ( parent ) {
    parent->registerService(this);
 }
 

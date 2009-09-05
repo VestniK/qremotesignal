@@ -4,9 +4,11 @@ Import('BaseEnv')
 Import('libs')
 env = BaseEnv.Clone()
 env['CPPPATH']=['.','#lib']
-env.EnableQt4Modules(['QtCore','QtXml','QtXmlPatterns','QtNetwork','QtTest'])
+env.EnableQt4Modules(['QtCore','QtTest'])
 env['LIBS']+=libs['static']
 env.ParseConfig('pkg-config --libs QJson')
+qtest_builder = Builder(action=('$SOURCE -xml -o $TARGET'))
+env.Append(BUILDERS={"QTest":qtest_builder})
 
 def compile_interface(env,source):
    xic = File('#xic/xic')
@@ -27,5 +29,10 @@ Files = env.Xic('example.xml')
 
 Sources = [f for f in Files if os.path.splitext(str(f))[1]=='.cpp']
 
-env.Program('remotesignaltests',Sources+['remotesignaltests.cpp'])
-env.Program('errortests',Sources+['errortests.cpp'])
+remotesignaltests = env.Program('remotesignaltests',Sources+['remotesignaltests.cpp'])
+errortests = env.Program('errortests',Sources+['errortests.cpp'])
+jsonserializertests = env.Program('jsonserializertests',['jsonserializertests.cpp'])
+
+env.QTest('reports/remotesignaltests.xml',remotesignaltests)
+env.QTest('reports/errortests.xml',errortests)
+env.QTest('reports/jsonserializertests.xml',jsonserializertests)

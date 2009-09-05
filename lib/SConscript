@@ -3,13 +3,13 @@ Import('BaseEnv')
 env = BaseEnv.Clone()
 env.ParseConfig('pkg-config --cflags --libs QJson')
 env['CPPPATH'] += ['.','QtSoap']
-env.EnableQt4Modules(['QtCore','QtXml','QtNetwork'])
+env.EnableQt4Modules(['QtCore'])
 
-Sources = ['baseconverters.cpp','comunicationmanager.cpp',
+Sources = ['baseconverters.cpp','communicationmanager.cpp',
            'jsonserializer.cpp']
 
 Headers = ['QRemoteSignal','absservice.h','baseconverters.h',
-           'comunicationmanager.h','baseexception.h',
+           'communicationmanager.h','baseexception.h',
            'message.h','absmessageserializer.h',
            'soapserializer.h','jsonserializer.h']
 

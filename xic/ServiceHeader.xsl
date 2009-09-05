@@ -15,7 +15,7 @@ namespace qrs {
       Q_OBJECT
       public:
          <xsl:value-of select="/service/@name"/>Service ( QObject* parent=0 ): AbsService ( parent ) {};
-         <xsl:value-of select="/service/@name"/>Service ( ComunicationManager* parent );
+         <xsl:value-of select="/service/@name"/>Service ( CommunicationManager* parent );
          virtual ~<xsl:value-of select="/service/@name"/>Service() {};
 
          virtual const QString&amp; name() const {return mName;};

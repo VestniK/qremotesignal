@@ -1,19 +1,19 @@
 /**
- * @file comunicationmanager.cpp
- * @brief ComunicationManager class
+ * @file communicationmanager.cpp
+ * @brief CommunicationManager class
  *
  * @author VestniK (Sergey N.Vidyuk) sir.vestnik@gmail.com
  * @date 10 Jul 2009
  */
-#include "comunicationmanager.h"
+#include "communicationmanager.h"
 
 using namespace qrs;
 
-ComunicationManager::ComunicationManager(QObject *parent): QObject(parent) {
+CommunicationManager::CommunicationManager(QObject *parent): QObject(parent) {
    mSerializer = 0;
 }
 
-void ComunicationManager::recieve(const QByteArray& msg) {
+void CommunicationManager::recieve(const QByteArray& msg) {
    MessageAP message;
    try {
       message = mSerializer->deserialize(msg);
@@ -52,10 +52,10 @@ void ComunicationManager::recieve(const QByteArray& msg) {
    }
 }
 
-void ComunicationManager::registerService(AbsService* service) {
+void CommunicationManager::registerService(AbsService* service) {
    mServices[service->name()] = service;
 }
 
-void ComunicationManager::send(const Message& msg) {
+void CommunicationManager::send(const Message& msg) {
    emit send( mSerializer->serialize(msg) );
 }
