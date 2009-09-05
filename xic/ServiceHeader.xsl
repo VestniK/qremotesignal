@@ -19,7 +19,7 @@ namespace qrs {
          virtual ~<xsl:value-of select="/service/@name"/>Service() {};
 
          virtual const QString&amp; name() const {return mName;};
-         virtual void processMessage ( const RemoteCall&amp; method )
+         virtual void processMessage ( const Message&amp; method )
                throw(IncorrectMethodException);
       signals:
 <xsl:for-each select="//method">

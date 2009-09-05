@@ -16,7 +16,7 @@ const QString <xsl:value-of select="/service/@name"/>Client::mName = "<xsl:value
    if ( mCManager == 0 ) {
       return;
    }
-   RemoteCall msg;
+   Message msg;
    msg.setMethod("<xsl:value-of select="./@name"/>");
    msg.setService(mName);
 <xsl:for-each select="./param">   qrs::appendArg(msg,"<xsl:value-of select="./@name"/>",<xsl:value-of select="./@name"/>);

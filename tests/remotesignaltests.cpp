@@ -1,5 +1,5 @@
 /**
- * @file libtests.cpp
+ * @file remotesignaltests.cpp
  * @brief QRemoteSignal library tests
  *
  * @author VestniK (Sergey N.Vidyuk) sir.vestnik@gmail.com
@@ -18,11 +18,10 @@ class RemoteSignalTests: public QObject {
    private slots:
       /// Prepare test environment
       void initTestCase() {
-         mSerializer = new qrs::JsonSerializer;
          mServerManager = new qrs::ComunicationManager;
          mClientManager = new qrs::ComunicationManager;
-         mServerManager->setSerializer(mSerializer);
-         mClientManager->setSerializer(mSerializer);
+         mServerManager->setSerializer(&mSerializer);
+         mClientManager->setSerializer(&mSerializer);
          connect(mServerManager,SIGNAL(send(QByteArray)),
                  mClientManager,SLOT(recieve(const QByteArray&)));
          connect(mClientManager,SIGNAL(send(QByteArray)),
@@ -44,6 +43,7 @@ class RemoteSignalTests: public QObject {
          QTest::newRow("one") << "one";
          QTest::newRow("Cyrilic") << "Кирилица";
          QTest::newRow("Xml") << "<root>&amp;</root>";
+         QTest::newRow("JSON") << "{\"key1\":\"val1\",\"key2\":{\"subkey1\":\"subval1\"}}";
       }
       /// Test of QString sending
       void remoteCallStrTest() {
@@ -97,11 +97,18 @@ class RemoteSignalTests: public QObject {
          QCOMPARE(spy.first().at(1).toInt() , num);
       }
 
+      /// void signal test
+      void remoteCallVoidTest() {
+         QSignalSpy spy(mService,SIGNAL(voidMethod()));
+         mClient->voidMethod();
+         QCOMPARE(spy.count() , 1);
+      }
+
    private:
       qrs::ComunicationManager *mServerManager,*mClientManager;
       qrs::ExampleClient *mClient;
       qrs::ExampleService *mService;
-      qrs::JsonSerializer *mSerializer;
+      qrs::JsonSerializer mSerializer;
 };
 
 QTEST_MAIN(RemoteSignalTests);
