@@ -6,7 +6,10 @@ env = BaseEnv.Clone()
 env['CPPPATH']=['.','#lib']
 env.EnableQt4Modules(['QtCore','QtTest'])
 env['LIBS']+=libs['static']
-env.ParseConfig('pkg-config --libs QJson')
+if env['PLATFORM'] != 'win32':
+   env.ParseConfig('pkg-config --libs QJson')
+else :
+   env['LIBS']+=['qjson']
 qtest_builder = Builder(action=('$SOURCE -xml -o $TARGET'))
 env.Append(BUILDERS={"QTest":qtest_builder})
 

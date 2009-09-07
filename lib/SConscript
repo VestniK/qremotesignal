@@ -1,8 +1,11 @@
 Import('BaseEnv')
 
 env = BaseEnv.Clone()
-env.ParseConfig('pkg-config --cflags --libs QJson')
-env['CPPPATH'] += ['.','QtSoap']
+if env['PLATFORM'] != 'win32':
+   env.ParseConfig('pkg-config --libs QJson')
+else :
+   env['LIBS']+=['qjson']
+env['CPPPATH'] = ['.']
 env.EnableQt4Modules(['QtCore'])
 
 Sources = ['baseconverters.cpp','communicationmanager.cpp',

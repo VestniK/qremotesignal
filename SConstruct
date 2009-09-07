@@ -18,7 +18,10 @@ BaseEnv['LINKFLAGS']=Split( ARGUMENTS.get('LDFLAGS','') )
 BaseEnv['PREFIX']=ARGUMENTS.get('prefix','/usr/local')
 
 if not (ARGUMENTS.get('nocheck') or GetOption('clean') or GetOption('help') ) :
-   conf = Configure(BaseEnv.Clone(),
+   confEnv = BaseEnv.Clone()
+   if confEnv['PLATFORM'] != 'win32':
+      confEnv.ParseConfig('pkg-config --libs QJson')
+   conf = Configure(confEnv,
                   custom_tests = {'CheckQt4Version' : CheckQt4Version,
                                      'CheckQt4Tool' : CheckQt4Tool,
                                    'CheckQt4Module' : CheckQt4Module})
@@ -31,6 +34,7 @@ if not (ARGUMENTS.get('nocheck') or GetOption('clean') or GetOption('help') ) :
    if not conf.CheckQt4Module('QtXml'): Exit(1)
    if not conf.CheckQt4Module('QtXmlPatterns'): Exit(1)
    if not conf.CheckQt4Module('QtTest'): Exit(1)
+   if not conf.CheckLibWithHeader('qjson','qjson/parser.h','c++'): Exit(1)
 
    conf.Finish()
    print "Confiduration done\n"
