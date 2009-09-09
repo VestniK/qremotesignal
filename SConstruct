@@ -20,7 +20,7 @@ BaseEnv['PREFIX']=ARGUMENTS.get('prefix','/usr/local')
 if not (ARGUMENTS.get('nocheck') or GetOption('clean') or GetOption('help') ) :
    confEnv = BaseEnv.Clone()
    if confEnv['PLATFORM'] != 'win32':
-      confEnv.ParseConfig('pkg-config --libs QJson')
+      confEnv.ParseConfig('pkg-config --cflags --libs QJson')
    conf = Configure(confEnv,
                   custom_tests = {'CheckQt4Version' : CheckQt4Version,
                                      'CheckQt4Tool' : CheckQt4Tool,

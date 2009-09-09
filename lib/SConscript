@@ -1,12 +1,12 @@
 Import('BaseEnv')
 
 env = BaseEnv.Clone()
-if env['PLATFORM'] != 'win32':
-   env.ParseConfig('pkg-config --libs QJson')
-else :
-   env['LIBS']+=['qjson']
-env['CPPPATH'] = ['.']
 env.EnableQt4Modules(['QtCore'])
+env['CPPPATH'] = ['.']
+if env['PLATFORM'] != 'win32':
+   env.ParseConfig('pkg-config --cflags --libs QJson')
+else:
+   env['LIBS']+=['qjson']
 
 Sources = ['baseconverters.cpp','communicationmanager.cpp',
            'jsonserializer.cpp']
