@@ -1,17 +1,15 @@
 import os
 
 Import('BaseEnv')
-Import('libs')
 env = BaseEnv.Clone()
 env['CPPPATH']=['.','#lib']
 env.EnableQt4Modules(['QtCore','QtTest'])
-env['LIBS']+=libs['static']
+env['LIBS'] += BaseEnv['QRemoteSignalStatic']
 if env['PLATFORM'] != 'win32':
    env.ParseConfig('pkg-config --libs QJson')
 else :
    env['LIBS']+=['qjson']
-qtest_builder = Builder(action=('$SOURCE -xml -o $TARGET'))
-env.Append(BUILDERS={"QTest":qtest_builder})
+env['BUILDERS']["QTest"] = Builder(action=('$SOURCE -xml -o $TARGET'))
 
 def compile_interface(env,source):
    xic = File('#xic/xic')

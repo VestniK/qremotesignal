@@ -16,12 +16,16 @@ Headers = ['QRemoteSignal','absservice.h','baseconverters.h',
            'message.h','absmessageserializer.h',
            'jsonserializer.h']
 
-libs = {}
-libs['shared'] = env.SharedLibrary('QRemoteSignal',Sources)
-libs['static'] = env.Library('QRemoteSignal',Sources)
+libs = [
+   env.SharedLibrary('QRemoteSignal',Sources),
+   env.StaticLibrary('QRemoteSignal',Sources)
+]
 
-env.Install(env['PREFIX']+'/lib/',libs['shared'])
-env.Install(env['PREFIX']+'/lib/',libs['static'])
-env.Install(env['PREFIX']+'/include/qremotesignal',Headers)
+Pc = env.Config('QRemoteSignal.pc.in')
+env.AlwaysBuild(Pc)
 
-Return('libs')
+env.Install(env['CONFIG']['PREFIX_LIB'],libs)
+env.Install(env['CONFIG']['PREFIX_INC'],Headers)
+env.Install(env['CONFIG']['PREFIX_PC'],Pc)
+
+BaseEnv['QRemoteSignalStatic'] = libs[1]

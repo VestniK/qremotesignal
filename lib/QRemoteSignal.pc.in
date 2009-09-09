@@ -1,0 +1,12 @@
+prefix=%(PREFIX)s
+libdir=${prefix}/lib
+includedir=${prefix}/include
+
+Name: QRemoteSignal
+Description: Remote Qt4 signal/slot call library
+Version: %(VERSION)s
+URL: qremotesignal.googlecode.com
+Requires: QtCore >= 4.5.0, QJson
+Libs: -L${libdir} -lqremotesignal
+Libs.private: -lqjson
+Cflags: -I${includedir}

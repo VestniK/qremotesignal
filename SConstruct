@@ -1,7 +1,9 @@
 import os
 from checkers import *
+from builders import *
 
 BaseEnv=Environment(tools=[],ENV=os.environ)
+BaseEnv['BUILDERS']['Config'] = Builder(action=config_build,suffix='',src_suffix='.in')
 if BaseEnv['PLATFORM'] == 'win32':
    BaseEnv.Tool('mingw')
 else:
@@ -15,7 +17,14 @@ BaseEnv['CCFLAGS']=Split( ARGUMENTS.get('CCFLAGS','') )
 BaseEnv['CPPFLAGS']=Split( ARGUMENTS.get('CPPFLAGS','') )
 BaseEnv['CXXFLAGS']=Split( ARGUMENTS.get('CXXFLAGS','') )
 BaseEnv['LINKFLAGS']=Split( ARGUMENTS.get('LDFLAGS','') )
-BaseEnv['PREFIX']=ARGUMENTS.get('prefix','/usr/local')
+
+BaseEnv['CONFIG'] = {}
+BaseEnv['CONFIG']['PREFIX'] = ARGUMENTS.get('prefix','/usr/local')
+BaseEnv['CONFIG']['PREFIX_BIN'] = os.path.join(BaseEnv['CONFIG']['PREFIX'],'bin')
+BaseEnv['CONFIG']['PREFIX_LIB'] = os.path.join(BaseEnv['CONFIG']['PREFIX'],'lib')
+BaseEnv['CONFIG']['PREFIX_PC'] = os.path.join(BaseEnv['CONFIG']['PREFIX'],'lib','pkgconfig')
+BaseEnv['CONFIG']['PREFIX_INC'] = os.path.join(BaseEnv['CONFIG']['PREFIX'],'include','qremotesignal')
+BaseEnv['CONFIG']['VERSION'] = 'svn'
 
 if not (ARGUMENTS.get('nocheck') or GetOption('clean') or GetOption('help') ) :
    confEnv = BaseEnv.Clone()
@@ -38,13 +47,11 @@ if not (ARGUMENTS.get('nocheck') or GetOption('clean') or GetOption('help') ) :
 
    conf.Finish()
    print "Confiduration done\n"
-
 Export('BaseEnv')
-SConscript('xic/SConscript')
-libs = SConscript('lib/SConscript')
+
 Default('xic')
 Default('lib')
-BaseEnv.Alias('install',BaseEnv['PREFIX'])
-
-Export('libs')
+SConscript('xic/SConscript')
+SConscript('lib/SConscript')
 SConscript('tests/SConscript')
+BaseEnv.Alias('install',BaseEnv['CONFIG']['PREFIX'])

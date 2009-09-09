@@ -14,6 +14,7 @@
 #include "interfacedocument.h"
 #include "interfacecompiler.h"
 #include "xicconfig.h"
+#include "config.h"
 
 #define HELP_FLAG "help"
 #define VERSION_FLAG "version"
@@ -25,7 +26,7 @@ int main(int argc, char *argv[]) {
    // Application Info
    QCoreApplication app(argc,argv);
    app.setApplicationName("XML interface compiler");
-   app.setApplicationVersion("0.1");
+   app.setApplicationVersion(VERSION);
    QTextStream out(stdout,QIODevice::WriteOnly);
    QTextStream err(stderr,QIODevice::WriteOnly);
    // Command line options configuration
