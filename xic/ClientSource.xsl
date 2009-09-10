@@ -19,7 +19,7 @@ const QString <xsl:value-of select="/service/@name"/>Client::mName = "<xsl:value
    Message msg;
    msg.setMethod("<xsl:value-of select="./@name"/>");
    msg.setService(mName);
-<xsl:for-each select="./param">   qrs::appendArg(msg,"<xsl:value-of select="./@name"/>",<xsl:value-of select="./@name"/>);
+<xsl:for-each select="./param">   msg.params().insert("<xsl:value-of select="./@name"/>",qrs::createArg(<xsl:value-of select="./@name"/>));
 </xsl:for-each>
    mCManager->send(msg);
 }

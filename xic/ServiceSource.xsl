@@ -24,7 +24,10 @@ void <xsl:value-of select="/service/@name"/>Service::processMessage (const Messa
 <xsl:for-each select="//method">
    if ( msg.method() == "<xsl:value-of select="./@name"/>" ) {<xsl:for-each select="./param"><xsl:text>
       </xsl:text><xsl:value-of select="./@type"/><xsl:text> </xsl:text><xsl:value-of select="./@name"/>;
-      if ( !qrs::getArgValue(msg, "<xsl:value-of select="./@name"/>", <xsl:value-of select="./@name"/>) ) {
+      if ( ! msg.params().contains("<xsl:value-of select="./@name"/>") ) {
+         throw( IncorrectMethodException( QString("Message doesn't contain param \"%1\" required to call method \"%2\"").arg("<xsl:value-of select="./@name"/>").arg(msg.method()) ) );
+      }
+      if ( !qrs::getArgValue(msg.params()["<xsl:value-of select="./@name"/>"], <xsl:value-of select="./@name"/>) ) {
          throw( IncorrectMethodException( QString("Can't obtain \"%1\" param value").arg("<xsl:value-of select="./@name"/>") ) );
       }</xsl:for-each>
       emit <xsl:value-of select="./@name"/>( <xsl:for-each select="./param"><xsl:value-of select="./@name"/><xsl:if test="position()!=last()">, </xsl:if></xsl:for-each> );

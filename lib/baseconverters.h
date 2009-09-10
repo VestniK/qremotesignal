@@ -12,11 +12,11 @@
 
 namespace qrs {
 
-   void appendArg(Message& msg, const QString& name, int val);
-   bool getArgValue(const Message& msg,const QString& name, int& res);
+   QVariant createArg(int val);
+   bool getArgValue(const QVariant& arg, int& res);
 
-   void appendArg(Message& msg, const QString& name, const QString& val);
-   bool getArgValue(const Message& msg,const QString& name, QString& res);
+   QVariant createArg(const QString& val);
+   bool getArgValue(const QVariant& arg, QString& res);
 
 }
 

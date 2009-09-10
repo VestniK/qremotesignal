@@ -9,33 +9,28 @@
 
 namespace qrs {
    // int
-   void appendArg(Message& msg, const QString& name, int val) {
-      msg.params().insert(name,QVariant(val));
+   QVariant createArg(int val) {
+      return QVariant(val);
    }
 
-   bool getArgValue(const Message& msg,const QString& name, int& res) {
-      if ( !msg.params().contains(name) ) {
+   bool getArgValue(const QVariant& arg, int& res) {
+      if ( !arg.canConvert<int>() ) {
          return false;
       }
-      if ( !msg.params()[name].canConvert<int>() ) {
-         return false;
-      }
-      res = msg.params()[name].value<int>();
-      return true;
+      bool convRes = false;
+      res = arg.toInt(&convRes);
+      return convRes;
    }
    // string
-   void appendArg(Message& msg, const QString& name, const QString& val) {
-      msg.params().insert(name,QVariant(val));
+   QVariant createArg(const QString& val) {
+      return QVariant(val);
    }
 
-   bool getArgValue(const Message& msg,const QString& name, QString& res) {
-      if ( !msg.params().contains(name) ) {
+   bool getArgValue(const QVariant& arg, QString& res) {
+      if ( !arg.canConvert<QString>() ) {
          return false;
       }
-      if ( !msg.params()[name].canConvert<QString>() ) {
-         return false;
-      }
-      res = msg.params()[name].value<QString>();
+      res = arg.toString();
       return true;
    }
 
