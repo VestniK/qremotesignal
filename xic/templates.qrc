@@ -1,8 +1,0 @@
-<RCC>
-    <qresource prefix="/" >
-        <file>ServiceHeader.xsl</file>
-        <file>ServiceSource.xsl</file>
-        <file>ClientHeader.xsl</file>
-        <file>ClientSource.xsl</file>
-    </qresource>
-</RCC>
