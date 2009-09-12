@@ -1,9 +1,9 @@
 Import('env')
 
-env['CPPPATH'] += ['.','..','../common']
+env['CPPPATH'] += ['.','../common']
 
 Sources=['client.cpp','../common/connectionprocessor.cpp']
 
-Sources += env.QRSClient('../print.xml')
+Sources += env.QRSClient('../common/print.xml')
 
 env.Program('client',Sources)
