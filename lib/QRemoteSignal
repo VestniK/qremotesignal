@@ -2,8 +2,9 @@
 #define _QRemoteSignal_H
 
 #include "absservice.h"
-#include "communicationmanager.h"
+#include "servicesmanager.h"
 #include "baseconverters.h"
 #include "absmessageserializer.h"
+#include "jsonserializer.h"
 
 #endif

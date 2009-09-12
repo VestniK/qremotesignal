@@ -8,13 +8,13 @@ if env['PLATFORM'] != 'win32':
 else:
    env['LIBS']+=['qjson']
 
-Sources = ['baseconverters.cpp','communicationmanager.cpp',
+Sources = ['baseconverters.cpp','servicesmanager.cpp',
            'jsonserializer.cpp']
 
 Headers = ['QRemoteSignal','absservice.h','baseconverters.h',
-           'communicationmanager.h','baseexception.h',
+           'servicesmanager.h','baseexception.h',
            'message.h','absmessageserializer.h',
-           'jsonserializer.h']
+           'jsonserializer.h','serializationexceptions.h']
 
 libs = [
    env.SharedLibrary('QRemoteSignal',Sources),
