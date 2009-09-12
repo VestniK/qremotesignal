@@ -1,0 +1,6 @@
+from os.path import join
+
+Subdirs=['remoteprint']
+
+for example in Subdirs:
+   SConscript(join(example,'SConscript'))

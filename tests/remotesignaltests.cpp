@@ -8,7 +8,7 @@
 #include <QtCore>
 #include <QtTest>
 
-#include "communicationmanager.h"
+#include "servicesmanager.h"
 #include "exampleclient.h"
 #include "exampleservice.h"
 #include "jsonserializer.h"
@@ -18,8 +18,8 @@ class RemoteSignalTests: public QObject {
    private slots:
       /// Prepare test environment
       void initTestCase() {
-         mServerManager = new qrs::CommunicationManager;
-         mClientManager = new qrs::CommunicationManager;
+         mServerManager = new qrs::ServicesManager;
+         mClientManager = new qrs::ServicesManager;
          mServerManager->setSerializer(&mSerializer);
          mClientManager->setSerializer(&mSerializer);
          connect(mServerManager,SIGNAL(send(QByteArray)),
@@ -105,7 +105,7 @@ class RemoteSignalTests: public QObject {
       }
 
    private:
-      qrs::CommunicationManager *mServerManager,*mClientManager;
+      qrs::ServicesManager *mServerManager,*mClientManager;
       qrs::ExampleClient *mClient;
       qrs::ExampleService *mService;
       qrs::JsonSerializer mSerializer;

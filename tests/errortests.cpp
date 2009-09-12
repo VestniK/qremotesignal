@@ -8,7 +8,7 @@
 #include <QtCore>
 #include <QtTest>
 
-#include "communicationmanager.h"
+#include "servicesmanager.h"
 #include "exampleservice.h"
 #include "jsonserializer.h"
 
@@ -19,7 +19,7 @@ class ErrorTests: public QObject {
    private slots:
       /// Prepare test environment
       void initTestCase() {
-         mServerManager = new qrs::CommunicationManager;
+         mServerManager = new qrs::ServicesManager;
          mSerializer = new qrs::JsonSerializer(mServerManager);
          mServerManager->setSerializer(mSerializer);
          mService = new qrs::ExampleService(mServerManager);
@@ -73,7 +73,7 @@ class ErrorTests: public QObject {
          QCOMPARE( (int)err->errorType(), expectedErr );
       }
    private:
-      qrs::CommunicationManager *mServerManager,*mClientManager;
+      qrs::ServicesManager *mServerManager,*mClientManager;
       qrs::ExampleService *mService;
       qrs::JsonSerializer *mSerializer;
 };

@@ -1,49 +1,14 @@
-import os
-
 Import('BaseEnv')
+
 env = BaseEnv.Clone()
+env.Tool('qrs_dev_build')
 env['CPPPATH']=['.','#lib']
 env.EnableQt4Modules(['QtCore','QtTest'])
 env['LIBS'] += BaseEnv['QRemoteSignalStatic']
 if env['PLATFORM'] != 'win32':
-   env.ParseConfig('pkg-config --libs QJson')
-else :
+   env.ParseConfig('pkg-config --cflags --libs QJson')
+else:
    env['LIBS']+=['qjson']
-
-env['BUILDERS']["QTest"] = Builder(action=('$SOURCE -xml -o $TARGET'))
-
-def xic_emiter(target, source, env):
-   header_target = File(os.path.splitext(str(target[0]))[0]+'.h')
-   target.append(header_target)
-   return target,source
-
-env['BUILDERS']['QRSBuildService'] = Builder(
-   emitter=xic_emiter,
-   action="$XIC --service --header ${TARGETS[1]} --source ${TARGETS[0]} $SOURCE"
-)
-env['BUILDERS']['QRSBuildClient'] = Builder(
-   emitter=xic_emiter,
-   action="$XIC --client --header ${TARGETS[1]} --source ${TARGETS[0]} $SOURCE"
-)
-
-def service_action(env,interface):
-   cpp = File( os.path.splitext(str(interface))[0]+'service.cpp' )
-   service = env.QRSBuildService(cpp,interface)
-   targets = [ service[0] ]
-   if not os.path.exists(str(service[0])) and not os.path.exists(str(service[1])):
-      targets.append(env.Moc4(service[1]))
-   return targets
-
-def client_action(env,interface):
-   cpp = File( os.path.splitext(str(interface))[0]+'client.cpp' )
-   client = env.QRSBuildClient(cpp,interface)
-   targets = [ client[0] ]
-   if not os.path.exists(str(client[0])) and not os.path.exists(str(client[1])):
-      targets.append(env.Moc4(client[1]))
-   return targets
-
-env.AddMethod(service_action,"QRSService")
-env.AddMethod(client_action,"QRSClient")
 
 Service = env.QRSService('example.xml')
 Client  = env.QRSClient('example.xml')
@@ -52,6 +17,7 @@ remotesignaltests = env.Program('remotesignaltests',Service+Client+['remotesigna
 errortests = env.Program('errortests',Service+['errortests.cpp'])
 jsonserializertests = env.Program('jsonserializertests',['jsonserializertests.cpp'])
 
+env['BUILDERS']['QTest'] = Builder(action=('$SOURCE -xml -o $TARGET'))
 env.QTest('reports/remotesignaltests.xml',remotesignaltests)
 env.QTest('reports/errortests.xml',errortests)
 env.QTest('reports/jsonserializertests.xml',jsonserializertests)

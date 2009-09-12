@@ -19,7 +19,7 @@ BaseEnv['CXXFLAGS']=Split( ARGUMENTS.get('CXXFLAGS','') )
 BaseEnv['LINKFLAGS']=Split( ARGUMENTS.get('LDFLAGS','') )
 
 BaseEnv['CONFIG'] = {}
-BaseEnv['CONFIG']['PREFIX'] = ARGUMENTS.get('prefix','/usr/local')
+BaseEnv['CONFIG']['PREFIX'] = ARGUMENTS.get('PREFIX','/usr/local')
 BaseEnv['CONFIG']['PREFIX_BIN'] = os.path.join(BaseEnv['CONFIG']['PREFIX'],'bin')
 BaseEnv['CONFIG']['PREFIX_LIB'] = os.path.join(BaseEnv['CONFIG']['PREFIX'],'lib')
 BaseEnv['CONFIG']['PREFIX_PC'] = os.path.join(BaseEnv['CONFIG']['PREFIX'],'lib','pkgconfig')
@@ -49,10 +49,8 @@ if not (ARGUMENTS.get('nocheck') or GetOption('clean') or GetOption('help') ) :
    print "Confiduration done\n"
 Export('BaseEnv')
 
-#Default('xic')
-#Default('lib')
-Depends('tests','xic')
-SConscript('xic/SConscript')
+Depends('tests','qrsc')
+SConscript('qrsc/SConscript')
 SConscript('lib/SConscript')
 SConscript('tests/SConscript')
 BaseEnv.Alias('install',BaseEnv['CONFIG']['PREFIX'])

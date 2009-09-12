@@ -6,6 +6,6 @@ debug:
 
 clean:
 	scons -c
-	rm -f *~ lib/*~ lib/QtSoap/*~ xic/*~ tests/*~
+	rm -f *~ lib/*~ qrsc/*~ tests/*~
 
 .PHONY: all clean
