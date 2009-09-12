@@ -1,0 +1,14 @@
+Import('BaseEnv')
+
+env = BaseEnv.Clone()
+env['CPPPATH']=['.']
+env.EnableQt4Modules(['QtCore','QtXml','QtXmlPatterns'])
+
+Resources=['templates.qrc']
+Sources=['qrsc.cpp','qtextserializer.cpp','interfacedocument.cpp',
+         'interfacecompiler.cpp','argvparser.cpp']
+Sources += env.Qrc(Resources)
+
+env.AlwaysBuild( env.Config('config.h.in') )
+BaseEnv['QRSC'] = env.Program('qrsc',Sources)[0]
+env.Install(env['CONFIG']['PREFIX_BIN'],BaseEnv['QRSC'])
