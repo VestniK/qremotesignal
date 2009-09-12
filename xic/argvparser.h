@@ -1,12 +1,12 @@
 /**
- * @file xicconfig.h
- * @brief XicConfig class
+ * @file argvparser.h
+ * @brief ArgvParser class
  *
  * @author VestniK (Sergey N.Vidyuk) sir.vestnik@gmail.com
  * @date 7 Aug 2009
  */
-#ifndef XicConfig_H
-#define XicConfig_H
+#ifndef ArgvParser_H
+#define ArgvParser_H
 
 #include <QtCore>
 
@@ -14,10 +14,10 @@
  * Parses command line and store configuration
  * Require QCoreApplication or QApplication object to be initialized
  */
-class XicConfig: public QObject {
+class ArgvParser: public QObject {
    public:
-      XicConfig(QObject *parent = 0);
-      virtual ~XicConfig() {};
+      ArgvParser(QObject *parent = 0);
+      virtual ~ArgvParser() {};
 
       void addFlag(const QString& name,
                   const QString& desc,

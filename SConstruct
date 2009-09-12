@@ -49,8 +49,9 @@ if not (ARGUMENTS.get('nocheck') or GetOption('clean') or GetOption('help') ) :
    print "Confiduration done\n"
 Export('BaseEnv')
 
-Default('xic')
-Default('lib')
+#Default('xic')
+#Default('lib')
+Depends('tests','xic')
 SConscript('xic/SConscript')
 SConscript('lib/SConscript')
 SConscript('tests/SConscript')

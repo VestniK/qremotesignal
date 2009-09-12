@@ -1,17 +1,17 @@
 /**
- * @file xicconfig.cpp
- * @brief XicConfig class
+ * @file argvparser.cpp
+ * @brief ArgvParser class
  *
  * @author VestniK (Sergey N.Vidyuk) sir.vestnik@gmail.com
  * @date 7 Aug 2009
  */
-#include "xicconfig.h"
+#include "argvparser.h"
 
-XicConfig::XicConfig(QObject *parent):QObject(parent) {
+ArgvParser::ArgvParser(QObject *parent):QObject(parent) {
    mError = "";
 }
 
-void XicConfig::addFlag(const QString& name,
+void ArgvParser::addFlag(const QString& name,
                    const QString& desc,
                    const QChar& shortName) {
    mFlags.insert(name,false);
@@ -19,7 +19,7 @@ void XicConfig::addFlag(const QString& name,
    mDescriptions.insert(name,desc);
 }
 
-void XicConfig::addOption(const QString& name,
+void ArgvParser::addOption(const QString& name,
                    const QString& desc,
                    const QChar& shortName,
                    const QString& defaultVal ) {
@@ -31,7 +31,7 @@ void XicConfig::addOption(const QString& name,
 /**
  * Require QCoreApplication or QApplication to be initialized
  */
-bool XicConfig::parse() {
+bool ArgvParser::parse() {
    QStringList args = qApp->arguments();
    mExecStr = args[0];
    QFileInfo executableInfo(mExecStr);
@@ -75,10 +75,11 @@ bool XicConfig::parse() {
    return true;
 }
 
-QString XicConfig::helpStr() const {
+QString ArgvParser::helpStr() const {
    QString res;
    QTextStream out(&res,QIODevice::WriteOnly);
    out << qApp->applicationName() << endl;
+   /// @todo store " [options] interface.xml" in some custumizable variable
    out << "\t" << mExecutableName << " [options] interface.xml" << endl;
    out << endl;
    out << tr("Options:") << endl;

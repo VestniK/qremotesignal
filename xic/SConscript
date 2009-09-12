@@ -6,9 +6,9 @@ env.EnableQt4Modules(['QtCore','QtXml','QtXmlPatterns'])
 
 Resources=['templates.qrc']
 Sources=['xic.cpp','qtextserializer.cpp','interfacedocument.cpp',
-         'interfacecompiler.cpp','xicconfig.cpp']
+         'interfacecompiler.cpp','argvparser.cpp']
 Sources += env.Qrc(Resources)
 
 env.AlwaysBuild( env.Config('config.h.in') )
-xic = env.Program('xic',Sources)
-env.Install(env['CONFIG']['PREFIX_BIN'],xic)
+BaseEnv['XIC'] = env.Program('xic',Sources)[0]
+env.Install(env['CONFIG']['PREFIX_BIN'],BaseEnv['XIC'])

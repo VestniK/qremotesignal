@@ -39,7 +39,8 @@ bool InterfaceCompiler::compileServiceSource() {
 
    mInterface->getIODevice()->seek(0);
    QXmlQuery query(QXmlQuery::XSLT20);
-   query.bindVariable( "ServiceHeader",QXmlItem(QVariant(mInterface->serviceHeader())) );
+   QFileInfo headerInfo(mInterface->serviceHeader());
+   query.bindVariable( "ServiceHeader",QXmlItem(QVariant(headerInfo.fileName())) );
    query.setFocus(mInterface->getIODevice());
    query.setQuery(&xsltFile);
 
@@ -78,7 +79,8 @@ bool InterfaceCompiler::compileClientSource() {
 
    mInterface->getIODevice()->seek(0);
    QXmlQuery query(QXmlQuery::XSLT20);
-   query.bindVariable( "ClientHeader",QXmlItem(QVariant(mInterface->clientHeader())) );
+   QFileInfo headerInfo(mInterface->clientHeader());
+   query.bindVariable( "ClientHeader",QXmlItem(QVariant(headerInfo.fileName())) );
    query.setFocus(mInterface->getIODevice());
    query.setQuery(&xsltFile);
 

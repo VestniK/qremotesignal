@@ -9,29 +9,47 @@ if env['PLATFORM'] != 'win32':
    env.ParseConfig('pkg-config --libs QJson')
 else :
    env['LIBS']+=['qjson']
+
 env['BUILDERS']["QTest"] = Builder(action=('$SOURCE -xml -o $TARGET'))
 
-def compile_interface(env,source):
-   xic = File('#xic/xic')
-   files = Split( os.popen(str(xic)+' -f '+source).read() )
-   path = os.path.dirname( os.path.abspath(str(source)) )
-   resNodes = [File(os.path.join(path,f)) for f in files]
-   env.Command(files,source,str(xic)+" -d " + path + " $SOURCE");
-   # if sources have noot been yet generated automoc will not
-   # generate Moc4 targets
-   for f in [x for x in resNodes if os.path.splitext(str(x))[1]=='.cpp']:
-      if not os.path.exists(str(f)):
-         resNodes += env.Moc4( os.path.splitext(str(f))[0]+'.h' )
-   return resNodes
+def xic_emiter(target, source, env):
+   header_target = File(os.path.splitext(str(target[0]))[0]+'.h')
+   target.append(header_target)
+   return target,source
 
-env.AddMethod(compile_interface,"Xic")
+env['BUILDERS']['QRSBuildService'] = Builder(
+   emitter=xic_emiter,
+   action="$XIC --service --header ${TARGETS[1]} --source ${TARGETS[0]} $SOURCE"
+)
+env['BUILDERS']['QRSBuildClient'] = Builder(
+   emitter=xic_emiter,
+   action="$XIC --client --header ${TARGETS[1]} --source ${TARGETS[0]} $SOURCE"
+)
 
-Files = env.Xic('example.xml')
+def service_action(env,interface):
+   cpp = File( os.path.splitext(str(interface))[0]+'service.cpp' )
+   service = env.QRSBuildService(cpp,interface)
+   targets = [ service[0] ]
+   if not os.path.exists(str(service[0])) and not os.path.exists(str(service[1])):
+      targets.append(env.Moc4(service[1]))
+   return targets
 
-Sources = [f for f in Files if os.path.splitext(str(f))[1]=='.cpp']
+def client_action(env,interface):
+   cpp = File( os.path.splitext(str(interface))[0]+'client.cpp' )
+   client = env.QRSBuildClient(cpp,interface)
+   targets = [ client[0] ]
+   if not os.path.exists(str(client[0])) and not os.path.exists(str(client[1])):
+      targets.append(env.Moc4(client[1]))
+   return targets
 
-remotesignaltests = env.Program('remotesignaltests',Sources+['remotesignaltests.cpp'])
-errortests = env.Program('errortests',Sources+['errortests.cpp'])
+env.AddMethod(service_action,"QRSService")
+env.AddMethod(client_action,"QRSClient")
+
+Service = env.QRSService('example.xml')
+Client  = env.QRSClient('example.xml')
+
+remotesignaltests = env.Program('remotesignaltests',Service+Client+['remotesignaltests.cpp'])
+errortests = env.Program('errortests',Service+['errortests.cpp'])
 jsonserializertests = env.Program('jsonserializertests',['jsonserializertests.cpp'])
 
 env.QTest('reports/remotesignaltests.xml',remotesignaltests)
