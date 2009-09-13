@@ -37,8 +37,8 @@ void Server::newConnection() {
    QTcpSocket* socket = mTcpSrv->nextPendingConnection();
    if (socket == 0) return;
    ConnectionProcessor* processor = new ConnectionProcessor(socket);
-   connect(processor,SIGNAL(messageRecieved(QByteArray)),
-           mManager,SLOT(recieve(const QByteArray&)));
+   connect(processor,SIGNAL(messageReceived(QByteArray)),
+           mManager,SLOT(receive(const QByteArray&)));
    connect(mManager,SIGNAL(send(QByteArray)),
            processor,SLOT(sendMessage(const QByteArray&)));
    mConnectionPool.append(socket);

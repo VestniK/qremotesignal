@@ -21,7 +21,7 @@ class ConnectionProcessor : public QObject {
       void sendMessage(const QByteArray& msg);
       void timeout();
    signals:
-      void messageRecieved(QByteArray msg);
+      void messageReceived(QByteArray msg);
    private:
       QTcpSocket* mSocket;
       QByteArray mReadBuf;

@@ -35,7 +35,7 @@ class ErrorTests: public QObject {
          msg.setErrorType(qrs::Message::UnknownService);
          msg.setError("test error");
 
-         mServerManager->recieve( mSerializer->serialize(msg) );
+         mServerManager->receive( mSerializer->serialize(msg) );
 
          QCOMPARE( spy.count(), 1 );
       }
@@ -66,7 +66,7 @@ class ErrorTests: public QObject {
          msg.setService(service);
          msg.setMethod(method);
          msg.params().insert("str","test");
-         mServerManager->recieve(mSerializer->serialize(msg));
+         mServerManager->receive(mSerializer->serialize(msg));
          QCOMPARE( spy.count(), 1 );
          qrs::MessageAP err = mSerializer->deserialize( spy.first().at(0).toByteArray() );
          QVERIFY( err->type() == qrs::Message::Error );

@@ -40,7 +40,7 @@ void ConnectionProcessor::readData() {
          return;
    }
    if ( mReadBuf.size() - (delimeterPos + 1) == mMsgLength ) {
-      emit messageRecieved(mReadBuf.right(mMsgLength));
+      emit messageReceived(mReadBuf.right(mMsgLength));
       mMsgLength = -1;
       mReadBuf.clear();
       mSocket->close();

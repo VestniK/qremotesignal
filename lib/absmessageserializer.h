@@ -45,7 +45,7 @@ namespace qrs {
           * @brief Serealize Message
           *
           * @throw MessageParsingException in case of error during message parsing
-          * @throw ErrorMessageException if the message recieved is error message
+          * @throw ErrorMessageException if the message received is error message
           *
           * @sa serialize
           *

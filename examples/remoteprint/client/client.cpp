@@ -35,8 +35,8 @@ int main(int argc,char **argv) {
 
    QObject::connect(manager,SIGNAL(send(QByteArray)),
                     processor,SLOT(sendMessage(const QByteArray&)));
-   QObject::connect(processor,SIGNAL(messageRecieved(QByteArray)),
-                    manager,SLOT(recieve(const QByteArray&)));
+   QObject::connect(processor,SIGNAL(messageReceived(QByteArray)),
+                    manager,SLOT(receive(const QByteArray&)));
 
    client->print(args[2]);
    return app.exec();
