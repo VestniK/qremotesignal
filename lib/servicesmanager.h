@@ -27,11 +27,11 @@ namespace qrs {
 
          void setSerializer(AbsMessageSerializer* val) {mSerializer = val;};
       public slots:
-         void recieve(const QByteArray& msg);
+         void receive(const QByteArray& msg);
       signals:
          void send(QByteArray msg);
          /**
-          * This signal is emmited if error message recieved.
+          * This signal is emmited if error message received.
           */
          void error();
       private:

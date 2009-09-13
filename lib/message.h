@@ -31,7 +31,7 @@ namespace qrs {
 
          enum MsgType {RemoteCall,Error};
          enum ErrorType {
-            /// if recieved error code is not described here or not recieved
+            /// if received error code is not described here or not received
             UnknownErrorCode = -1,
             /// Incorrect mesage from underlying protocol point of view
             ProtocolError = 1,
@@ -127,7 +127,7 @@ namespace qrs {
          /**
           * @brief Error description.
           *
-          * Contains description of the recieved error message
+          * Contains description of the received error message
           */
          QString mError;
    };

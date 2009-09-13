@@ -13,7 +13,7 @@ ServicesManager::ServicesManager(QObject *parent): QObject(parent) {
    mSerializer = 0;
 }
 
-void ServicesManager::recieve(const QByteArray& msg) {
+void ServicesManager::receive(const QByteArray& msg) {
    MessageAP message;
    try {
       message = mSerializer->deserialize(msg);
@@ -25,7 +25,7 @@ void ServicesManager::recieve(const QByteArray& msg) {
       return;
    }
    if ( message->type() == Message::Error ) {
-      /// @todo Create error handler class and process recieved error
+      /// @todo Create error handler class and process received error
       emit error();
       return;
    }

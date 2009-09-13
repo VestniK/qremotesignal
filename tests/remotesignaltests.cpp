@@ -23,9 +23,9 @@ class RemoteSignalTests: public QObject {
          mServerManager->setSerializer(&mSerializer);
          mClientManager->setSerializer(&mSerializer);
          connect(mServerManager,SIGNAL(send(QByteArray)),
-                 mClientManager,SLOT(recieve(const QByteArray&)));
+                 mClientManager,SLOT(receive(const QByteArray&)));
          connect(mClientManager,SIGNAL(send(QByteArray)),
-                 mServerManager,SLOT(recieve(const QByteArray&)));
+                 mServerManager,SLOT(receive(const QByteArray&)));
          mClient = new qrs::ExampleClient(mClientManager);
          mService = new qrs::ExampleService(mServerManager);
       }
