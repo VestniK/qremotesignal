@@ -1,0 +1,31 @@
+Import('BaseEnv')
+
+env = BaseEnv.Clone()
+env.EnableQt4Modules(['QtCore'])
+env['CPPPATH'] = ['.']
+if env['PLATFORM'] != 'win32':
+   env.ParseConfig('pkg-config --cflags --libs QJson')
+else:
+   env['LIBS']+=['qjson']
+
+Sources = ['baseconverters.cpp','servicesmanager.cpp',
+           'jsonserializer.cpp']
+
+Headers = ['QRemoteSignal','absservice.h','baseconverters.h',
+           'servicesmanager.h','baseexception.h',
+           'message.h','absmessageserializer.h',
+           'jsonserializer.h','serializationexceptions.h']
+
+libs = [
+   env.SharedLibrary('QRemoteSignal',Sources),
+   env.StaticLibrary('QRemoteSignal',Sources)
+]
+
+Pc = env.Config('QRemoteSignal.pc.in')
+env.AlwaysBuild(Pc)
+
+env.Install(env['CONFIG']['PREFIX_LIB'],libs)
+env.Install(env['CONFIG']['PREFIX_INC'],Headers)
+env.Install(env['CONFIG']['PREFIX_PC'],Pc)
+
+BaseEnv['QRemoteSignalStatic'] = libs[1]

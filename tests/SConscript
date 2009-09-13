@@ -1,0 +1,23 @@
+Import('BaseEnv')
+
+env = BaseEnv.Clone()
+env.Tool('qrs_dev_build')
+env['CPPPATH']=['.','#lib']
+env.EnableQt4Modules(['QtCore','QtTest'])
+env['LIBS'] += BaseEnv['QRemoteSignalStatic']
+if env['PLATFORM'] != 'win32':
+   env.ParseConfig('pkg-config --cflags --libs QJson')
+else:
+   env['LIBS']+=['qjson']
+
+Service = env.QRSService('example.xml')
+Client  = env.QRSClient('example.xml')
+
+remotesignaltests = env.Program('remotesignaltests',Service+Client+['remotesignaltests.cpp'])
+errortests = env.Program('errortests',Service+['errortests.cpp'])
+jsonserializertests = env.Program('jsonserializertests',['jsonserializertests.cpp'])
+
+env['BUILDERS']['QTest'] = Builder(action=('$SOURCE -xml -o $TARGET'))
+env.QTest('reports/remotesignaltests.xml',remotesignaltests)
+env.QTest('reports/errortests.xml',errortests)
+env.QTest('reports/jsonserializertests.xml',jsonserializertests)
