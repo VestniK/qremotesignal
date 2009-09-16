@@ -6,7 +6,6 @@ debug:
 
 clean:
 	scons -c
-	rm -f *~ lib/*~ qrsc/*~ tests/*~
 
 examples:
 	make -C examples

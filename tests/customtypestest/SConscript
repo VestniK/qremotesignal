@@ -1,0 +1,9 @@
+Import('env')
+
+Sources = ['customtypestests.cpp','customconvertors.cpp']
+Sources += env.QRSService('customtype.xml')
+Sources += env.QRSClient('customtype.xml')
+
+customtypestests = env.Program('customtypestests',Sources)
+
+Return('customtypestests')
