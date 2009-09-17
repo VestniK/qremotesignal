@@ -1,5 +1,5 @@
 /**
- * @file customconvertors.h
+ * @file customconverters.h
  * @brief Conertors for custom types definition
  *
  * @author VestniK (Sergey N.Vidyuk) sir.vestnik@gmail.com

@@ -1,11 +1,11 @@
 /**
- * @file customconvertors.cpp
+ * @file customconverters.cpp
  * @brief Conertors for custom types implementation
  *
  * @author VestniK (Sergey N.Vidyuk) sir.vestnik@gmail.com
  * @date 16 Sep 2009
  */
-#include "customconvertors.h"
+#include "customconverters.h"
 
 #include <QRemoteSignal>
 

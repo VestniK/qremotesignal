@@ -1,6 +1,6 @@
 Import('env')
 
-Sources = ['customtypestests.cpp','customconvertors.cpp']
+Sources = ['customtypestests.cpp','customconverters.cpp']
 Sources += env.QRSService('customtype.xml')
 Sources += env.QRSClient('customtype.xml')
 

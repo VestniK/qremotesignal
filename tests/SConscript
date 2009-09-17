@@ -16,6 +16,7 @@ Client  = env.QRSClient('example.xml')
 remotesignaltests = env.Program('remotesignaltests',Service+Client+['remotesignaltests.cpp'])
 errortests = env.Program('errortests',Service+['errortests.cpp'])
 jsonserializertests = env.Program('jsonserializertests',['jsonserializertests.cpp'])
+converterstests = env.Program('converterstests',['converterstests.cpp'])
 
 customtypestests = SConscript('customtypestest/SConscript',exports='env')
 
@@ -24,3 +25,4 @@ env.QTest('reports/remotesignaltests.xml',remotesignaltests)
 env.QTest('reports/errortests.xml',errortests)
 env.QTest('reports/jsonserializertests.xml',jsonserializertests)
 env.QTest('reports/customtypestests.xml',customtypestests)
+env.QTest('reports/converterstests.xml',converterstests)

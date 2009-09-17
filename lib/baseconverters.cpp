@@ -18,7 +18,11 @@ namespace qrs {
          return false;
       }
       bool convRes = false;
-      res = arg.toInt(&convRes);
+      /* According to Qt 4.5 documentation QVariant::toInt(bool* ok) doesn't
+      set *ok to false in case of numeric values out of int range while
+      QString::toInt does. That's why I use such strange way to obtain the
+      value. */
+      res = arg.toString().toInt(&convRes,0);
       return convRes;
    }
    // string
