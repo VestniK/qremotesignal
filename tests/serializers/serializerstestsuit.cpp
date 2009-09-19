@@ -84,8 +84,31 @@ void SerializersTestSuit::testSerialization() {
 }
 
 void SerializersTestSuit::testDeserializationError_data() {
+   QTest::addColumn<QByteArray>("rawMsg");
+
+   QMap<QString,QByteArray>::iterator indx = mRawMessages.begin();
+   while ( indx != mRawMessages.end() ) {
+      QTest::newRow( indx.key().toLocal8Bit().constData() ) << indx.value();
+      indx++;
+   }
+   if ( !mRawMessages.contains("empty") ) {
+      QTest::newRow("empty") << QByteArray();
+   }
 }
 void SerializersTestSuit::testDeserializationError() {
+   QFETCH(QByteArray,rawMsg);
+
+   try {
+      qrs::JsonSerializer serializer;
+      serializer.deserialize(rawMsg);
+      QFAIL("Incorrect message was parsed. Exception wasn't thrown");
+   } catch (const qrs::MessageParsingException& e) {
+   } catch ( const std::exception& e ) {
+      qWarning("Caught exception of incorrect type");
+      QFAIL( e.what() );
+   } catch (...) {
+      QFAIL("Caught exception of unknown type");
+   }
 }
 
 // Additional stuff

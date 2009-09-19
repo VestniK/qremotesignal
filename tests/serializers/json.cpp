@@ -13,5 +13,11 @@
 int main(int argc, char** argv) {
    qrs::JsonSerializer json;
    SerializersTestSuit testsuit(&json);
+
+   testsuit.addDeserializationErrorTestCase("NotJson",(QByteArray)"12345");
+   testsuit.addDeserializationErrorTestCase("EmptyMessage",(QByteArray)"{}");
+   testsuit.addDeserializationErrorTestCase("NoType", (QByteArray)"{\"service\":\"Example\",\"method\":\"voidMethod\"}");
+   testsuit.addDeserializationErrorTestCase("WrongType", (QByteArray)"{\"Wrong\":{\"service\":\"Example\",\"method\":\"voidMethod\"}}");
+
    return QTest::qExec(&testsuit,argc,argv);
 }
