@@ -23,7 +23,7 @@ namespace qrs {
          virtual ~BaseException() throw() {};
 
          /// Returns C string. Encoding is determined from locale
-         virtual const char* what() throw() {
+         virtual const char* what() const throw() {
             return mReason.toLocal8Bit().constData();
          }
          virtual const QString& reason() const {return mReason;};

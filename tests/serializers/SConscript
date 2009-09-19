@@ -1,0 +1,7 @@
+Import('env')
+
+Sources = ['json.cpp','serializerstestsuit.cpp']
+
+json = env.Program('JsonSerializerTestSuit',Sources)
+
+Return('json')

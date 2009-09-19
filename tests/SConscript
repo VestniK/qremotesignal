@@ -19,10 +19,15 @@ jsonserializertests = env.Program('jsonserializertests',['jsonserializertests.cp
 converterstests = env.Program('converterstests',['converterstests.cpp'])
 
 customtypestests = SConscript('customtypestest/SConscript',exports='env')
+json = SConscript('serializers/SConscript',exports='env')
 
-env['BUILDERS']['QTest'] = Builder(action=('$SOURCE -xml -o $TARGET'))
+env['BUILDERS']['QTest'] = Builder(action=('$SOURCE -xml -o $TARGET'),
+                                   src_suffix='',
+                                   suffix='.xml')
+
 env.QTest('reports/remotesignaltests.xml',remotesignaltests)
 env.QTest('reports/errortests.xml',errortests)
 env.QTest('reports/jsonserializertests.xml',jsonserializertests)
 env.QTest('reports/customtypestests.xml',customtypestests)
 env.QTest('reports/converterstests.xml',converterstests)
+env.QTest('reports/json.xml',json)
