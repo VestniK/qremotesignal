@@ -26,13 +26,15 @@ namespace qrs {
     */
    class Message {
       public:
-         Message() {mType = RemoteCall;};
+         Message() {mType = RemoteCall; mErrorType = Ok;};
          ~Message() {};
 
          enum MsgType {RemoteCall,Error};
          enum ErrorType {
             /// if received error code is not described here or not received
             UnknownErrorCode = -1,
+            /// If there is no error
+            Ok = 0,
             /// Incorrect mesage from underlying protocol point of view
             ProtocolError = 1,
             /// Message type not specified
