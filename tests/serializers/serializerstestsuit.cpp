@@ -88,6 +88,49 @@ void SerializersTestSuit::addDeserializationErrorTestCase(const QString& name, c
 void SerializersTestSuit::initTestCase() {
    qrs::Message *msg;
 
+   // --- Errors
+   // Unknown error
+   msg = new qrs::Message;
+   msg->setService(TEST_SERVICE_NAME);
+   msg->setMethod(TEST_METHOD_NAME);
+   msg->setErrorType(qrs::Message::UnknownErrorCode);
+   msg->setError("error description");
+   mMessages.insert("unknown error",msg);
+
+   // Protocol error
+   msg = new qrs::Message;
+   msg->setErrorType(qrs::Message::ProtocolError);
+   msg->setError("error description");
+   mMessages.insert("protocol error",msg);
+
+   // Unknown message type
+   msg = new qrs::Message;
+   msg->setErrorType(qrs::Message::UnknownMsgType);
+   msg->setError("error description");
+   mMessages.insert("unknown type",msg);
+
+   // Unknown service
+   msg = new qrs::Message;
+   msg->setMethod(TEST_METHOD_NAME);
+   msg->setErrorType(qrs::Message::UnknownService);
+   msg->setError("error description");
+   mMessages.insert("unknown service",msg);
+
+   // Incorrect method
+   msg = new qrs::Message;
+   msg->setService(TEST_SERVICE_NAME);
+   msg->setMethod(TEST_METHOD_NAME);
+   msg->setErrorType(qrs::Message::IncorrectMethod);
+   msg->setError("error description");
+   mMessages.insert("incorrect method",msg);
+
+   // --- Remote calls
+   // No args
+   msg = new qrs::Message;
+   msg->setService(TEST_SERVICE_NAME);
+   msg->setMethod(TEST_METHOD_NAME);
+   mMessages.insert("no args",msg);
+
    // int
    msg = new qrs::Message;
    msg->setService(TEST_SERVICE_NAME);
