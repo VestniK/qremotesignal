@@ -101,6 +101,32 @@ void SerializersTestSuit::initTestCase() {
    msg->setMethod(TEST_METHOD_NAME);
    msg->params().insert("str",qrs::createArg( QString("string") ));
    mMessages.insert("QString",msg);
+
+   // QList
+   msg = new qrs::Message;
+   msg->setService(TEST_SERVICE_NAME);
+   msg->setMethod(TEST_METHOD_NAME);
+   msg->params().insert("list",qrs::createArg( QList<QString>() << "2" << "4" << "6" ));
+   mMessages.insert("QList",msg);
+
+   // QMap
+   msg = new qrs::Message;
+   msg->setService(TEST_SERVICE_NAME);
+   msg->setMethod(TEST_METHOD_NAME);
+   QMap<QString,int> intMap;
+   intMap["one"]=1;
+   intMap["two"]=2;
+   intMap["three"]=3;
+   msg->params().insert("map",qrs::createArg( intMap ));
+   mMessages.insert("QMap",msg);
+
+   // Two args
+   msg = new qrs::Message;
+   msg->setService(TEST_SERVICE_NAME);
+   msg->setMethod(TEST_METHOD_NAME);
+   msg->params().insert("str",qrs::createArg( QString("string") ));
+   msg->params().insert("list",qrs::createArg( QList<int>() << 2 << 4 << 8 << 16 ));
+   mMessages.insert("Two args",msg);
 }
 void SerializersTestSuit::cleanupTestCase(){
    QMap<QString,qrs::Message*>::iterator indx = mMessages.begin();
