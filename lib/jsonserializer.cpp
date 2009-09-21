@@ -40,6 +40,8 @@ QByteArray JsonSerializer::serialize ( const Message& msg )
       message.insert( ERROR_DESCRIPTION_KEY,msg.error() );
       message.insert( ERROR_CODE_KEY, (int)msg.errorType() );
       jsonObject.insert(ERROR_TYPE,QVariant(message));
+   } else {
+      /// @todo what to do if message type is incorrect?
    }
    return serializer.serialize( QVariant(jsonObject) );
 }
@@ -83,6 +85,7 @@ MessageAP JsonSerializer::deserialize ( const QByteArray& msg )
                err->setErrorType(Message::UnknownService); break;
             case (int)Message::IncorrectMethod:
                err->setErrorType(Message::IncorrectMethod); break;
+            default: err->setErrorType(Message::UnknownErrorCode);
          }
       } else {
          err->setErrorType(Message::UnknownErrorCode);
@@ -96,11 +99,11 @@ MessageAP JsonSerializer::deserialize ( const QByteArray& msg )
       res->setMethod( rc.value(METHOD_KEY).toString() );
       res->setParams( rc.value(RC_PARAMS_KEY).toMap() );
       return res;
+   } else {
+      // Unknown message type
+      QString desc = "Unknown message type \"%1\"";
+      desc = desc.arg(messageType);
+      MessageParsingException err(desc,Message::UnknownMsgType);
+      throw( err );
    }
-
-   // Unknown message type
-   QString desc = "Unknown message type \"%1\"";
-   desc = desc.arg(messageType);
-   MessageParsingException err(desc,Message::UnknownMsgType);
-   throw( err );
 }

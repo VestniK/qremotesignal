@@ -42,10 +42,9 @@ namespace qrs {
          virtual QByteArray serialize(const Message& msg)
                throw(UnsupportedTypeException) = 0;
          /**
-          * @brief Serealize Message
+          * @brief Deserealize Message
           *
           * @throw MessageParsingException in case of error during message parsing
-          * @throw ErrorMessageException if the message received is error message
           *
           * @sa serialize
           *
