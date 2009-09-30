@@ -10,6 +10,7 @@
 #include <exception>
 
 #include <QtTest>
+#include <QtDebug>
 
 const QString TEST_SERVICE_NAME = "test";
 const QString TEST_METHOD_NAME = "do";
@@ -256,10 +257,10 @@ bool operator== (const qrs::Message& msg1, const qrs::Message& msg2) {
 bool qrsCompareParams(const QVariant param1 , const QVariant& param2) {
    if ( param1.type() == QVariant::Map ) {
       if ( param2.type() != QVariant::Map ) return false;
-      if ( !qrsCompareMapParams(param1.toMap() , param2.toMap()) ) return false;
+      return qrsCompareMapParams(param1.toMap() , param2.toMap());
    } else if ( param1.type() == QVariant::List ) {
       if ( param2.type() != QVariant::List ) return false;
-      if ( !qrsCompareListParams(param1.toList(),param2.toList()) ) return false;
+      return qrsCompareListParams(param1.toList(),param2.toList());
    } else if ( param1.canConvert<QString>() ) {
       if ( ! param2.canConvert<QString>() ) return false;
       return ( param1.toString() == param2.toString() );
