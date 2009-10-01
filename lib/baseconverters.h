@@ -14,12 +14,59 @@
 
 namespace qrs {
 
+   // ----- unsigned long long -----
+   QVariant createArg(unsigned long long val);
+   bool getArgValue(const QVariant& arg, unsigned long long& res);
+
+   // ----- unsigned long -----
+   QVariant createArg(unsigned long val);
+   bool getArgValue(const QVariant& arg, unsigned long& res);
+
+   // ----- unsigned -----
+   QVariant createArg(unsigned val);
+   bool getArgValue(const QVariant& arg, unsigned& res);
+
+   // ----- unsigned short -----
+   QVariant createArg(unsigned short val);
+   bool getArgValue(const QVariant& arg, unsigned short& res);
+
+   // ----- unsigned char -----
+   QVariant createArg(unsigned char val);
+   bool getArgValue(const QVariant& arg, unsigned char& res);
+
+   // ----- long long -----
+   QVariant createArg(long long val);
+   bool getArgValue(const QVariant& arg, long long& res);
+
+   // ----- long -----
+   QVariant createArg(long val);
+   bool getArgValue(const QVariant& arg, long& res);
+
+   // ----- int -----
    QVariant createArg(int val);
    bool getArgValue(const QVariant& arg, int& res);
 
+   // ----- short -----
+   QVariant createArg(short val);
+   bool getArgValue(const QVariant& arg, short& res);
+
+   // ----- signed char -----
+   QVariant createArg(signed char val);
+   bool getArgValue(const QVariant& arg, signed char& res);
+
+   // ----- char -----
+   QVariant createArg(char val);
+   bool getArgValue(const QVariant& arg, char& res);
+
+   // ----- QChar -----
+   QVariant createArg(QChar val);
+   bool getArgValue(const QVariant& arg, QChar& res);
+
+   // ----- QString -----
    QVariant createArg(const QString& val);
    bool getArgValue(const QVariant& arg, QString& res);
 
+   // ----- QList -----
    template<typename T>
    QVariant createArg(const QList<T>& val) {
       QVariantList res;
@@ -46,6 +93,7 @@ namespace qrs {
       return true;
    }
 
+   // ----- QMap -----
    template<typename T>
    QVariant createArg(const QMap<QString,T>& val) {
       QVariantMap res;

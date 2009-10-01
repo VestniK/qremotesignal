@@ -131,6 +131,13 @@ void SerializersTestSuit::initTestCase() {
    msg->setService(TEST_SERVICE_NAME);
    msg->setMethod(TEST_METHOD_NAME);
    mMessages.insert("no args",msg);
+   mMessages.insert("QChar",msg);
+
+   // QChar
+   msg = new qrs::Message;
+   msg->setService(TEST_SERVICE_NAME);
+   msg->setMethod(TEST_METHOD_NAME);
+   msg->params().insert("character",qrs::createArg( QChar('l') ));
 
    // int
    msg = new qrs::Message;
