@@ -21,6 +21,8 @@ class SerializersTestSuit:public QObject{
       }
 
       void addDeserializationErrorTestCase(const QString& name, const QByteArray& msg);
+   private:
+      void addOneArgRemoteCallTest(const QString& testName, const QVariant& arg);
    private slots:
       void initTestCase();
       void cleanupTestCase();

@@ -120,7 +120,7 @@ namespace qrs {
          if ( !getArgValue(arg,num) ) {
             return false; // unexpected error
          }
-         if ( num > std::numeric_limits<long long>::max() ) {
+         if ( num > (unsigned long long)std::numeric_limits<long long>::max() ) {
             return false;
          }
       }
@@ -225,14 +225,14 @@ namespace qrs {
 
    // QChar
    QVariant createArg(QChar val) {
-      return QVariant(val);
+      return QVariant(val.unicode());
    }
 
    bool getArgValue(const QVariant& arg, QChar& res) {
-      if ( !arg.canConvert<QChar>() ) {
-         return false;
+      unsigned short unicode;
+      if ( !getArgValue(arg,unicode) ) {
       }
-      res = arg.toChar();
+      res = QChar(unicode);
       return true;
    }
 

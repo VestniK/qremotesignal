@@ -8,6 +8,7 @@
 #include "serializerstestsuit.h"
 
 #include <exception>
+#include <limits>
 
 #include <QtTest>
 #include <QtDebug>
@@ -83,6 +84,18 @@ void SerializersTestSuit::addDeserializationErrorTestCase(const QString& name, c
    mRawMessages.insert(name,msg);
 }
 
+void SerializersTestSuit::addOneArgRemoteCallTest(const QString& testName, const QVariant& arg) {
+   qrs::Message *msg = new qrs::Message;
+   msg->setService(TEST_SERVICE_NAME);
+   msg->setMethod(TEST_METHOD_NAME);
+   msg->params().insert("arg",arg);
+   if ( mMessages.contains(testName) ) {
+      qWarning() << "Trying to create several tests with the same name: " << testName;
+      qWarning() << "Previous test is removed from tests list";
+   }
+   mMessages.insert(testName,msg);
+}
+
 /**
  * @brief filling test messages list
  */
@@ -131,45 +144,86 @@ void SerializersTestSuit::initTestCase() {
    msg->setService(TEST_SERVICE_NAME);
    msg->setMethod(TEST_METHOD_NAME);
    mMessages.insert("no args",msg);
-   mMessages.insert("QChar",msg);
 
    // QChar
-   msg = new qrs::Message;
-   msg->setService(TEST_SERVICE_NAME);
-   msg->setMethod(TEST_METHOD_NAME);
-   msg->params().insert("character",qrs::createArg( QChar('l') ));
-
+   addOneArgRemoteCallTest("QChar",qrs::createArg( QChar('l') ));
+   // null QChar
+   addOneArgRemoteCallTest("null QChar",qrs::createArg( QChar('\0')) );
+   // char
+   addOneArgRemoteCallTest("char",qrs::createArg( 'a' ));
+   // min char
+   addOneArgRemoteCallTest("min char",qrs::createArg( std::numeric_limits<char>::min() ));
+   // max char
+   addOneArgRemoteCallTest("max char",qrs::createArg( std::numeric_limits<char>::max() ));
+   // unsigned char
+   addOneArgRemoteCallTest("unsigned char",qrs::createArg( (unsigned char)45 ));
+   // min unsigned char
+   addOneArgRemoteCallTest("min unsigned char",qrs::createArg( std::numeric_limits<unsigned char>::min() ));
+   // max unsigned char
+   addOneArgRemoteCallTest("max unsigned char",qrs::createArg( std::numeric_limits<unsigned char>::max() ));
+   // signed char
+   addOneArgRemoteCallTest("signed char",qrs::createArg( (signed char)-76 ));
+   // min signed char
+   addOneArgRemoteCallTest("min signed shar",qrs::createArg( std::numeric_limits<signed char>::min() ));
+   // max signed char
+   addOneArgRemoteCallTest("max signed char",qrs::createArg( std::numeric_limits<signed char>::max() ));
+   // short
+   addOneArgRemoteCallTest("short",qrs::createArg( short(-123) ));
+   // min short
+   addOneArgRemoteCallTest("min short",qrs::createArg( std::numeric_limits<short>::min() ));
+   // max short
+   addOneArgRemoteCallTest("max short",qrs::createArg( std::numeric_limits<short>::max() ));
+   // unsigned short
+   addOneArgRemoteCallTest("unsigned short",qrs::createArg( (unsigned short)50 ));
+   // min ushort
+   addOneArgRemoteCallTest("min unsigned short",qrs::createArg( std::numeric_limits<unsigned short>::min() ));
+   // max ushort
+   addOneArgRemoteCallTest("max unsigned short",qrs::createArg( std::numeric_limits<unsigned short>::max() ));
    // int
-   msg = new qrs::Message;
-   msg->setService(TEST_SERVICE_NAME);
-   msg->setMethod(TEST_METHOD_NAME);
-   msg->params().insert("num",qrs::createArg( int(123) ));
-   mMessages.insert("int",msg);
-
+   addOneArgRemoteCallTest("int",qrs::createArg( int(123) ));
+   // min int
+   addOneArgRemoteCallTest("min int",qrs::createArg( std::numeric_limits<int>::min() ));
+   // max int
+   addOneArgRemoteCallTest("max int",qrs::createArg( std::numeric_limits<int>::max() ));
+   // unsigned
+   addOneArgRemoteCallTest("unsigned",qrs::createArg( (unsigned)45000 ));
+   // min unsigned
+   addOneArgRemoteCallTest("min unsigned",qrs::createArg( std::numeric_limits<unsigned>::min() ));
+   // max unsigned
+   addOneArgRemoteCallTest("max unsigned",qrs::createArg( std::numeric_limits<unsigned>::max() ));
+   // min long
+   addOneArgRemoteCallTest("min long",qrs::createArg( std::numeric_limits<long>::min() ));
+   // max long
+   addOneArgRemoteCallTest("max long",qrs::createArg( std::numeric_limits<long>::max() ));
+   // min unsigned long
+   addOneArgRemoteCallTest("min unsigned long",qrs::createArg( std::numeric_limits<unsigned long>::min() ));
+   // max unsigned long
+   addOneArgRemoteCallTest("max unsigned long",qrs::createArg( std::numeric_limits<unsigned long>::max() ));
+   // min long long
+   addOneArgRemoteCallTest("min long long",qrs::createArg( std::numeric_limits<long long>::min() ));
+   // max long long
+   addOneArgRemoteCallTest("max long long",qrs::createArg( std::numeric_limits<long long>::max() ));
+   // min unsigned long long
+   addOneArgRemoteCallTest("min unsigned long long",qrs::createArg( std::numeric_limits<unsigned long long>::min() ));
+   // max unsigned long
+   addOneArgRemoteCallTest("max unsigned long long",qrs::createArg( std::numeric_limits<unsigned long long>::max() ));
    // QString
-   msg = new qrs::Message;
-   msg->setService(TEST_SERVICE_NAME);
-   msg->setMethod(TEST_METHOD_NAME);
-   msg->params().insert("str",qrs::createArg( QString("string") ));
-   mMessages.insert("QString",msg);
-
+   addOneArgRemoteCallTest("QString",qrs::createArg( QString("string") ));
+   // empty QString
+   addOneArgRemoteCallTest("empty QString",qrs::createArg( QString("") ));
    // QList
-   msg = new qrs::Message;
-   msg->setService(TEST_SERVICE_NAME);
-   msg->setMethod(TEST_METHOD_NAME);
-   msg->params().insert("list",qrs::createArg( QList<QString>() << "2" << "4" << "6" ));
-   mMessages.insert("QList",msg);
-
+   addOneArgRemoteCallTest("QList",qrs::createArg( QList<QString>() << "2" << "4" << "6" ));
+   // empty QList
+   addOneArgRemoteCallTest("empty QList",qrs::createArg( QList<QString>() ));
    // QMap
-   msg = new qrs::Message;
-   msg->setService(TEST_SERVICE_NAME);
-   msg->setMethod(TEST_METHOD_NAME);
    QMap<QString,int> intMap;
    intMap["one"]=1;
    intMap["two"]=2;
    intMap["three"]=3;
-   msg->params().insert("map",qrs::createArg( intMap ));
-   mMessages.insert("QMap",msg);
+   addOneArgRemoteCallTest("QMap",qrs::createArg( intMap ));
+   // empty QMap
+   addOneArgRemoteCallTest("empty QMap",qrs::createArg( QMap<QString,unsigned>() ));
+
 
    // Two args
    msg = new qrs::Message;
