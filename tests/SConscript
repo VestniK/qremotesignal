@@ -4,7 +4,7 @@ env = BaseEnv.Clone()
 env.Tool('qrs_dev_build')
 env['CPPPATH']=['.','#lib']
 env.EnableQt4Modules(['QtCore','QtTest'])
-env['LIBS'] += BaseEnv['QRemoteSignalStatic']
+env['LIBS'] = BaseEnv['QRemoteSignalStatic'] + env['LIBS']
 if env['PLATFORM'] != 'win32':
    env.ParseConfig('pkg-config --cflags --libs QJson')
 else:

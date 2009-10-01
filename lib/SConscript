@@ -18,7 +18,7 @@ Headers = ['QRemoteSignal','absservice.h','baseconverters.h',
 
 libs = [
    env.SharedLibrary('QRemoteSignal',Sources),
-   env.StaticLibrary('QRemoteSignal',Sources)
+   env.StaticLibrary('#tests/QRemoteSignal',Sources)
 ]
 
 Pc = env.Config('QRemoteSignal.pc.in')
