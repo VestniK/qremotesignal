@@ -3,7 +3,7 @@ Import('BaseEnv')
 env = BaseEnv.Clone()
 env['CPPPATH'] = ['.']
 env.EnableQt4Modules(['QtCore'])
-if env['PLATFORM'] != 'win32':
+if env['PLATFORM'] != 'win32' and ARGUMENTS.get('QJSON','') != '':
    env.ParseConfig('pkg-config --cflags --libs QJson')
 else:
    env['LIBS']+=['qjson']
