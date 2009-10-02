@@ -58,6 +58,10 @@ namespace qrs {
    QVariant createArg(char val);
    bool getArgValue(const QVariant& arg, char& res);
 
+   // ----- bool -----
+   QVariant createArg(bool val);
+   bool getArgValue(const QVariant& arg, bool& res);
+
    // ----- QChar -----
    QVariant createArg(QChar val);
    bool getArgValue(const QVariant& arg, QChar& res);

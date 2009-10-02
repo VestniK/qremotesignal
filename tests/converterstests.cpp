@@ -287,6 +287,19 @@ class ConvertersTests: public QObject {
          QVERIFY( !qrs::getArgValue(arg,ulonglongRes) );
       }
 
+      // bool
+      void testConvertBool() {
+         bool src,res;
+
+         src = true;
+         QVERIFY( qrs::getArgValue(qrs::createArg(src), res) );
+         QCOMPARE(res,src);
+
+         src = false;
+         QVERIFY( qrs::getArgValue(qrs::createArg(src), res) );
+         QCOMPARE(res,src);
+      }
+
       // QString
       void testConvertStr_data() {
          QTest::addColumn<QString>("src");

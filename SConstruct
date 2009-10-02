@@ -33,7 +33,7 @@ except KeyError:
    BaseEnv['CCFLAGS'] += Split( os.popen('pkg-config --cflags QJson').read() )
    BaseEnv['LINKFLAGS'] += Split( os.popen('pkg-config --libs-only-L QJson').read() )
 
-if not (GetOption('clean') or GetOption('help') ) :
+if not (ARGUMENTS.get('nocheck') or GetOption('clean') or GetOption('help') ) :
    confEnv = BaseEnv.Clone()
    conf = Configure(confEnv,
                   custom_tests = {'CheckQt4Version' : CheckQt4Version,

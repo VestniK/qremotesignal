@@ -207,6 +207,10 @@ void SerializersTestSuit::initTestCase() {
    addOneArgRemoteCallTest("min unsigned long long",qrs::createArg( std::numeric_limits<unsigned long long>::min() ));
    // max unsigned long
    addOneArgRemoteCallTest("max unsigned long long",qrs::createArg( std::numeric_limits<unsigned long long>::max() ));
+   // bool true
+   addOneArgRemoteCallTest("bool true",qrs::createArg(true));
+   // bool false
+   addOneArgRemoteCallTest("bool false",qrs::createArg(false));
    // QString
    addOneArgRemoteCallTest("QString",qrs::createArg( QString("string") ));
    // empty QString
