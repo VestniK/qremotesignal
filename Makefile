@@ -1,8 +1,8 @@
 all:
-	scons nocheck=1
+	scons
 
 debug:
-	scons nocheck=1 CCFLAGS="-ggdb -O0 -Wall"
+	scons CCFLAGS="-ggdb -O0 -Wall"
 
 clean:
 	scons -c

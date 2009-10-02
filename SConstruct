@@ -18,11 +18,6 @@ BaseEnv['CPPFLAGS']=Split( ARGUMENTS.get('CPPFLAGS','') )
 BaseEnv['CXXFLAGS']=Split( ARGUMENTS.get('CXXFLAGS','') )
 BaseEnv['LINKFLAGS']=Split( ARGUMENTS.get('LDFLAGS','') )
 
-if ARGUMENTS.get('QJSON','') != '':
-   BaseEnv['CCFLAGS'].append( '-I%s/include'%ARGUMENTS.get('QJSON') )
-   BaseEnv['LIBPATH'].append( '%s/lib'%ARGUMENTS.get('QJSON') )
-   
-
 BaseEnv['CONFIG'] = {}
 BaseEnv['CONFIG']['PREFIX'] = ARGUMENTS.get('PREFIX','/usr/local')
 BaseEnv['CONFIG']['PREFIX_BIN'] = os.path.join(BaseEnv['CONFIG']['PREFIX'],'bin')
@@ -31,14 +26,19 @@ BaseEnv['CONFIG']['PREFIX_PC'] = os.path.join(BaseEnv['CONFIG']['PREFIX'],'lib',
 BaseEnv['CONFIG']['PREFIX_INC'] = os.path.join(BaseEnv['CONFIG']['PREFIX'],'include','qremotesignal')
 BaseEnv['CONFIG']['VERSION'] = 'svn'
 
-if not (ARGUMENTS.get('nocheck') or GetOption('clean') or GetOption('help') ) :
+try:
+   BaseEnv['CCFLAGS'].append( '-I'+os.path.join(os.environ['QJSON'],'include') )
+   BaseEnv['LINKFLAGS'].append( '-L'+os.path.join(os.environ['QJSON'],'lib') )
+except KeyError:
+   BaseEnv['CCFLAGS'] += Split( os.popen('pkg-config --cflags QJson').read() )
+   BaseEnv['LINKFLAGS'] += Split( os.popen('pkg-config --libs-only-L QJson').read() )
+
+if not (GetOption('clean') or GetOption('help') ) :
    confEnv = BaseEnv.Clone()
-   if confEnv['PLATFORM'] != 'win32' and ARGUMENTS.get('QJSON','') != '':
-      confEnv.ParseConfig('pkg-config --cflags --libs QJson')
    conf = Configure(confEnv,
                   custom_tests = {'CheckQt4Version' : CheckQt4Version,
                                      'CheckQt4Tool' : CheckQt4Tool,
-                                   'CheckQt4Module' : CheckQt4Module})
+                                   'CheckQt4Module' : CheckQt4Module,})
 
    if not conf.CheckCXX(): Exit(1)
    if not conf.CheckQt4Version("4.5.0"): Exit(1)
@@ -52,6 +52,8 @@ if not (ARGUMENTS.get('nocheck') or GetOption('clean') or GetOption('help') ) :
 
    conf.Finish()
    print "Confiduration done\n"
+else:
+   BaseEnv['CONFIG']['HAVE_PKG_CONFIG'] = False
 Export('BaseEnv')
 
 Depends('tests','qrsc')
