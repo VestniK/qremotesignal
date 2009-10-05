@@ -6,12 +6,13 @@ env.EnableQt4Modules(['QtCore'])
 env['LIBS']+=['qjson']
 
 Sources = ['baseconverters.cpp','servicesmanager.cpp',
-           'jsonserializer.cpp']
+           'jsonserializer.cpp','devicemanager.cpp']
 
 Headers = ['QRemoteSignal','absservice.h','baseconverters.h',
            'servicesmanager.h','baseexception.h',
            'message.h','absmessageserializer.h',
-           'jsonserializer.h','serializationexceptions.h']
+           'jsonserializer.h','serializationexceptions.h',
+           'devicemanager.h']
 
 libs = [
    env.SharedLibrary('QRemoteSignal',Sources),
