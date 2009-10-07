@@ -10,6 +10,7 @@
 using namespace qrs;
 
 DeviceManager::DeviceManager(QIODevice *device, QObject *parent = 0):QObject(parent) {
+   mDevice = 0;
    this->setDevice(device);
 }
 
@@ -25,9 +26,17 @@ void DeviceManager::setDevice(QIODevice* device) {
          /// @todo throw exception here! Device should be writable
       }
    }
+   if ( mDevice != 0 ) {
+      disconnect(mDevice,SIGNAL(readyRead()),
+                 this,SLOT(onNewDataReceived()));
+   }
    mDevice = device;
    mStream.setDevice(mDevice);
    mStream.setByteOrder(QDataStream::BigEndian);
+   connect(mDevice,SIGNAL(readyRead()),
+           this,SLOT(onNewDataReceived()));
+   // If device already contains some data then read it
+   onNewDataReceived();
 }
 
 void DeviceManager::sendMessage(const QByteArray& msg) {
