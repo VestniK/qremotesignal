@@ -33,6 +33,9 @@ void DeviceManager::setDevice(QIODevice* device) {
    mDevice = device;
    mStream.setDevice(mDevice);
    mStream.setByteOrder(QDataStream::BigEndian);
+   if ( mDevice == 0 ) {
+      return;
+   }
    connect(mDevice,SIGNAL(readyRead()),
            this,SLOT(onNewDataReceived()));
    // If device already contains some data then read it
@@ -50,6 +53,9 @@ void DeviceManager::sendMessage(const QByteArray& msg) {
 }
 
 void DeviceManager::onNewDataReceived() {
+   if ( mDevice == 0 ) {
+      return;
+   }
    mBuffer += mDevice->readAll();
    QDataStream buffReader(mBuffer);
    int pos = 0;

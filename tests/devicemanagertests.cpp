@@ -16,26 +16,42 @@ class DeviceManagerTests: public QObject {
    Q_OBJECT
    private slots:
       void init() {
-         dev1.setData("");
-         dev2.setData("");
-         dev1.open(QIODevice::ReadWrite);
-         dev2.open(QIODevice::ReadWrite);
-         manager1.setDevice(&dev1);
-         manager2.setDevice(&dev2);
+         mDevice1.setData("");
+         mDevice2.setData("");
+         mDevice1.open(QIODevice::ReadWrite);
+         mDevice2.open(QIODevice::ReadWrite);
+         mDevManager1.setDevice(&mDevice1);
+         mDevManager2.setDevice(&mDevice2);
       };
 
       void cleanup() {
-         dev1.close();
-         dev2.close();
+         mDevice1.close();
+         mDevice2.close();
+      };
+
+      void testReadingAlreadyExistingData() {
+         QByteArray msg = "Hello";
+         mDevManager2.setDevice(0);
+
+         QSignalSpy spy(&mDevManager2,SIGNAL(messageReceived(QByteArray)));
+         mDevManager1.sendMessage( msg );
+
+         sendDataToDev2( mDevice1.buffer() );
+         QCOMPARE(spy.count() , 0);
+
+         mDevManager2.setDevice(&mDevice2);
+
+         QCOMPARE(spy.count() , 1);
+         QCOMPARE(spy.first().at(0).toByteArray() , msg);
       };
 
       void testSendReceive() {
          QByteArray msg = "Hello";
 
-         QSignalSpy spy(&manager2,SIGNAL(messageReceived(QByteArray)));
-         manager1.sendMessage( msg );
+         QSignalSpy spy(&mDevManager2,SIGNAL(messageReceived(QByteArray)));
+         mDevManager1.sendMessage( msg );
 
-         sendDataToDev2( dev1.buffer() );
+         sendDataToDev2( mDevice1.buffer() );
 
          QCOMPARE(spy.count() , 1);
          QCOMPARE(spy.first().at(0).toByteArray() , msg);
@@ -44,31 +60,65 @@ class DeviceManagerTests: public QObject {
       void testRecievePart() {
          QByteArray msg = "Long message";
 
-         QSignalSpy dev2ReadyReadSpy(&dev2,SIGNAL(readyRead()));
-         QSignalSpy spy(&manager2,SIGNAL(messageReceived(QByteArray)));
+         QSignalSpy mDevice2ReadyReadSpy(&mDevice2,SIGNAL(readyRead()));
+         QSignalSpy spy(&mDevManager2,SIGNAL(messageReceived(QByteArray)));
 
-         manager1.sendMessage( msg );
-         int splitPoint = dev1.buffer().size()/2;
+         mDevManager1.sendMessage( msg );
+         int splitPoint = mDevice1.buffer().size()/2;
 
-         sendDataToDev2( dev1.buffer().left( splitPoint ) );
-         QCOMPARE(dev2ReadyReadSpy.count(), 1);
+         sendDataToDev2( mDevice1.buffer().left( splitPoint ) );
+         QCOMPARE(mDevice2ReadyReadSpy.count(), 1);
          QCOMPARE(spy.count() , 0);
 
-         sendDataToDev2( dev1.buffer().mid( splitPoint ) );
-         QCOMPARE(dev2ReadyReadSpy.count(), 2);
+         sendDataToDev2( mDevice1.buffer().mid( splitPoint ) );
+         QCOMPARE(mDevice2ReadyReadSpy.count(), 2);
          // Check that message was splited correctly
-         QCOMPARE(dev1.buffer() , dev2.buffer());
+         QCOMPARE(mDevice1.buffer() , mDevice2.buffer());
          QCOMPARE(spy.count() , 1);
          QCOMPARE(spy.first().at(0).toByteArray() , msg);
       };
+
+      void testReceiveMultiple() {
+         QByteArray msg1 = "Hello";
+         QByteArray msg2 = "World";
+
+         QSignalSpy spy(&mDevManager2,SIGNAL(messageReceived(QByteArray)));
+         mDevManager1.sendMessage( msg1 );
+         mDevManager1.sendMessage( msg2 );
+
+         sendDataToDev2( mDevice1.buffer() );
+
+         QCOMPARE(spy.count() , 2);
+         QCOMPARE(spy.at(0).at(0).toByteArray() , msg1);
+         QCOMPARE(spy.at(1).at(0).toByteArray() , msg2);
+      };
+
+      void testReceiveOneAndHalf() {
+         QByteArray msg1 = "Hello";
+         QByteArray msg2 = "Big World";
+
+         QSignalSpy spy(&mDevManager2,SIGNAL(messageReceived(QByteArray)));
+         mDevManager1.sendMessage( msg1 );
+         mDevManager1.sendMessage( msg2 );
+         int splitPoint = mDevice1.buffer().size() - msg2.size()/2;
+
+         sendDataToDev2( mDevice1.buffer().left(splitPoint) );
+         QCOMPARE(spy.count() , 1);
+         sendDataToDev2( mDevice1.buffer().mid(splitPoint) );
+         // Check that message was splited correctly
+         QCOMPARE(mDevice1.buffer() , mDevice2.buffer());
+         QCOMPARE(spy.count() , 2);
+         QCOMPARE(spy.at(0).at(0).toByteArray() , msg1);
+         QCOMPARE(spy.at(1).at(0).toByteArray() , msg2);
+      };
    private:
-      QBuffer dev1,dev2;
-      qrs::DeviceManager manager1,manager2;
+      QBuffer mDevice1,mDevice2;
+      qrs::DeviceManager mDevManager1,mDevManager2;
 
       void sendDataToDev2(const QByteArray& data) {
-         qint64 pos = dev2.pos();
-         dev2.write( data );
-         dev2.seek(pos);
+         qint64 pos = mDevice2.pos();
+         mDevice2.write( data );
+         mDevice2.seek(pos);
          QTest::qWait(1); // Return to qt event loop to allow it process asincronious signals
       }
 };
