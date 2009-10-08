@@ -30,6 +30,12 @@ class SerializersTestSuit:public QObject{
       void testSerialization_data();
       void testSerialization();
 
+      void testQCharSerialization_data();
+      void testQCharSerialization();
+
+      void testCharSerialization_data();
+      void testCharSerialization();
+
       void testDeserializationError_data();
       void testDeserializationError();
    private:
