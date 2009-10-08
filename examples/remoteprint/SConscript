@@ -1,6 +1,10 @@
 import os
 
-env = Environment(ENV=os.environ)
+env = Environment(tools=[],ENV=os.environ)
+if env['PLATFORM'] == 'win32':
+   env.Tool('mingw')
+else:
+   env.Tool('default')
 env.Tool('qt4')
 env.EnableQt4Modules(['QtCore','QtNetwork'])
 env.Tool('qrs')

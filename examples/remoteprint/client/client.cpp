@@ -6,12 +6,12 @@
  * @date 12 Sep 2009
  */
 #include <QtCore>
+#include <QtNetwork>
 #include <QtDebug>
 
 #include <QRemoteSignal>
 
 #include "printclient.h"
-#include "connectionprocessor.h"
 
 int main(int argc,char **argv) {
    QCoreApplication app(argc,argv);
@@ -27,17 +27,20 @@ int main(int argc,char **argv) {
    socket->waitForConnected();
    QObject::connect(socket,SIGNAL(disconnected()),
                     &app,SLOT(quit()));
-   ConnectionProcessor* processor = new ConnectionProcessor(socket);
+   qrs::DeviceManager* dmanager = new qrs::DeviceManager;
 
    qrs::ServicesManager* manager = new qrs::ServicesManager(&app);
    manager->setSerializer(new qrs::JsonSerializer(manager));
    qrs::PrintClient* client = new qrs::PrintClient(manager);
 
    QObject::connect(manager,SIGNAL(send(QByteArray)),
-                    processor,SLOT(sendMessage(const QByteArray&)));
-   QObject::connect(processor,SIGNAL(messageReceived(QByteArray)),
+                    dmanager,SLOT(sendMessage(const QByteArray&)));
+   QObject::connect(dmanager,SIGNAL(messageReceived(QByteArray)),
                     manager,SLOT(receive(const QByteArray&)));
+   dmanager->setParent(socket);
+   dmanager->setDevice(socket);
 
    client->print(args[2]);
+   socket->close();
    return app.exec();
 }

@@ -2,7 +2,7 @@ Import('env')
 
 env['CPPPATH'] += ['.','../common']
 
-Sources=['printserver.cpp','server.cpp','../common/connectionprocessor.cpp']
+Sources=['printserver.cpp','server.cpp']
 
 Sources += env.QRSService('../common/print.xml')
 

@@ -11,7 +11,6 @@
 
 #include <QRemoteSignal>
 
-#include "connectionprocessor.h"
 #include "printservice.h"
 
 #define CLEANUP_INTERVAL 1000 //ms
@@ -36,11 +35,13 @@ Server::Server (QObject *parent):QObject(parent) {
 void Server::newConnection() {
    QTcpSocket* socket = mTcpSrv->nextPendingConnection();
    if (socket == 0) return;
-   ConnectionProcessor* processor = new ConnectionProcessor(socket);
-   connect(processor,SIGNAL(messageReceived(QByteArray)),
+   qrs::DeviceManager* dmanager = new qrs::DeviceManager;
+   connect(dmanager,SIGNAL(messageReceived(QByteArray)),
            mManager,SLOT(receive(const QByteArray&)));
    connect(mManager,SIGNAL(send(QByteArray)),
-           processor,SLOT(sendMessage(const QByteArray&)));
+           dmanager,SLOT(sendMessage(const QByteArray&)));
+   dmanager->setParent(socket);
+   dmanager->setDevice(socket);
    mConnectionPool.append(socket);
 }
 
