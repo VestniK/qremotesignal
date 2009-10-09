@@ -14,16 +14,13 @@ Headers = ['QRemoteSignal','absservice.h','baseconverters.h',
            'jsonserializer.h','serializationexceptions.h',
            'devicemanager.h']
 
-libs = [
-   env.SharedLibrary('QRemoteSignal',Sources),
-   env.StaticLibrary('#tests/QRemoteSignal',Sources)
-]
+lib = env.SharedLibrary('QRemoteSignal',Sources)
 
 Pc = env.Config('QRemoteSignal.pc.in')
 env.AlwaysBuild(Pc)
 
-env.Install(env['CONFIG']['PREFIX_LIB'],libs)
+env.Install(env['CONFIG']['PREFIX_LIB'],lib)
 env.Install(env['CONFIG']['PREFIX_INC'],Headers)
 env.Install(env['CONFIG']['PREFIX_PC'],Pc)
 
-BaseEnv['QRemoteSignalStatic'] = libs[1]
+BaseEnv['QRemoteSignalStatic'] = env.StaticLibrary('#tests/QRemoteSignal',Sources)
