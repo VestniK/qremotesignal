@@ -4,6 +4,6 @@ Sources = ['customtypestests.cpp','customconverters.cpp']
 Sources += env.QRSService('customtype.xml')
 Sources += env.QRSClient('customtype.xml')
 
-customtypestests = env.Program('customtypestests',Sources)
+customtypestests = env.Program('#tests/CustomTypesTests',Sources)
 
 Return('customtypestests')

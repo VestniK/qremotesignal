@@ -3,7 +3,11 @@ from checkers import *
 from builders import *
 
 BaseEnv=Environment(tools=[],ENV=os.environ)
+BaseEnv['package'] = 'qremotesignal'
+BaseEnv['VERSION'] = 'svn'
+
 BaseEnv['BUILDERS']['Config'] = Builder(action=config_build,suffix='',src_suffix='.in')
+
 if BaseEnv['PLATFORM'] == 'win32':
    BaseEnv.Tool('mingw')
 else:
@@ -13,51 +17,40 @@ BaseEnv.Tool('qt4')
 BaseEnv['CXXFILESUFFIX']='.cpp'
 BaseEnv['QT4_UICDECLPREFIX'] = 'ui_'
 
-BaseEnv['CCFLAGS']=Split( ARGUMENTS.get('CCFLAGS','') )
-BaseEnv['CPPFLAGS']=Split( ARGUMENTS.get('CPPFLAGS','') )
-BaseEnv['CXXFLAGS']=Split( ARGUMENTS.get('CXXFLAGS','') )
-BaseEnv['LINKFLAGS']=Split( ARGUMENTS.get('LDFLAGS','') )
+vars = Variables('build.conf')
+vars.Add('CCFLAGS','Custom C compiler flags','')
+vars.Add('CPPFLAGS','Custom C/C++ preprocessor flags','')
+vars.Add('CXXFLAGS','Custom C++ compiler flags','')
+vars.Add('LINKFLAGS','Custom linker flags','')
+vars.Add('prefix','install prefix','')
+vars.Add('prefix_bin','binaries install prefix','')
+vars.Add('prefix_lib','libraries install prefix','')
+vars.Add('prefix_pc','pkg-config files install prefix','')
+vars.Add('prefix_inc','headers install prefix','')
+vars.Add('prefix_data','package data install prefix','')
+vars.Add('QJson','QJson library path live blank to detect it using pkg-config','')
+vars.Update(BaseEnv)
+# Hack need to convert flags lists from strings to lists
+BaseEnv['CCFLAGS'] = Split(BaseEnv['CCFLAGS'])
+BaseEnv['CPPFLAGS'] = Split(BaseEnv['CPPFLAGS'])
+BaseEnv['CXXFLAGS'] = Split(BaseEnv['CXXFLAGS'])
+BaseEnv['LINKFLAGS'] = Split(BaseEnv['LINKFLAGS'])
+vars.Save('build.conf',BaseEnv)
+Help(vars.GenerateHelpText(BaseEnv))
 
-BaseEnv['CONFIG'] = {}
-BaseEnv['CONFIG']['PREFIX'] = ARGUMENTS.get('PREFIX','/usr/local')
-BaseEnv['CONFIG']['PREFIX_BIN'] = os.path.join(BaseEnv['CONFIG']['PREFIX'],'bin')
-BaseEnv['CONFIG']['PREFIX_LIB'] = os.path.join(BaseEnv['CONFIG']['PREFIX'],'lib')
-BaseEnv['CONFIG']['PREFIX_PC'] = os.path.join(BaseEnv['CONFIG']['PREFIX'],'lib','pkgconfig')
-BaseEnv['CONFIG']['PREFIX_INC'] = os.path.join(BaseEnv['CONFIG']['PREFIX'],'include','qremotesignal')
-BaseEnv['CONFIG']['VERSION'] = 'svn'
+BaseEnv.Tool('smartinstall')
+BaseEnv['install_dev'] = True
 
-try:
-   BaseEnv['CCFLAGS'].append( '-I'+os.path.join(os.environ['QJSON'],'include') )
-   BaseEnv['LINKFLAGS'].append( '-L'+os.path.join(os.environ['QJSON'],'lib') )
-except KeyError:
+if BaseEnv['QJson'] != '':
+   BaseEnv.Append(CPPPATH = os.path.join(BaseEnv['QJson'],'include') )
+   BaseEnv.Append(LIBPATH = os.path.join(BaseEnv['QJson'],'lib') )
+else:
    BaseEnv['CCFLAGS'] += Split( os.popen('pkg-config --cflags QJson').read() )
    BaseEnv['LINKFLAGS'] += Split( os.popen('pkg-config --libs-only-L QJson').read() )
 
-if not (ARGUMENTS.get('nocheck') or GetOption('clean') or GetOption('help') ) :
-   confEnv = BaseEnv.Clone()
-   conf = Configure(confEnv,
-                  custom_tests = {'CheckQt4Version' : CheckQt4Version,
-                                     'CheckQt4Tool' : CheckQt4Tool,
-                                   'CheckQt4Module' : CheckQt4Module,})
-
-   if not conf.CheckCXX(): Exit(1)
-   if not conf.CheckQt4Version("4.5.0"): Exit(1)
-   if not conf.CheckQt4Tool('moc'): Exit(1)
-   if not conf.CheckQt4Tool('rcc'): Exit(1)
-   if not conf.CheckQt4Module('QtCore'): Exit(1)
-   if not conf.CheckQt4Module('QtXml'): Exit(1)
-   if not conf.CheckQt4Module('QtXmlPatterns'): Exit(1)
-   if not conf.CheckQt4Module('QtTest'): Exit(1)
-   if not conf.CheckLibWithHeader('qjson','qjson/parser.h','c++'): Exit(1)
-
-   conf.Finish()
-   print "Confiduration done\n"
-else:
-   BaseEnv['CONFIG']['HAVE_PKG_CONFIG'] = False
 Export('BaseEnv')
 
 Depends('tests','qrsc')
 SConscript('qrsc/SConscript')
 SConscript('lib/SConscript')
 SConscript('tests/SConscript')
-BaseEnv.Alias('install',BaseEnv['CONFIG']['PREFIX'])

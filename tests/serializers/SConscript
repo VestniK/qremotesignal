@@ -2,6 +2,7 @@ Import('env')
 
 Sources = ['json.cpp','serializerstestsuit.cpp']
 
-json = env.Program('JsonSerializerTestSuit',Sources)
+results = []
+results.append( env.Program('JsonSerializerTestSuit',Sources) )
 
-Return('json')
+Return('results')

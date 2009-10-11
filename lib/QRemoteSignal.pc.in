@@ -1,4 +1,4 @@
-prefix=%(PREFIX)s
+prefix=%(prefix)s
 libdir=${prefix}/lib
 includedir=${prefix}/include
 

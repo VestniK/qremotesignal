@@ -65,3 +65,7 @@ def CheckQt4Tool(context,tool):
    res = os.path.isfile(ToolPath) and os.access(ToolPath, os.X_OK)
    context.Result(res)
    return res
+
+qrs_custom_tests = {'CheckQt4Version' : CheckQt4Version,
+                       'CheckQt4Tool' : CheckQt4Tool,
+                     'CheckQt4Module' : CheckQt4Module,}

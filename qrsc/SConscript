@@ -1,8 +1,21 @@
+from checkers import *
+
 Import('BaseEnv')
 
 env = BaseEnv.Clone()
-env['CPPPATH']=['.']
+env.Append(CPPPATH = ['.'])
 env.EnableQt4Modules(['QtCore','QtXml','QtXmlPatterns'])
+
+if  not (ARGUMENTS.get('nocheck') or GetOption('clean') or GetOption('help') ) :
+   conf = Configure(env, custom_tests = qrs_custom_tests)
+   if not conf.CheckCXX(): Exit(1)
+   if not conf.CheckQt4Version("4.5.0"): Exit(1)
+   if not conf.CheckQt4Tool('moc'): Exit(1)
+   if not conf.CheckQt4Tool('rcc'): Exit(1)
+   if not conf.CheckQt4Module('QtCore'): Exit(1)
+   if not conf.CheckQt4Module('QtXml'): Exit(1)
+   if not conf.CheckQt4Module('QtXmlPatterns'): Exit(1)
+   conf.Finish()
 
 Resources=['templates.qrc']
 Sources=['qrsc.cpp','qtextserializer.cpp','interfacedocument.cpp',
@@ -11,4 +24,4 @@ Sources += env.Qrc(Resources)
 
 env.AlwaysBuild( env.Config('config.h.in') )
 BaseEnv['QRSC'] = env.Program('qrsc',Sources)[0]
-env.Install(env['CONFIG']['PREFIX_BIN'],BaseEnv['QRSC'])
+env.InstallProgram(BaseEnv['QRSC'])

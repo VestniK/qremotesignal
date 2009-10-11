@@ -1,9 +1,14 @@
 Import('BaseEnv')
 
 env = BaseEnv.Clone()
-env['CPPPATH'] = ['.']
+env.Append(CPPPATH = ['.'])
 env.EnableQt4Modules(['QtCore'])
 env['LIBS']+=['qjson']
+
+if  not (ARGUMENTS.get('nocheck') or GetOption('clean') or GetOption('help') ) :
+   conf = Configure(env)
+   if not conf.CheckLibWithHeader('qjson','qjson/parser.h','c++'): Exit(1)
+   conf.Finish()
 
 Sources = ['baseconverters.cpp','servicesmanager.cpp',
            'jsonserializer.cpp','devicemanager.cpp']
@@ -19,8 +24,8 @@ lib = env.SharedLibrary('QRemoteSignal',Sources)
 Pc = env.Config('QRemoteSignal.pc.in')
 env.AlwaysBuild(Pc)
 
-env.Install(env['CONFIG']['PREFIX_LIB'],lib)
-env.Install(env['CONFIG']['PREFIX_INC'],Headers)
-env.Install(env['CONFIG']['PREFIX_PC'],Pc)
+env.InstallLibrary(lib)
+env.InstallHeader(Headers)
+env.InstallPkgConfig(Pc)
 
 BaseEnv['QRemoteSignalStatic'] = env.StaticLibrary('#tests/QRemoteSignal',Sources)
