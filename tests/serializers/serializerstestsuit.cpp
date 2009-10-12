@@ -13,93 +13,29 @@
 #include <QtTest>
 #include <QtDebug>
 
+#include "messagetesttools.h"
+
+typedef QMap<QString,int> QIntMap;
+
+Q_DECLARE_METATYPE(QList<long>);
+Q_DECLARE_METATYPE(QIntMap);
+Q_DECLARE_METATYPE(signed char);
+
 const QString TEST_SERVICE_NAME = "test";
 const QString TEST_METHOD_NAME = "do";
 
-/**
- * @brief qrs::Message comparision
- *
- * This operator defined to simplify tests there is no necesity to move it to the
- * class qrs::Message itself.
- */
-bool operator== (const qrs::Message& msg1, const qrs::Message& msg2);
-
-void printParam(const QVariant& param, int indent, QTextStream& out);
-void printMapParam(const QVariantMap& param, int indent, QTextStream& out);
-void printListParam(const QVariantList& param, int indent, QTextStream& out);
-namespace QTest {
-   /**
-    * @brief qrs::Message textual representation for debug printing
-    */
-   template<>
-   char* toString (const qrs::Message& msg) {
-      QString buf;
-      buf.clear();
-      QTextStream out(&buf, QIODevice::WriteOnly);
-      out << endl << "Type:\t";
-      switch ( msg.type() ) {
-         case qrs::Message::RemoteCall :
-            out << "qrs::Message::RemoteCall" << endl;
-            break;
-         case qrs::Message::Error :
-            out << "qrs::Message::Error" << endl;
-            break;
-         default:
-            out << "Unknown type (" << (int)msg.type() << ")" << endl;
-      }
-      out << "Error type:\t";
-      switch ( msg.errorType() ) {
-         case qrs::Message::Ok :
-            out << "qrs::Message::Ok" << endl;
-            break;
-         case qrs::Message::IncorrectMethod :
-            out << "qrs::Message::IncorrectMethod" << endl;
-            break;
-         case qrs::Message::UnknownErrorCode :
-            out << "qrs::Message::UnknownErrorCode" << endl;
-            break;
-         case qrs::Message::ProtocolError :
-            out << "qrs::Message::ProtocolError" << endl;
-            break;
-         case qrs::Message::UnknownService :
-            out << "qrs::Message::UnknownService" << endl;
-            break;
-         case qrs::Message::UnknownMsgType :
-            out << "qrs::Message::UnknownMsgType" << endl;
-            break;
-         default:
-            out << "Unknown error type (" << (int)msg.errorType() << ")" << endl;
-      }
-      out << "Error string:\t\"" << msg.error() << "\"" << endl;
-      out << "Service:\t\"" << msg.service() << "\"" << endl;
-      out << "Method:\t\t\"" << msg.method() << "\"" << endl;
-
-      out << endl << "Arguments:\t";
-      printMapParam(msg.params(), 0 , out);
-      return qstrdup( buf.toLocal8Bit().constData() );
-   }
-}
-
 void SerializersTestSuit::addDeserializationErrorTestCase(const QString& name, const QByteArray& msg) {
    mRawMessages.insert(name,msg);
-}
-
-void SerializersTestSuit::addOneArgRemoteCallTest(const QString& testName, const QVariant& arg) {
-   qrs::Message *msg = new qrs::Message;
-   msg->setService(TEST_SERVICE_NAME);
-   msg->setMethod(TEST_METHOD_NAME);
-   msg->params().insert("arg",arg);
-   if ( mMessages.contains(testName) ) {
-      qWarning() << "Trying to create several tests with the same name: " << testName;
-      qWarning() << "Previous test is removed from tests list";
-   }
-   mMessages.insert(testName,msg);
 }
 
 /**
  * @brief filling test messages list
  */
 void SerializersTestSuit::initTestCase() {
+   qRegisterMetaType< QList<long> >("QList<long>");
+   qRegisterMetaType< QMap<QString,int> >("QMap<QString,int>");
+   qRegisterMetaType<signed char>("signed char");
+
    qrs::Message *msg;
 
    // --- Errors
@@ -145,80 +81,6 @@ void SerializersTestSuit::initTestCase() {
    msg->setMethod(TEST_METHOD_NAME);
    mMessages.insert("no args",msg);
 
-   // unsigned char
-   addOneArgRemoteCallTest("unsigned char",qrs::createArg( (unsigned char)45 ));
-   // min unsigned char
-   addOneArgRemoteCallTest("min unsigned char",qrs::createArg( std::numeric_limits<unsigned char>::min() ));
-   // max unsigned char
-   addOneArgRemoteCallTest("max unsigned char",qrs::createArg( std::numeric_limits<unsigned char>::max() ));
-   // signed char
-   addOneArgRemoteCallTest("signed char",qrs::createArg( (signed char)-76 ));
-   // min signed char
-   addOneArgRemoteCallTest("min signed shar",qrs::createArg( std::numeric_limits<signed char>::min() ));
-   // max signed char
-   addOneArgRemoteCallTest("max signed char",qrs::createArg( std::numeric_limits<signed char>::max() ));
-   // short
-   addOneArgRemoteCallTest("short",qrs::createArg( short(-123) ));
-   // min short
-   addOneArgRemoteCallTest("min short",qrs::createArg( std::numeric_limits<short>::min() ));
-   // max short
-   addOneArgRemoteCallTest("max short",qrs::createArg( std::numeric_limits<short>::max() ));
-   // unsigned short
-   addOneArgRemoteCallTest("unsigned short",qrs::createArg( (unsigned short)50 ));
-   // min ushort
-   addOneArgRemoteCallTest("min unsigned short",qrs::createArg( std::numeric_limits<unsigned short>::min() ));
-   // max ushort
-   addOneArgRemoteCallTest("max unsigned short",qrs::createArg( std::numeric_limits<unsigned short>::max() ));
-   // int
-   addOneArgRemoteCallTest("int",qrs::createArg( int(123) ));
-   // min int
-   addOneArgRemoteCallTest("min int",qrs::createArg( std::numeric_limits<int>::min() ));
-   // max int
-   addOneArgRemoteCallTest("max int",qrs::createArg( std::numeric_limits<int>::max() ));
-   // unsigned
-   addOneArgRemoteCallTest("unsigned",qrs::createArg( (unsigned)45000 ));
-   // min unsigned
-   addOneArgRemoteCallTest("min unsigned",qrs::createArg( std::numeric_limits<unsigned>::min() ));
-   // max unsigned
-   addOneArgRemoteCallTest("max unsigned",qrs::createArg( std::numeric_limits<unsigned>::max() ));
-   // min long
-   addOneArgRemoteCallTest("min long",qrs::createArg( std::numeric_limits<long>::min() ));
-   // max long
-   addOneArgRemoteCallTest("max long",qrs::createArg( std::numeric_limits<long>::max() ));
-   // min unsigned long
-   addOneArgRemoteCallTest("min unsigned long",qrs::createArg( std::numeric_limits<unsigned long>::min() ));
-   // max unsigned long
-   addOneArgRemoteCallTest("max unsigned long",qrs::createArg( std::numeric_limits<unsigned long>::max() ));
-   // min long long
-   addOneArgRemoteCallTest("min long long",qrs::createArg( std::numeric_limits<long long>::min() ));
-   // max long long
-   addOneArgRemoteCallTest("max long long",qrs::createArg( std::numeric_limits<long long>::max() ));
-   // min unsigned long long
-   addOneArgRemoteCallTest("min unsigned long long",qrs::createArg( std::numeric_limits<unsigned long long>::min() ));
-   // max unsigned long
-   addOneArgRemoteCallTest("max unsigned long long",qrs::createArg( std::numeric_limits<unsigned long long>::max() ));
-   // bool true
-   addOneArgRemoteCallTest("bool true",qrs::createArg(true));
-   // bool false
-   addOneArgRemoteCallTest("bool false",qrs::createArg(false));
-   // QString
-   addOneArgRemoteCallTest("QString",qrs::createArg( QString("string") ));
-   // empty QString
-   addOneArgRemoteCallTest("empty QString",qrs::createArg( QString("") ));
-   // QList
-   addOneArgRemoteCallTest("QList",qrs::createArg( QList<QString>() << "2" << "4" << "6" ));
-   // empty QList
-   addOneArgRemoteCallTest("empty QList",qrs::createArg( QList<QString>() ));
-   // QMap
-   QMap<QString,int> intMap;
-   intMap["one"]=1;
-   intMap["two"]=2;
-   intMap["three"]=3;
-   addOneArgRemoteCallTest("QMap",qrs::createArg( intMap ));
-   // empty QMap
-   addOneArgRemoteCallTest("empty QMap",qrs::createArg( QMap<QString,unsigned>() ));
-
-
    // Two args
    msg = new qrs::Message;
    msg->setService(TEST_SERVICE_NAME);
@@ -255,7 +117,7 @@ void SerializersTestSuit::testQCharSerialization() {
 
       QCOMPARE(*res , src);
       QChar res_arg;
-      qrs::getArgValue(res->params()["arg"] , res_arg);
+      QVERIFY( qrs::getArgValue(res->params()["arg"] , res_arg) );
       QCOMPARE(res_arg , arg);
    } catch(const qrs::UnsupportedTypeException& e) {
       qWarning("Unsupported type");
@@ -293,7 +155,531 @@ void SerializersTestSuit::testCharSerialization() {
 
       QCOMPARE(*res , src);
       char res_arg;
-      qrs::getArgValue(res->params()["arg"] , res_arg);
+      QVERIFY( qrs::getArgValue(res->params()["arg"] , res_arg) );
+      QCOMPARE(res_arg , arg);
+   } catch(const qrs::UnsupportedTypeException& e) {
+      qWarning("Unsupported type");
+      QFAIL( e.what() );
+   } catch(const qrs::MessageParsingException& e) {
+      qWarning("Can't parse message created by myself");
+      QFAIL( e.what() );
+   } catch(const std::exception& e) {
+      qWarning("std::exception");
+      QFAIL( e.what() );
+   } catch( ... ) {
+      QFAIL("Exception of unknown type");
+   }
+}
+
+// signed char
+void SerializersTestSuit::testSignedCharSerialization_data() {
+   QTest::addColumn<signed char>("arg");
+
+   QTest::newRow("-1") << (signed char)-1;
+   QTest::newRow("0") << (signed char)0;
+   QTest::newRow("1") << (signed char)1;
+   QTest::newRow("min") << std::numeric_limits<signed char>::min();
+   QTest::newRow("max") << std::numeric_limits<signed char>::max();
+}
+void SerializersTestSuit::testSignedCharSerialization() {
+   QFETCH(signed char,arg);
+   qrs::Message src;
+   src.setService(TEST_SERVICE_NAME);
+   src.setMethod(TEST_METHOD_NAME);
+   src.params().insert("arg",qrs::createArg(arg));
+
+   try {
+      QByteArray raw = mSerializer->serialize( src );
+      qrs::MessageAP res = mSerializer->deserialize(raw);
+
+      QCOMPARE(*res , src);
+      signed char res_arg;
+      QVERIFY( qrs::getArgValue(res->params()["arg"] , res_arg) );
+      QCOMPARE(res_arg , arg);
+   } catch(const qrs::UnsupportedTypeException& e) {
+      qWarning("Unsupported type");
+      QFAIL( e.what() );
+   } catch(const qrs::MessageParsingException& e) {
+      qWarning("Can't parse message created by myself");
+      QFAIL( e.what() );
+   } catch(const std::exception& e) {
+      qWarning("std::exception");
+      QFAIL( e.what() );
+   } catch( ... ) {
+      QFAIL("Exception of unknown type");
+   }
+}
+
+void SerializersTestSuit::testUnsignedCharSerialization_data() {
+   QTest::addColumn<unsigned char>("arg");
+
+   QTest::newRow("0") << (unsigned char)0;
+   QTest::newRow("1") << (unsigned char)1;
+   QTest::newRow("min") << std::numeric_limits<unsigned char>::min();
+   QTest::newRow("max") << std::numeric_limits<unsigned char>::max();
+}
+void SerializersTestSuit::testUnsignedCharSerialization() {
+   QFETCH(unsigned char,arg);
+   qrs::Message src;
+   src.setService(TEST_SERVICE_NAME);
+   src.setMethod(TEST_METHOD_NAME);
+   src.params().insert("arg",qrs::createArg(arg));
+
+   try {
+      QByteArray raw = mSerializer->serialize( src );
+      qrs::MessageAP res = mSerializer->deserialize(raw);
+
+      QCOMPARE(*res , src);
+      unsigned char res_arg;
+      QVERIFY( qrs::getArgValue(res->params()["arg"] , res_arg) );
+      QCOMPARE(res_arg , arg);
+   } catch(const qrs::UnsupportedTypeException& e) {
+      qWarning("Unsupported type");
+      QFAIL( e.what() );
+   } catch(const qrs::MessageParsingException& e) {
+      qWarning("Can't parse message created by myself");
+      QFAIL( e.what() );
+   } catch(const std::exception& e) {
+      qWarning("std::exception");
+      QFAIL( e.what() );
+   } catch( ... ) {
+      QFAIL("Exception of unknown type");
+   }
+}
+
+void SerializersTestSuit::testShortSerialization_data() {
+   QTest::addColumn<short>("arg");
+
+   QTest::newRow("min") << std::numeric_limits<short>::min();
+   QTest::newRow("-1") << (short)-1;
+   QTest::newRow("0") << (short)0;
+   QTest::newRow("1") << (short)1;
+   QTest::newRow("max") << std::numeric_limits<short>::max();
+}
+void SerializersTestSuit::testShortSerialization() {
+   QFETCH(short,arg);
+   qrs::Message src;
+   src.setService(TEST_SERVICE_NAME);
+   src.setMethod(TEST_METHOD_NAME);
+   src.params().insert("arg",qrs::createArg(arg));
+
+   try {
+      QByteArray raw = mSerializer->serialize( src );
+      qrs::MessageAP res = mSerializer->deserialize(raw);
+
+      QCOMPARE(*res , src);
+      short res_arg;
+      QVERIFY( qrs::getArgValue(res->params()["arg"] , res_arg) );
+      QCOMPARE(res_arg , arg);
+   } catch(const qrs::UnsupportedTypeException& e) {
+      qWarning("Unsupported type");
+      QFAIL( e.what() );
+   } catch(const qrs::MessageParsingException& e) {
+      qWarning("Can't parse message created by myself");
+      QFAIL( e.what() );
+   } catch(const std::exception& e) {
+      qWarning("std::exception");
+      QFAIL( e.what() );
+   } catch( ... ) {
+      QFAIL("Exception of unknown type");
+   }
+}
+
+void SerializersTestSuit::testUShortSerialization_data() {
+   QTest::addColumn<unsigned short>("arg");
+
+   QTest::newRow("min") << std::numeric_limits<unsigned short>::min();
+   QTest::newRow("0") << (unsigned short)0;
+   QTest::newRow("1") << (unsigned short)1;
+   QTest::newRow("max") << std::numeric_limits<unsigned short>::max();
+}
+void SerializersTestSuit::testUShortSerialization() {
+   QFETCH(unsigned short,arg);
+   qrs::Message src;
+   src.setService(TEST_SERVICE_NAME);
+   src.setMethod(TEST_METHOD_NAME);
+   src.params().insert("arg",qrs::createArg(arg));
+
+   try {
+      QByteArray raw = mSerializer->serialize( src );
+      qrs::MessageAP res = mSerializer->deserialize(raw);
+
+      QCOMPARE(*res , src);
+      unsigned short res_arg;
+      QVERIFY( qrs::getArgValue(res->params()["arg"] , res_arg) );
+      QCOMPARE(res_arg , arg);
+   } catch(const qrs::UnsupportedTypeException& e) {
+      qWarning("Unsupported type");
+      QFAIL( e.what() );
+   } catch(const qrs::MessageParsingException& e) {
+      qWarning("Can't parse message created by myself");
+      QFAIL( e.what() );
+   } catch(const std::exception& e) {
+      qWarning("std::exception");
+      QFAIL( e.what() );
+   } catch( ... ) {
+      QFAIL("Exception of unknown type");
+   }
+}
+
+void SerializersTestSuit::testIntSerialization_data() {
+   QTest::addColumn<int>("arg");
+
+   QTest::newRow("1") << 1;
+   QTest::newRow("-100") << -100;
+   QTest::newRow("0") << 0;
+   QTest::newRow("32000") << 32000;
+   QTest::newRow("min") << std::numeric_limits<int>::min();
+   QTest::newRow("max") << std::numeric_limits<int>::max();
+}
+void SerializersTestSuit::testIntSerialization() {
+   QFETCH(int,arg);
+   qrs::Message src;
+   src.setService(TEST_SERVICE_NAME);
+   src.setMethod(TEST_METHOD_NAME);
+   src.params().insert("arg",qrs::createArg(arg));
+
+   try {
+      QByteArray raw = mSerializer->serialize( src );
+      qrs::MessageAP res = mSerializer->deserialize(raw);
+
+      QCOMPARE(*res , src);
+      int res_arg;
+      QVERIFY( qrs::getArgValue(res->params()["arg"] , res_arg) );
+      QCOMPARE(res_arg , arg);
+   } catch(const qrs::UnsupportedTypeException& e) {
+      qWarning("Unsupported type");
+      QFAIL( e.what() );
+   } catch(const qrs::MessageParsingException& e) {
+      qWarning("Can't parse message created by myself");
+      QFAIL( e.what() );
+   } catch(const std::exception& e) {
+      qWarning("std::exception");
+      QFAIL( e.what() );
+   } catch( ... ) {
+      QFAIL("Exception of unknown type");
+   }
+}
+
+void SerializersTestSuit::testUIntSerialization_data() {
+   QTest::addColumn<unsigned>("arg");
+
+   QTest::newRow("1") << 1u;
+   QTest::newRow("0") << 0u;
+   QTest::newRow("32000") << 32000u;
+   QTest::newRow("min") << std::numeric_limits<unsigned>::min();
+   QTest::newRow("max") << std::numeric_limits<unsigned>::max();
+}
+void SerializersTestSuit::testUIntSerialization() {
+   QFETCH(unsigned,arg);
+   qrs::Message src;
+   src.setService(TEST_SERVICE_NAME);
+   src.setMethod(TEST_METHOD_NAME);
+   src.params().insert("arg",qrs::createArg(arg));
+
+   try {
+      QByteArray raw = mSerializer->serialize( src );
+      qrs::MessageAP res = mSerializer->deserialize(raw);
+
+      QCOMPARE(*res , src);
+      unsigned res_arg;
+      QVERIFY( qrs::getArgValue(res->params()["arg"] , res_arg) );
+      QCOMPARE(res_arg , arg);
+   } catch(const qrs::UnsupportedTypeException& e) {
+      qWarning("Unsupported type");
+      QFAIL( e.what() );
+   } catch(const qrs::MessageParsingException& e) {
+      qWarning("Can't parse message created by myself");
+      QFAIL( e.what() );
+   } catch(const std::exception& e) {
+      qWarning("std::exception");
+      QFAIL( e.what() );
+   } catch( ... ) {
+      QFAIL("Exception of unknown type");
+   }
+}
+
+void SerializersTestSuit::testLongSerialization_data() {
+   QTest::addColumn<long>("arg");
+
+   QTest::newRow("-1") << -1l;
+   QTest::newRow("1") << 1l;
+   QTest::newRow("0") << 0l;
+   QTest::newRow("min") << std::numeric_limits<long>::min();
+   QTest::newRow("max") << std::numeric_limits<long>::max();
+}
+void SerializersTestSuit::testLongSerialization() {
+   QFETCH(long,arg);
+   qrs::Message src;
+   src.setService(TEST_SERVICE_NAME);
+   src.setMethod(TEST_METHOD_NAME);
+   src.params().insert("arg",qrs::createArg(arg));
+
+   try {
+      QByteArray raw = mSerializer->serialize( src );
+      qrs::MessageAP res = mSerializer->deserialize(raw);
+
+      QCOMPARE(*res , src);
+      long res_arg;
+      QVERIFY( qrs::getArgValue(res->params()["arg"] , res_arg) );
+      QCOMPARE(res_arg , arg);
+   } catch(const qrs::UnsupportedTypeException& e) {
+      qWarning("Unsupported type");
+      QFAIL( e.what() );
+   } catch(const qrs::MessageParsingException& e) {
+      qWarning("Can't parse message created by myself");
+      QFAIL( e.what() );
+   } catch(const std::exception& e) {
+      qWarning("std::exception");
+      QFAIL( e.what() );
+   } catch( ... ) {
+      QFAIL("Exception of unknown type");
+   }
+}
+
+void SerializersTestSuit::testULongSerialization_data() {
+   QTest::addColumn<unsigned long>("arg");
+
+   QTest::newRow("1") << 1ul;
+   QTest::newRow("0") << 0ul;
+   QTest::newRow("min") << std::numeric_limits<unsigned long>::min();
+   QTest::newRow("max") << std::numeric_limits<unsigned long>::max();
+}
+void SerializersTestSuit::testULongSerialization() {
+   QFETCH(unsigned long,arg);
+   qrs::Message src;
+   src.setService(TEST_SERVICE_NAME);
+   src.setMethod(TEST_METHOD_NAME);
+   src.params().insert("arg",qrs::createArg(arg));
+
+   try {
+      QByteArray raw = mSerializer->serialize( src );
+      qrs::MessageAP res = mSerializer->deserialize(raw);
+
+      QCOMPARE(*res , src);
+      unsigned long res_arg;
+      QVERIFY( qrs::getArgValue(res->params()["arg"] , res_arg) );
+      QCOMPARE(res_arg , arg);
+   } catch(const qrs::UnsupportedTypeException& e) {
+      qWarning("Unsupported type");
+      QFAIL( e.what() );
+   } catch(const qrs::MessageParsingException& e) {
+      qWarning("Can't parse message created by myself");
+      QFAIL( e.what() );
+   } catch(const std::exception& e) {
+      qWarning("std::exception");
+      QFAIL( e.what() );
+   } catch( ... ) {
+      QFAIL("Exception of unknown type");
+   }
+}
+
+void SerializersTestSuit::testLongLongSerialization_data() {
+   QTest::addColumn<long long>("arg");
+
+   QTest::newRow("-1") << -1ll;
+   QTest::newRow("1") << 1ll;
+   QTest::newRow("0") << 0ll;
+   QTest::newRow("min") << std::numeric_limits<long long>::min();
+   QTest::newRow("max") << std::numeric_limits<long long>::max();
+}
+void SerializersTestSuit::testLongLongSerialization() {
+   QFETCH(long long,arg);
+   qrs::Message src;
+   src.setService(TEST_SERVICE_NAME);
+   src.setMethod(TEST_METHOD_NAME);
+   src.params().insert("arg",qrs::createArg(arg));
+
+   try {
+      QByteArray raw = mSerializer->serialize( src );
+      qrs::MessageAP res = mSerializer->deserialize(raw);
+
+      QCOMPARE(*res , src);
+      long long res_arg;
+      QVERIFY( qrs::getArgValue(res->params()["arg"] , res_arg) );
+      QCOMPARE(res_arg , arg);
+   } catch(const qrs::UnsupportedTypeException& e) {
+      qWarning("Unsupported type");
+      QFAIL( e.what() );
+   } catch(const qrs::MessageParsingException& e) {
+      qWarning("Can't parse message created by myself");
+      QFAIL( e.what() );
+   } catch(const std::exception& e) {
+      qWarning("std::exception");
+      QFAIL( e.what() );
+   } catch( ... ) {
+      QFAIL("Exception of unknown type");
+   }
+}
+
+void SerializersTestSuit::testULongLongSerialization_data() {
+   QTest::addColumn<unsigned long long>("arg");
+
+   QTest::newRow("1") << 1ull;
+   QTest::newRow("0") << 0ull;
+   QTest::newRow("min") << std::numeric_limits<unsigned long long>::min();
+   QTest::newRow("max") << std::numeric_limits<unsigned long long>::max();
+}
+void SerializersTestSuit::testULongLongSerialization() {
+   QFETCH(unsigned long long,arg);
+   qrs::Message src;
+   src.setService(TEST_SERVICE_NAME);
+   src.setMethod(TEST_METHOD_NAME);
+   src.params().insert("arg",qrs::createArg(arg));
+
+   try {
+      QByteArray raw = mSerializer->serialize( src );
+      qrs::MessageAP res = mSerializer->deserialize(raw);
+
+      QCOMPARE(*res , src);
+      unsigned long long res_arg;
+      QVERIFY( qrs::getArgValue(res->params()["arg"] , res_arg) );
+      QCOMPARE(res_arg , arg);
+   } catch(const qrs::UnsupportedTypeException& e) {
+      qWarning("Unsupported type");
+      QFAIL( e.what() );
+   } catch(const qrs::MessageParsingException& e) {
+      qWarning("Can't parse message created by myself");
+      QFAIL( e.what() );
+   } catch(const std::exception& e) {
+      qWarning("std::exception");
+      QFAIL( e.what() );
+   } catch( ... ) {
+      QFAIL("Exception of unknown type");
+   }
+}
+
+void SerializersTestSuit::testBoolSerialization_data() {
+   QTest::addColumn<bool>("arg");
+
+   QTest::newRow("true") << true;
+   QTest::newRow("false") << false;
+}
+void SerializersTestSuit::testBoolSerialization() {
+   QFETCH(bool,arg);
+   qrs::Message src;
+   src.setService(TEST_SERVICE_NAME);
+   src.setMethod(TEST_METHOD_NAME);
+   src.params().insert("arg",qrs::createArg(arg));
+
+   try {
+      QByteArray raw = mSerializer->serialize( src );
+      qrs::MessageAP res = mSerializer->deserialize(raw);
+
+      QCOMPARE(*res , src);
+      bool res_arg;
+      QVERIFY( qrs::getArgValue(res->params()["arg"] , res_arg) );
+      QCOMPARE(res_arg , arg);
+   } catch(const qrs::UnsupportedTypeException& e) {
+      qWarning("Unsupported type");
+      QFAIL( e.what() );
+   } catch(const qrs::MessageParsingException& e) {
+      qWarning("Can't parse message created by myself");
+      QFAIL( e.what() );
+   } catch(const std::exception& e) {
+      qWarning("std::exception");
+      QFAIL( e.what() );
+   } catch( ... ) {
+      QFAIL("Exception of unknown type");
+   }
+}
+
+void SerializersTestSuit::testQStringSerialization_data() {
+   QTest::addColumn<QString>("arg");
+
+   QTest::newRow("word") << "word";
+   QTest::newRow("line") << "Some line";
+   QTest::newRow("two lines") << "Multiline string\nthere are 2 lines";
+   QTest::newRow("empty") << QString();
+}
+void SerializersTestSuit::testQStringSerialization() {
+   QFETCH(QString,arg);
+   qrs::Message src;
+   src.setService(TEST_SERVICE_NAME);
+   src.setMethod(TEST_METHOD_NAME);
+   src.params().insert("arg",qrs::createArg(arg));
+
+   try {
+      QByteArray raw = mSerializer->serialize( src );
+      qrs::MessageAP res = mSerializer->deserialize(raw);
+
+      QCOMPARE(*res , src);
+      QString res_arg;
+      QVERIFY( qrs::getArgValue(res->params()["arg"] , res_arg) );
+      QCOMPARE(res_arg , arg);
+   } catch(const qrs::UnsupportedTypeException& e) {
+      qWarning("Unsupported type");
+      QFAIL( e.what() );
+   } catch(const qrs::MessageParsingException& e) {
+      qWarning("Can't parse message created by myself");
+      QFAIL( e.what() );
+   } catch(const std::exception& e) {
+      qWarning("std::exception");
+      QFAIL( e.what() );
+   } catch( ... ) {
+      QFAIL("Exception of unknown type");
+   }
+}
+
+void SerializersTestSuit::testQListSerialization_data() {
+   QTest::addColumn< QList<long> >("arg");
+
+   QTest::newRow("simple") << ( QList<long>() << 1l << 2l << 3l << -4096l );
+   QTest::newRow("empty") << QList<long>();
+}
+void SerializersTestSuit::testQListSerialization() {
+   QFETCH(QList<long>,arg);
+   qrs::Message src;
+   src.setService(TEST_SERVICE_NAME);
+   src.setMethod(TEST_METHOD_NAME);
+   src.params().insert("arg",qrs::createArg(arg));
+
+   try {
+      QByteArray raw = mSerializer->serialize( src );
+      qrs::MessageAP res = mSerializer->deserialize(raw);
+
+      QCOMPARE(*res , src);
+      QList<long> res_arg;
+      QVERIFY( qrs::getArgValue(res->params()["arg"] , res_arg) );
+      QCOMPARE(res_arg , arg);
+   } catch(const qrs::UnsupportedTypeException& e) {
+      qWarning("Unsupported type");
+      QFAIL( e.what() );
+   } catch(const qrs::MessageParsingException& e) {
+      qWarning("Can't parse message created by myself");
+      QFAIL( e.what() );
+   } catch(const std::exception& e) {
+      qWarning("std::exception");
+      QFAIL( e.what() );
+   } catch( ... ) {
+      QFAIL("Exception of unknown type");
+   }
+}
+
+void SerializersTestSuit::testQMapSerialization_data() {
+   QTest::addColumn< QIntMap >("arg");
+
+   QIntMap map;
+   map["one"] = 1;
+   map["two"] = 2;
+   map["three"] = 3;
+   QTest::newRow("simple") << map;
+   QTest::newRow("empty") << QIntMap();
+}
+void SerializersTestSuit::testQMapSerialization() {
+   QFETCH(QIntMap,arg);
+   qrs::Message src;
+   src.setService(TEST_SERVICE_NAME);
+   src.setMethod(TEST_METHOD_NAME);
+   src.params().insert("arg",qrs::createArg(arg));
+
+   try {
+      QByteArray raw = mSerializer->serialize( src );
+      qrs::MessageAP res = mSerializer->deserialize(raw);
+
+      QCOMPARE(*res , src);
+      QIntMap res_arg;
+      QVERIFY( qrs::getArgValue(res->params()["arg"] , res_arg) );
       QCOMPARE(res_arg , arg);
    } catch(const qrs::UnsupportedTypeException& e) {
       qWarning("Unsupported type");
@@ -366,98 +752,4 @@ void SerializersTestSuit::testDeserializationError() {
    } catch (...) {
       QFAIL("Caught exception of unknown type");
    }
-}
-
-// Additional stuff
-bool qrsCompareParams(const QVariant param1 , const QVariant& param2);
-bool qrsCompareMapParams(const QVariantMap& params1 , const QVariantMap& params2);
-bool qrsCompareListParams(const QVariantList& list1 , const QVariantList& list2);
-
-bool operator== (const qrs::Message& msg1, const qrs::Message& msg2) {
-   if ( msg1.type()      != msg2.type()      ) return false;
-   if ( msg1.errorType() != msg2.errorType() ) return false;
-   if ( msg1.error()     != msg2.error()     ) return false;
-   if ( msg1.service()   != msg2.service()   ) return false;
-   if ( msg1.method()    != msg2.method()    ) return false;
-
-   return qrsCompareMapParams(msg1.params() , msg2.params());
-}
-
-bool qrsCompareParams(const QVariant param1 , const QVariant& param2) {
-   if ( param1.type() == QVariant::Map ) {
-      if ( param2.type() != QVariant::Map ) return false;
-      return qrsCompareMapParams(param1.toMap() , param2.toMap());
-   } else if ( param1.type() == QVariant::List ) {
-      if ( param2.type() != QVariant::List ) return false;
-      return qrsCompareListParams(param1.toList(),param2.toList());
-   } else if ( param1.canConvert<QString>() ) {
-      if ( ! param2.canConvert<QString>() ) return false;
-      return ( param1.toString() == param2.toString() );
-   }
-   qWarning("Can't compare params (corresponding QVariant can't be converted to string). Assuming them equal");
-   return true;
-}
-
-bool qrsCompareMapParams(const QVariantMap& params1 , const QVariantMap& params2) {
-   QVariantMap::const_iterator it = params1.begin();
-   while ( it != params1.end() ) {
-      if ( !params2.contains(it.key()) ) return false;
-      if ( !qrsCompareParams(it.value() , params2.value(it.key())) ) return false;
-      it++;
-   }
-   return true;
-}
-
-bool qrsCompareListParams(const QVariantList& list1 , const QVariantList& list2) {
-   if ( list1.size() != list2.size() ) return false;
-   for ( int i = 0; i < list1.size(); i++ ) {
-      if ( !qrsCompareParams(list1[i],list2[i]) ) return false;
-   }
-   return true;
-}
-
-void printParam(const QVariant& param, int indent, QTextStream& out) {
-   if ( param.type() == QVariant::Map ) {
-      out << "Map ";
-      printMapParam(param.toMap(), indent+1, out);
-   } else if ( param.type() == QVariant::List ) {
-      out << "List ";
-      printListParam(param.toList(), indent+1, out);
-   } else if ( param.canConvert<QString>() ) {
-      out << "\"" << param.toString() << "\"" << endl;
-   } else {
-      out << "(Can't convert arg value to string)" << endl;
-   }
-}
-
-void printMapParam(const QVariantMap& param, int indent, QTextStream& out) {
-   QVariantMap::const_iterator it = param.begin();
-   out << "{" << endl;
-   while ( it != param.end() ) {
-      for ( int i = 0; i < indent; i++ ) {
-         out << " ";
-      }
-      out << "[" << it.key() << "]" << " = ";
-      printParam(it.value(),indent+1,out);
-      it++;
-   }
-   for ( int i = 0; i < indent; i++ ) {
-      out << " ";
-   }
-   out << "}" << endl;
-}
-
-void printListParam(const QVariantList& param, int indent, QTextStream& out) {
-   out << "{" << endl;
-   for (int i = 0; i < param.size(); i++) {
-      for ( int j = 0; j < indent; j++ ) {
-         out << " ";
-      }
-      out << i << ": ";
-      printParam(param[i], indent+1, out);
-   }
-   for ( int i = 0; i < indent; i++ ) {
-      out << " ";
-   }
-   out << "}" << endl;
 }

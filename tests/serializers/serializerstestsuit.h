@@ -21,8 +21,6 @@ class SerializersTestSuit:public QObject{
       }
 
       void addDeserializationErrorTestCase(const QString& name, const QByteArray& msg);
-   private:
-      void addOneArgRemoteCallTest(const QString& testName, const QVariant& arg);
    private slots:
       void initTestCase();
       void cleanupTestCase();
@@ -35,6 +33,48 @@ class SerializersTestSuit:public QObject{
 
       void testCharSerialization_data();
       void testCharSerialization();
+
+      void testSignedCharSerialization_data();
+      void testSignedCharSerialization();
+
+      void testUnsignedCharSerialization_data();
+      void testUnsignedCharSerialization();
+
+      void testShortSerialization_data();
+      void testShortSerialization();
+
+      void testUShortSerialization_data();
+      void testUShortSerialization();
+
+      void testIntSerialization_data();
+      void testIntSerialization();
+
+      void testUIntSerialization_data();
+      void testUIntSerialization();
+
+      void testLongSerialization_data();
+      void testLongSerialization();
+
+      void testULongSerialization_data();
+      void testULongSerialization();
+
+      void testLongLongSerialization_data();
+      void testLongLongSerialization();
+
+      void testULongLongSerialization_data();
+      void testULongLongSerialization();
+
+      void testBoolSerialization_data();
+      void testBoolSerialization();
+
+      void testQStringSerialization_data();
+      void testQStringSerialization();
+
+      void testQListSerialization_data();
+      void testQListSerialization();
+
+      void testQMapSerialization_data();
+      void testQMapSerialization();
 
       void testDeserializationError_data();
       void testDeserializationError();

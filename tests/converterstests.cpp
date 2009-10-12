@@ -341,6 +341,7 @@ class ConvertersTests: public QObject {
          QTest::addColumn< QList<int> >("src");
 
          QTest::newRow("simple") << ( QList<int>() << 1 << 2 << 3 );
+         QTest::newRow("empty") << QList<int>();
       }
       void testConvertList() {
          QFETCH(QList<int>,src);
@@ -371,11 +372,12 @@ class ConvertersTests: public QObject {
       void testConvertMap_data() {
          QTest::addColumn< QIntMap >("src");
 
-         QMap<QString,int> map;
+         QIntMap map;
          map["one"] = 1;
          map["two"] = 2;
          map["three"] = 3;
          QTest::newRow("simple") << map;
+         QTest::newRow("empty") << QIntMap();
       }
       void testConvertMap() {
          QFETCH(QIntMap,src);
