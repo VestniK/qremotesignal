@@ -17,11 +17,13 @@ if  not (ARGUMENTS.get('nocheck') or GetOption('clean') or GetOption('help') ) :
    if not conf.CheckQt4Module('QtXmlPatterns'): Exit(1)
    conf.Finish()
 
+env['Gch'] = env.Gch('sharedheaders.h')
+
 Resources=['templates.qrc']
 Sources=['qrsc.cpp','qtextserializer.cpp','interfacedocument.cpp',
          'interfacecompiler.cpp','argvparser.cpp']
 Sources += env.Qrc(Resources)
 
 env.AlwaysBuild( env.Config('config.h.in') )
-BaseEnv['QRSC'] = env.Program('qrsc',Sources)[0]
+BaseEnv['QRSC'] = env.Program('qrsc',Sources,CPPFLAGS=Split('-include sharedheaders.h'))[0]
 env.InstallProgram(BaseEnv['QRSC'])

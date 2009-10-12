@@ -6,14 +6,20 @@ env = BaseEnv.Clone()
 env.Tool('qrs_dev_build')
 env.Append(CPPPATH = ['.','#lib'])
 env.EnableQt4Modules(['QtCore','QtTest'])
-env['LIBS']+=['qjson']
+env.Append(LIBS = 'qjson')
 
 if  not (ARGUMENTS.get('nocheck') or GetOption('clean') or GetOption('help') ) :
    conf = Configure(env, custom_tests = qrs_custom_tests)
    if not conf.CheckQt4Module('QtTest'): Exit(1)
    conf.Finish()
 
-env.Prepend(LIBS=BaseEnv['QRemoteSignalStatic'])
+env.Prepend(LIBPATH='.')
+env.Prepend(LIBS='QRemoteSignal')
+env.Install('.',env['QRemoteSignalLib'])
+if env['PLATFORM']!='win32': env.Append(LINKFLAGS='-Wl,-rpath=\\$$ORIGIN')
+
+env['Gch'] = env.Gch('sharedheaders.h')[0]
+env.Append(CPPFLAGS=Split('-include sharedheaders.h'))
 
 Service = env.QRSService('example.xml')
 Client  = env.QRSClient('example.xml')

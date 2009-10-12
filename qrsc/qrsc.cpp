@@ -5,7 +5,7 @@
  * @author VestniK (Sergey N.Vidyuk) sir.vestnik@gmail.com
  * @date 29 Jul 2009
  */
-#include <stdio.h>
+#include <cstdio>
 
 #include <QtCore>
 #include <QtXml>

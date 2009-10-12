@@ -6,9 +6,7 @@ from SCons.Node.FS import File
 import SCons.Defaults
 import SCons.Tool
 
-from SCons.Script.SConscript import SConsEnvironment
-SConsEnvironment.Chmod = SCons.Action.ActionFactory(os.chmod,
-        lambda dest, mode: 'Chmod("%s", 0%o)' % (dest, mode))
+from SCons.Script import Chmod
 
 bin_mode = 0755
 res_mode = 0644
@@ -57,7 +55,7 @@ def get_default_data_prefix(env):
 def install_bin(env,src):
    res = env.Install(env['prefix_bin'],src)
    env.Alias('install',res)
-   for obj in res: env.AddPostAction(obj , env.Chmod(str(obj),bin_mode) )
+   for obj in res: env.AddPostAction(obj , Chmod(str(obj),bin_mode) )
    return res
 
 def install_lib(env,src):
@@ -75,9 +73,9 @@ def install_lib(env,src):
       res = env.Install(env['prefix_lib'],src)
       for obj in res:
          if os.path.splitext( str(obj) )[1] == env['SHLIBSUFFIX']:
-            env.AddPostAction(obj , env.Chmod(str(obj),bin_mode) )
+            env.AddPostAction(obj , Chmod(str(obj),bin_mode) )
          else:
-            env.AddPostAction(obj , env.Chmod(str(obj),res_mode) )
+            env.AddPostAction(obj , Chmod(str(obj),res_mode) )
    env.Alias('install',res)
    return res
 
@@ -85,20 +83,20 @@ def install_pc(env,src):
    if env['install_dev'] :
       res = env.Install(env['prefix_pc'],src)
       env.Alias('install',res)
-      for obj in res: env.AddPostAction(obj , env.Chmod(str(obj),res_mode) )
+      for obj in res: env.AddPostAction(obj , Chmod(str(obj),res_mode) )
       return res
 
 def install_inc(env,src):
    if env['install_dev'] :
       res = env.Install(env['prefix_inc'],src)
       env.Alias('install',res)
-      for obj in res: env.AddPostAction(obj , env.Chmod(str(obj),res_mode) )
+      for obj in res: env.AddPostAction(obj , Chmod(str(obj),res_mode) )
       return res
 
 def install_data(env,src,mode=res_mode):
    res = env.Install(env['prefix_data'],src)
    env.Alias('install',res)
-   for obj in res: env.AddPostAction(obj , env.Chmod(str(obj),mode) )
+   for obj in res: env.AddPostAction(obj , Chmod(str(obj),mode) )
    return res
 
 def generate(env):

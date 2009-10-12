@@ -6,13 +6,14 @@ BaseEnv=Environment(tools=[],ENV=os.environ)
 BaseEnv['package'] = 'qremotesignal'
 BaseEnv['VERSION'] = 'svn'
 
-BaseEnv['BUILDERS']['Config'] = Builder(action=config_build,suffix='',src_suffix='.in')
+BaseEnv['BUILDERS']['Config'] = Builder(action=Config,suffix='',src_suffix='.in')
 
 if BaseEnv['PLATFORM'] == 'win32':
    BaseEnv.Tool('mingw')
 else:
    BaseEnv.Tool('default')
 BaseEnv.Tool('qt4')
+BaseEnv.Tool('gch')
 
 BaseEnv['CXXFILESUFFIX']='.cpp'
 BaseEnv['QT4_UICDECLPREFIX'] = 'ui_'
@@ -45,7 +46,7 @@ if BaseEnv['QJson'] != '':
    BaseEnv.Append(CPPPATH = os.path.join(BaseEnv['QJson'],'include') )
    BaseEnv.Append(LIBPATH = os.path.join(BaseEnv['QJson'],'lib') )
 else:
-   BaseEnv['CCFLAGS'] += Split( os.popen('pkg-config --cflags QJson').read() )
+   BaseEnv['CXXFLAGS'] += Split( os.popen('pkg-config --cflags QJson').read() )
    BaseEnv['LINKFLAGS'] += Split( os.popen('pkg-config --libs-only-L QJson').read() )
 
 Export('BaseEnv')
