@@ -26,26 +26,20 @@ def get_default_prefix(env):
       return '/usr/local'
 
 def get_default_bin_prefix(env):
-   if env['PLATFORM'] == 'win32':
-      return env['prefix']
-   else:
-      return os.path.join(env['prefix'],'bin')
+   return os.path.join(env['prefix'],'bin')
 
 def get_default_lib_prefix(env):
    return os.path.join(env['prefix'],'lib')
 
 def get_default_inc_prefix(env):
-   if env['PLATFORM'] == 'win32':
-      return os.path.join(env['prefix'],'include')
-   else:
-      return os.path.join(env['prefix'],'include',env['package'])
+   return os.path.join(env['prefix'],'include',env['package'])
 
 def get_default_pc_prefix(env):
    return os.path.join(env['prefix'],'lib','pkgconfig')
 
 def get_default_data_prefix(env):
    if env['PLATFORM'] == 'win32':
-      return env['prefix']
+      return os.path.join(env['prefix'],'data')
    else:
       return os.path.join(env['prefix'],'share',env['package'])
 

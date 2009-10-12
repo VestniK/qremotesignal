@@ -48,7 +48,6 @@ def generate(env):
    except KeyError: env.Tool('qt4')
 
    env['QRSC'] = find_qrsc(env)
-   env.ParseConfig('pkg-config --libs --cflags QRemoteSignal')
    env['BUILDERS']['QRSBuildService'] = Builder(emitter=qrsc_emiter,
       action="$QRSC --service --header ${TARGETS[1]} --source ${TARGETS[0]} $SOURCE")
    env['BUILDERS']['QRSBuildClient'] = Builder(emitter=qrsc_emiter,
