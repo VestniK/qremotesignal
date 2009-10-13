@@ -7,35 +7,39 @@ To build QRemoteSignal you need to have:
 2. QJson library (tested with svn snapshot)
 3. scons build tool (tested with 1.20)
 
+ * Build
+
+To build QRemoteSignal library, qrsc tool and unit tests run:
+$ scons
+
+NOTE: On windows you need to set correct path to Qt4 to QTDIR environment
+variable and you need to use QJson argument to specify path to your QJson
+installation:
+$ scons QJson="C:\Program Files\qjson"
+
+You need to specify path to QJson only once at first scons run since this
+argument is cached
+
  * Install
 
 To install run:
-
-$ scons PREFIX=<installation path> install
+$ scons prefix=<installation path> install
 
 This will build qrsc and library and then install it to the location specified
-by PREFIX value. If PREFIX argument is not specified library will be installed
-to "/usr".
+by "prefix" value. If "prefix" argument is not specified library will be
+installed to "/usr/local" on POSIX systems and to
+"C:\Program Files\qremotesignal" on Windows.
 
- * Additional parameters
-
-If you need to build QRemoteSignal using custom Qt installation set path to Qt to
-QTDIR environment variable.
-
-There are several arguments you can specify when running scons to specify some
-custom compiler and linker flags.
-CPPFLAGS	specifies custom C/C++ preprocessor flags
-CCFLAGS		specifies custom C compiler flags
-CXXFLAGS	specifies custom C++ compiler flags
-LDFLAGS		specifies custom linker flags
-
-Example of usage:
-
-$ scons CXXFLAGS="-Wall -O2"
+You don't need to specify prefix every time since it's value cached. Specify it
+when installing first time or if you want to change installation path.
 
  * Uninstall
 
 To uninstall QRemoteSignal use the following command:
+$ scons install -c
 
-$ scons PREFIX=<installation path> install -c
+ * Additional parameters
 
+There are several build arguments which you can use to customize QRemoteSignal
+build and installation process. Use `scons --help` for detales. All of those
+parameters are cached you don't need to specify them evry time.

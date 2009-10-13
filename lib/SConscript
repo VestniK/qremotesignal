@@ -3,7 +3,6 @@ Import('BaseEnv')
 env = BaseEnv.Clone()
 env.Append(CPPPATH = ['.'])
 env.EnableQt4Modules(['QtCore'])
-env['LIBS']+=['qjson']
 
 if  not (ARGUMENTS.get('nocheck') or GetOption('clean') or GetOption('help') ) :
    conf = Configure(env)

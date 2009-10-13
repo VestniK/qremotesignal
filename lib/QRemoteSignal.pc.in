@@ -1,6 +1,6 @@
 prefix=%(prefix)s
-libdir=${prefix}/lib
-includedir=${prefix}/include
+libdir=%(prefix_lib)s
+includedir=%(prefix_inc)s
 
 Name: QRemoteSignal
 Description: Remote Qt4 signal/slot call library
