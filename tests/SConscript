@@ -14,7 +14,7 @@ if  not (ARGUMENTS.get('nocheck') or GetOption('clean') or GetOption('help') ) :
    conf.Finish()
 
 env.Prepend(LIBPATH='#tests')
-env.Install('.',env['QRemoteSignalLib'])
+env.Depends( '#tests', env.Install('.',env['QRemoteSignalLib']) )
 env.Prepend( LIBS='QRemoteSignal' )
 env.Append(LINKFLAGS='-Wl,-rpath=\\$$ORIGIN')
 

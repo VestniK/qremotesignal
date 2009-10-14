@@ -17,7 +17,7 @@ BaseEnv.Tool('gch')
 
 BaseEnv['CXXFILESUFFIX']='.cpp'
 
-vars = Variables('build.conf')
+vars = Variables('%s_build.conf'%BaseEnv['PLATFORM'])
 vars.Add('CCFLAGS','Custom C compiler flags','')
 vars.Add('CPPFLAGS','Custom C/C++ preprocessor flags','')
 vars.Add('CXXFLAGS','Custom C++ compiler flags','')
@@ -35,7 +35,7 @@ BaseEnv['CCFLAGS'] = Split(BaseEnv['CCFLAGS'])
 BaseEnv['CPPFLAGS'] = Split(BaseEnv['CPPFLAGS'])
 BaseEnv['CXXFLAGS'] = Split(BaseEnv['CXXFLAGS'])
 BaseEnv['LINKFLAGS'] = Split(BaseEnv['LINKFLAGS'])
-vars.Save('build.conf',BaseEnv)
+vars.Save('%s_build.conf'%BaseEnv['PLATFORM'],BaseEnv)
 
 BaseEnv.Tool('smartinstall')
 BaseEnv['install_dev'] = True

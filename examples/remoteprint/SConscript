@@ -10,7 +10,7 @@ env.EnableQt4Modules(['QtCore','QtNetwork'])
 env.Tool('qrs')
 env['CXXFILESUFFIX']='.cpp'
 
-vars = Variables('build.conf')
+vars = Variables('%s_build.conf'%env['PLATFORM'])
 vars.Add('CCFLAGS','Custom C compiler flags','')
 vars.Add('CPPFLAGS','Custom C/C++ preprocessor flags','')
 vars.Add('CXXFLAGS','Custom C++ compiler flags','')
@@ -23,7 +23,7 @@ env['CCFLAGS'] = Split(env['CCFLAGS'])
 env['CPPFLAGS'] = Split(env['CPPFLAGS'])
 env['CXXFLAGS'] = Split(env['CXXFLAGS'])
 env['LINKFLAGS'] = Split(env['LINKFLAGS'])
-vars.Save('build.conf',env)
+vars.Save('%s_build.conf'%env['PLATFORM'],env)
 Help(vars.GenerateHelpText(env))
 
 if env['QJson'] != '':
