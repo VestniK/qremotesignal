@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<service name="Example">
+<!--   <customTypes header="someheader.h"/> -->
+   <method name="intMethod">
+      <param type="int" name="num"/>
+   </method>
+   <method name="strMethod">
+      <param type="QString" name="str"/>
+   </method>
+<!--   <method name="intVectorMethod">
+      <param type='QVector&lt;int>' name="vector"/>
+   </method> -->
+   <method name="mixedMethod">
+      <param type="QString" name="str"/>
+      <param type="int" name="num"/>
+   </method>
+   <method name="voidMethod"/>
+</service>

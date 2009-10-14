@@ -1,0 +1,11 @@
+#ifndef _QRemoteSignal_H
+#define _QRemoteSignal_H
+
+#include "absservice.h"
+#include "servicesmanager.h"
+#include "devicemanager.h"
+#include "baseconverters.h"
+#include "absmessageserializer.h"
+#include "jsonserializer.h"
+
+#endif

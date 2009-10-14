@@ -1,0 +1,55 @@
+import os
+
+env = Environment(tools=[],ENV=os.environ)
+if env['PLATFORM'] == 'win32':
+   env.Tool('mingw')
+else:
+   env.Tool('default')
+env.Tool('qt4')
+env.EnableQt4Modules(['QtCore','QtNetwork'])
+env.Tool('qrs')
+env['CXXFILESUFFIX']='.cpp'
+
+vars = Variables('%s_build.conf'%env['PLATFORM'])
+vars.Add('CCFLAGS','Custom C compiler flags','')
+vars.Add('CPPFLAGS','Custom C/C++ preprocessor flags','')
+vars.Add('CXXFLAGS','Custom C++ compiler flags','')
+vars.Add('LINKFLAGS','Custom linker flags','')
+vars.Add('QJson','QJson library path live blank to detect it using pkg-config','')
+vars.Add('QRemoteSignal','QRemoteSignal library path live blank to detect it using pkg-config','')
+vars.Update(env)
+# Hack: need to convert flags lists from strings to lists
+env['CCFLAGS'] = Split(env['CCFLAGS'])
+env['CPPFLAGS'] = Split(env['CPPFLAGS'])
+env['CXXFLAGS'] = Split(env['CXXFLAGS'])
+env['LINKFLAGS'] = Split(env['LINKFLAGS'])
+vars.Save('%s_build.conf'%env['PLATFORM'],env)
+Help(vars.GenerateHelpText(env))
+
+if env['QJson'] != '':
+   env.Append( LIBPATH=os.path.join(env['QJson'],'lib') )
+   env.Append( LIBS='qjson' )
+   env.Append( CPPPATH=os.path.join(env['QJson'],'include') )
+else:
+   env.ParseConfig('pkg-config --libs --cflags QJson')
+if env['QRemoteSignal'] != '':
+   env.Append( LIBPATH=os.path.join(env['QRemoteSignal'],'lib') )
+   env.Append( LIBS='QRemoteSignal' )
+   env.Append( CPPPATH=os.path.join(env['QRemoteSignal'],'include') )
+   env.Append( CPPPATH=os.path.join(env['QRemoteSignal'],'include','qremotesignal') )
+else:
+   env.ParseConfig('pkg-config --libs --cflags QRemoteSignal')
+
+if  not (ARGUMENTS.get('nocheck') or GetOption('clean') or GetOption('help') ) :
+   conf = Configure(env)
+   if not conf.CheckCXX(): Exit(1)
+   if not conf.CheckCXXHeader('QtCore'): Exit(1)
+   if not conf.CheckCXXHeader('QtNetwork'): Exit(1)
+   if not conf.CheckLibWithHeader('qjson','qjson/parser.h','c++'): Exit(1)
+   if not conf.CheckLibWithHeader('QRemoteSignal','QRemoteSignal','c++'): Exit(1)
+   conf.Finish()
+   
+Export('env')
+
+SConscript('server/SConscript')
+SConscript('client/SConscript')
