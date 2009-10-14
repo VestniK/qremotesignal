@@ -28,7 +28,7 @@ void DeviceManager::setDevice(QIODevice* device) {
    }
    if ( mDevice != 0 ) {
       disconnect(mDevice,SIGNAL(readyRead()),
-                 this,SLOT(onNewDataReceived()));
+                 this,SLOT(onNewData()));
    }
    mDevice = device;
    mStream.setDevice(mDevice);
@@ -37,12 +37,12 @@ void DeviceManager::setDevice(QIODevice* device) {
       return;
    }
    connect(mDevice,SIGNAL(readyRead()),
-           this,SLOT(onNewDataReceived()));
+           this,SLOT(onNewData()));
    // If device already contains some data then read it
-   onNewDataReceived();
+   onNewData();
 }
 
-void DeviceManager::sendMessage(const QByteArray& msg) {
+void DeviceManager::send(const QByteArray& msg) {
    if ( mDevice == 0 ) {
       return;
    }
@@ -52,7 +52,7 @@ void DeviceManager::sendMessage(const QByteArray& msg) {
    mStream << msg;
 }
 
-void DeviceManager::onNewDataReceived() {
+void DeviceManager::onNewData() {
    if ( mDevice == 0 ) {
       return;
    }
@@ -66,7 +66,7 @@ void DeviceManager::onNewDataReceived() {
          break;
       }
       pos = buffReader.device()->pos();
-      emit messageReceived(msg);
+      emit received(msg);
    }
    if ( pos != 0 ) {
       mBuffer = mBuffer.mid(pos);

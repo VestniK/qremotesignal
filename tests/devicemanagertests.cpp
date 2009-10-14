@@ -33,8 +33,8 @@ class DeviceManagerTests: public QObject {
          QByteArray msg = "Hello";
          mDevManager2.setDevice(0);
 
-         QSignalSpy spy(&mDevManager2,SIGNAL(messageReceived(QByteArray)));
-         mDevManager1.sendMessage( msg );
+         QSignalSpy spy(&mDevManager2,SIGNAL(received(QByteArray)));
+         mDevManager1.send( msg );
 
          sendDataToDev2( mDevice1.buffer() );
          QCOMPARE(spy.count() , 0);
@@ -48,8 +48,8 @@ class DeviceManagerTests: public QObject {
       void testSendReceive() {
          QByteArray msg = "Hello";
 
-         QSignalSpy spy(&mDevManager2,SIGNAL(messageReceived(QByteArray)));
-         mDevManager1.sendMessage( msg );
+         QSignalSpy spy(&mDevManager2,SIGNAL(received(QByteArray)));
+         mDevManager1.send( msg );
 
          sendDataToDev2( mDevice1.buffer() );
 
@@ -61,9 +61,9 @@ class DeviceManagerTests: public QObject {
          QByteArray msg = "Long message";
 
          QSignalSpy mDevice2ReadyReadSpy(&mDevice2,SIGNAL(readyRead()));
-         QSignalSpy spy(&mDevManager2,SIGNAL(messageReceived(QByteArray)));
+         QSignalSpy spy(&mDevManager2,SIGNAL(received(QByteArray)));
 
-         mDevManager1.sendMessage( msg );
+         mDevManager1.send( msg );
          int splitPoint = mDevice1.buffer().size()/2;
 
          sendDataToDev2( mDevice1.buffer().left( splitPoint ) );
@@ -82,9 +82,9 @@ class DeviceManagerTests: public QObject {
          QByteArray msg1 = "Hello";
          QByteArray msg2 = "World";
 
-         QSignalSpy spy(&mDevManager2,SIGNAL(messageReceived(QByteArray)));
-         mDevManager1.sendMessage( msg1 );
-         mDevManager1.sendMessage( msg2 );
+         QSignalSpy spy(&mDevManager2,SIGNAL(received(QByteArray)));
+         mDevManager1.send( msg1 );
+         mDevManager1.send( msg2 );
 
          sendDataToDev2( mDevice1.buffer() );
 
@@ -97,9 +97,9 @@ class DeviceManagerTests: public QObject {
          QByteArray msg1 = "Hello";
          QByteArray msg2 = "Big World";
 
-         QSignalSpy spy(&mDevManager2,SIGNAL(messageReceived(QByteArray)));
-         mDevManager1.sendMessage( msg1 );
-         mDevManager1.sendMessage( msg2 );
+         QSignalSpy spy(&mDevManager2,SIGNAL(received(QByteArray)));
+         mDevManager1.send( msg1 );
+         mDevManager1.send( msg2 );
          int splitPoint = mDevice1.buffer().size() - msg2.size()/2;
 
          sendDataToDev2( mDevice1.buffer().left(splitPoint) );

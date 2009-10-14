@@ -36,10 +36,10 @@ void Server::newConnection() {
    QTcpSocket* socket = mTcpSrv->nextPendingConnection();
    if (socket == 0) return;
    qrs::DeviceManager* dmanager = new qrs::DeviceManager;
-   connect(dmanager,SIGNAL(messageReceived(QByteArray)),
+   connect(dmanager,SIGNAL(received(QByteArray)),
            mManager,SLOT(receive(const QByteArray&)));
    connect(mManager,SIGNAL(send(QByteArray)),
-           dmanager,SLOT(sendMessage(const QByteArray&)));
+           dmanager,SLOT(send(const QByteArray&)));
    dmanager->setParent(socket);
    dmanager->setDevice(socket);
    mConnectionPool.append(socket);

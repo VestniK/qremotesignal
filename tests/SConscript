@@ -14,12 +14,9 @@ if  not (ARGUMENTS.get('nocheck') or GetOption('clean') or GetOption('help') ) :
    conf.Finish()
 
 env.Prepend(LIBPATH='#tests')
-env.Prepend(LIBS='QRemoteSignal')
 env.Install('.',env['QRemoteSignalLib'])
-if env['PLATFORM']=='win32':
-   env.Depends('libQRemoteSignal.a','QRemoteSignal.dll')
-else:
-   env.Append(LINKFLAGS='-Wl,-rpath=\\$$ORIGIN')
+env.Prepend( LIBS='QRemoteSignal' )
+env.Append(LINKFLAGS='-Wl,-rpath=\\$$ORIGIN')
 
 env['Gch'] = env.Gch('sharedheaders.h')[0]
 env.Append(CPPFLAGS=Split('-include sharedheaders.h'))

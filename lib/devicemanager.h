@@ -23,11 +23,11 @@ namespace qrs {
          QIODevice* device() {return mDevice;};
          void setDevice(QIODevice* device);
       public slots:
-         void sendMessage(const QByteArray& msg);
+         void send(const QByteArray& msg);
       signals:
-         void messageReceived(QByteArray msg);
+         void received(QByteArray msg);
       private slots:
-         void onNewDataReceived();
+         void onNewData();
       private:
          QIODevice *mDevice;
          QDataStream mStream;

@@ -34,8 +34,8 @@ int main(int argc,char **argv) {
    qrs::PrintClient* client = new qrs::PrintClient(manager);
 
    QObject::connect(manager,SIGNAL(send(QByteArray)),
-                    dmanager,SLOT(sendMessage(const QByteArray&)));
-   QObject::connect(dmanager,SIGNAL(messageReceived(QByteArray)),
+                    dmanager,SLOT(send(const QByteArray&)));
+   QObject::connect(dmanager,SIGNAL(received(QByteArray)),
                     manager,SLOT(receive(const QByteArray&)));
    dmanager->setParent(socket);
    dmanager->setDevice(socket);

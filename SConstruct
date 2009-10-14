@@ -4,7 +4,7 @@ from builders import *
 
 BaseEnv=Environment(tools=[],ENV=os.environ)
 BaseEnv['package'] = 'qremotesignal'
-BaseEnv['VERSION'] = 'svn'
+BaseEnv['VERSION'] = '0.5.9svn'
 
 BaseEnv['BUILDERS']['Config'] = Builder(action=Config,suffix='',src_suffix='.in')
 
@@ -46,8 +46,7 @@ if BaseEnv['QJson'] != '':
    BaseEnv.Append(CPPPATH = os.path.join(BaseEnv['QJson'],'include') )
    BaseEnv.Append(LIBPATH = os.path.join(BaseEnv['QJson'],'lib') )
 else:
-   BaseEnv.Append(CXXFLAGS = Split( os.popen('pkg-config --cflags QJson').read() ) )
-   BaseEnv.Append(LINKFLAGS = Split( os.popen('pkg-config --libs-only-L QJson').read() ) )
+   BaseEnv.ParseConfig(('pkg-config --cflags --libs-only-L QJson'))
 
 Export('BaseEnv')
 
