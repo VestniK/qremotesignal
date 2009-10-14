@@ -1,4 +1,6 @@
-Version 0.6.0 SVN
+Version 0.7.0 SVN
+
+2009-10-14 Version 0.6.0
 	* Added support for the folowing types: QChar, char, signed char,
 	unsigned char, short, unsigned short, unsigned, long, unsigned long,
 	long long, unsigned long long, bool, QList<T>, QMap<QString,T> (where
