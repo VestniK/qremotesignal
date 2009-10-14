@@ -30,6 +30,8 @@ Server::Server (QObject *parent):QObject(parent) {
    qrs::PrintService* print_service = new qrs::PrintService(mManager);
    connect(print_service,SIGNAL(print(QString)),
            this,SLOT(print(const QString&)));
+   connect(print_service,SIGNAL(quit()),
+           qApp,SLOT(quit()));
 }
 
 void Server::newConnection() {

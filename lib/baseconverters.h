@@ -10,69 +10,70 @@
 
 #include <QtCore>
 
+#include "qrsexport.h"
 #include "message.h"
 
 namespace qrs {
 
    // ----- unsigned long long -----
-   QVariant createArg(unsigned long long val);
-   bool getArgValue(const QVariant& arg, unsigned long long& res);
+   QRS_EXPORT QVariant createArg(unsigned long long val);
+   QRS_EXPORT bool getArgValue(const QVariant& arg, unsigned long long& res);
 
    // ----- unsigned long -----
-   QVariant createArg(unsigned long val);
-   bool getArgValue(const QVariant& arg, unsigned long& res);
+   QRS_EXPORT QVariant createArg(unsigned long val);
+   QRS_EXPORT bool getArgValue(const QVariant& arg, unsigned long& res);
 
    // ----- unsigned -----
-   QVariant createArg(unsigned val);
-   bool getArgValue(const QVariant& arg, unsigned& res);
+   QRS_EXPORT QVariant createArg(unsigned val);
+   QRS_EXPORT bool getArgValue(const QVariant& arg, unsigned& res);
 
    // ----- unsigned short -----
-   QVariant createArg(unsigned short val);
-   bool getArgValue(const QVariant& arg, unsigned short& res);
+   QRS_EXPORT QVariant createArg(unsigned short val);
+   QRS_EXPORT bool getArgValue(const QVariant& arg, unsigned short& res);
 
    // ----- unsigned char -----
-   QVariant createArg(unsigned char val);
-   bool getArgValue(const QVariant& arg, unsigned char& res);
+   QRS_EXPORT QVariant createArg(unsigned char val);
+   QRS_EXPORT bool getArgValue(const QVariant& arg, unsigned char& res);
 
    // ----- long long -----
-   QVariant createArg(long long val);
-   bool getArgValue(const QVariant& arg, long long& res);
+   QRS_EXPORT QVariant createArg(long long val);
+   QRS_EXPORT bool getArgValue(const QVariant& arg, long long& res);
 
    // ----- long -----
-   QVariant createArg(long val);
-   bool getArgValue(const QVariant& arg, long& res);
+   QRS_EXPORT QVariant createArg(long val);
+   QRS_EXPORT bool getArgValue(const QVariant& arg, long& res);
 
    // ----- int -----
-   QVariant createArg(int val);
-   bool getArgValue(const QVariant& arg, int& res);
+   QRS_EXPORT QVariant createArg(int val);
+   QRS_EXPORT bool getArgValue(const QVariant& arg, int& res);
 
    // ----- short -----
-   QVariant createArg(short val);
-   bool getArgValue(const QVariant& arg, short& res);
+   QRS_EXPORT QVariant createArg(short val);
+   QRS_EXPORT bool getArgValue(const QVariant& arg, short& res);
 
    // ----- signed char -----
-   QVariant createArg(signed char val);
-   bool getArgValue(const QVariant& arg, signed char& res);
+   QRS_EXPORT QVariant createArg(signed char val);
+   QRS_EXPORT bool getArgValue(const QVariant& arg, signed char& res);
 
    // ----- char -----
-   QVariant createArg(char val);
-   bool getArgValue(const QVariant& arg, char& res);
+   QRS_EXPORT QVariant createArg(char val);
+   QRS_EXPORT bool getArgValue(const QVariant& arg, char& res);
 
    // ----- bool -----
-   QVariant createArg(bool val);
-   bool getArgValue(const QVariant& arg, bool& res);
+   QRS_EXPORT QVariant createArg(bool val);
+   QRS_EXPORT bool getArgValue(const QVariant& arg, bool& res);
 
    // ----- QChar -----
-   QVariant createArg(QChar val);
-   bool getArgValue(const QVariant& arg, QChar& res);
+   QRS_EXPORT QVariant createArg(QChar val);
+   QRS_EXPORT bool getArgValue(const QVariant& arg, QChar& res);
 
    // ----- QString -----
-   QVariant createArg(const QString& val);
-   bool getArgValue(const QVariant& arg, QString& res);
+   QRS_EXPORT QVariant createArg(const QString& val);
+   QRS_EXPORT bool getArgValue(const QVariant& arg, QString& res);
 
    // ----- QList -----
    template<typename T>
-   QVariant createArg(const QList<T>& val) {
+   QRS_EXPORT QVariant createArg(const QList<T>& val) {
       QVariantList res;
       foreach(T t, val) {
          res.append( createArg(t) );
@@ -81,7 +82,7 @@ namespace qrs {
    }
 
    template<typename T>
-   bool getArgValue(const QVariant& arg, QList<T>& res) {
+   QRS_EXPORT bool getArgValue(const QVariant& arg, QList<T>& res) {
       if( !arg.canConvert<QVariantList>() ){
          return false;
       }
@@ -99,7 +100,7 @@ namespace qrs {
 
    // ----- QMap -----
    template<typename T>
-   QVariant createArg(const QMap<QString,T>& val) {
+   QRS_EXPORT QVariant createArg(const QMap<QString,T>& val) {
       QVariantMap res;
       typename QMap<QString,T>::const_iterator indx = val.begin();
       while ( indx != val.end() ) {
@@ -110,7 +111,7 @@ namespace qrs {
    }
 
    template<typename T>
-   bool getArgValue(const QVariant& arg, QMap<QString,T>& res) {
+   QRS_EXPORT bool getArgValue(const QVariant& arg, QMap<QString,T>& res) {
       if( !arg.canConvert<QVariantMap>() ){
          return false;
       }

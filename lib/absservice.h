@@ -10,6 +10,7 @@
 
 #include <QtCore>
 
+#include "qrsexport.h"
 #include "baseexception.h"
 #include "message.h"
 
@@ -18,7 +19,7 @@ namespace qrs {
    /**
     * @brief Exception to be thrown on attempt to call unknown method
     */
-   class IncorrectMethodException: public BaseException {
+   class QRS_EXPORT IncorrectMethodException: public BaseException {
       public:
          IncorrectMethodException(const QString& msg):BaseException(msg) {};
    };
@@ -30,7 +31,7 @@ namespace qrs {
     * service interface in XML document and use XML interface compiler
     * tool (xic) to generate service and client classes.
     */
-   class AbsService : public QObject {
+   class QRS_EXPORT AbsService : public QObject {
       public:
          AbsService(QObject *parent = 0): QObject(parent) {};
          virtual ~AbsService() {};

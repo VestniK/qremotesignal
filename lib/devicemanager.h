@@ -10,9 +10,11 @@
 
 #include <QtCore>
 
+#include "qrsexport.h"
+
 namespace qrs {
 
-   class DeviceManager : public QObject {
+   class QRS_EXPORT DeviceManager : public QObject {
       Q_OBJECT
       public:
          DeviceManager(QObject *parent = 0): QObject(parent) {mDevice = 0;};

@@ -9,4 +9,4 @@ URL: qremotesignal.googlecode.com
 Requires: QtCore >= 4.5.0, QJson
 Libs: -L${libdir} -lQRemoteSignal
 Libs.private: -lqjson
-Cflags: -I${includedir} -I${includedir}/qremotesignal
+Cflags: -I${prefix}/include -I${includedir}

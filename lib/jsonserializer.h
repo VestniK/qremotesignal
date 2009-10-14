@@ -8,11 +8,12 @@
 #ifndef qrsjsonserializer_h
 #define qrsjsonserializer_h
 
+#include "qrsexport.h"
 #include "absmessageserializer.h"
 
 namespace qrs {
 
-   class JsonSerializer: public AbsMessageSerializer {
+   class QRS_EXPORT JsonSerializer: public AbsMessageSerializer {
       public:
          JsonSerializer (QObject *parent=0):AbsMessageSerializer(parent) {};
          virtual ~JsonSerializer() {};

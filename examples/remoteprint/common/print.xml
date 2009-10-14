@@ -3,4 +3,5 @@
    <method name="print">
       <param type="QString" name="line"/>
    </method>
+   <method name="quit"/>
 </service>

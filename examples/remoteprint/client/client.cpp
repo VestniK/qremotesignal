@@ -18,7 +18,11 @@ int main(int argc,char **argv) {
 
    QStringList args = app.arguments();
    if ( args.size() != 3 ) {
-      qWarning() << "Ussage:\n\tprintclient host message";
+      qWarning() << "Ussage:";
+      qWarning() << "Send message to a server";
+      qWarning() << "\t" << argv[0] << " host message";
+      qWarning() << "Shoutdown a server";
+      qWarning() << "\t" << argv[0] << " host -q";;
       return -1;
    }
 
@@ -40,7 +44,11 @@ int main(int argc,char **argv) {
    dmanager->setParent(socket);
    dmanager->setDevice(socket);
 
-   client->print(args[2]);
+   if ( QString("-q") == argv[2] ) {
+      client->quit();
+   } else {
+      client->print(args[2]);
+   }
    socket->close();
    return app.exec();
 }

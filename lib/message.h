@@ -12,6 +12,8 @@
 
 #include <QtCore>
 
+#include "qrsexport.h"
+
 namespace qrs {
 
    /**
@@ -24,7 +26,7 @@ namespace qrs {
     *
     * @sa AbsMessageSerializer
     */
-   class Message {
+   class QRS_EXPORT Message {
       public:
          Message() {mType = RemoteCall; mErrorType = Ok;};
          ~Message() {};

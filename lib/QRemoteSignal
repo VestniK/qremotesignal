@@ -1,6 +1,8 @@
 #ifndef _QRemoteSignal_H
 #define _QRemoteSignal_H
 
+#include "qrsexport.h"
+
 #include "absservice.h"
 #include "servicesmanager.h"
 #include "devicemanager.h"

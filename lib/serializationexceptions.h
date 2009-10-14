@@ -8,6 +8,7 @@
 #ifndef _SerializationExceptions_H
 #define _SerializationExceptions_H
 
+#include "qrsexport.h"
 #include "baseexception.h"
 #include "message.h"
 
@@ -20,7 +21,7 @@ namespace qrs{
     * call object contains data types not supported by underlying protocol or
     * current serializer realization.
     */
-   class UnsupportedTypeException: public BaseException {
+   class QRS_EXPORT UnsupportedTypeException: public BaseException {
       public:
          UnsupportedTypeException(const QString& msg):BaseException(msg) {};
    };
@@ -31,7 +32,7 @@ namespace qrs{
     * Exception to be thrown by AbsMessageSerializer::deserealize if
     * message given as parameter is not valid underlying protocol message.
     */
-   class MessageParsingException: public BaseException {
+   class QRS_EXPORT MessageParsingException: public BaseException {
       public:
          MessageParsingException(const QString& msg,Message::ErrorType val):BaseException(msg) {
             mErrorType = val;

@@ -10,13 +10,14 @@
 
 #include <QtCore>
 
+#include "qrsexport.h"
 #include "absservice.h"
 #include "absmessageserializer.h"
 #include "message.h"
 
 namespace qrs {
 
-   class ServicesManager : public QObject {
+   class QRS_EXPORT ServicesManager : public QObject {
       Q_OBJECT
       public:
          ServicesManager(QObject *parent = 0);

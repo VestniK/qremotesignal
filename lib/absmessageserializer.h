@@ -10,6 +10,7 @@
 
 #include <QtCore>
 
+#include "qrsexport.h"
 #include "message.h"
 #include "serializationexceptions.h"
 
@@ -22,7 +23,7 @@ namespace qrs {
     * functions should be inverse for each other. So the following statement
     * should be true: msg == deserialize(serialize(msg))
     */
-   class AbsMessageSerializer: public QObject {
+   class QRS_EXPORT AbsMessageSerializer: public QObject {
       public:
          AbsMessageSerializer(QObject* parent = 0): QObject(parent) {};
          virtual ~AbsMessageSerializer() {};
