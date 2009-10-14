@@ -73,7 +73,7 @@ namespace qrs {
 
    // ----- QList -----
    template<typename T>
-   QRS_EXPORT QVariant createArg(const QList<T>& val) {
+   QVariant createArg(const QList<T>& val) {
       QVariantList res;
       foreach(T t, val) {
          res.append( createArg(t) );
@@ -82,7 +82,7 @@ namespace qrs {
    }
 
    template<typename T>
-   QRS_EXPORT bool getArgValue(const QVariant& arg, QList<T>& res) {
+   bool getArgValue(const QVariant& arg, QList<T>& res) {
       if( !arg.canConvert<QVariantList>() ){
          return false;
       }
@@ -100,7 +100,7 @@ namespace qrs {
 
    // ----- QMap -----
    template<typename T>
-   QRS_EXPORT QVariant createArg(const QMap<QString,T>& val) {
+   QVariant createArg(const QMap<QString,T>& val) {
       QVariantMap res;
       typename QMap<QString,T>::const_iterator indx = val.begin();
       while ( indx != val.end() ) {
@@ -111,7 +111,7 @@ namespace qrs {
    }
 
    template<typename T>
-   QRS_EXPORT bool getArgValue(const QVariant& arg, QMap<QString,T>& res) {
+   bool getArgValue(const QVariant& arg, QMap<QString,T>& res) {
       if( !arg.canConvert<QVariantMap>() ){
          return false;
       }
