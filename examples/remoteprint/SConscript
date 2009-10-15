@@ -26,19 +26,20 @@ env['LINKFLAGS'] = Split(env['LINKFLAGS'])
 vars.Save('%s_build.conf'%env['PLATFORM'],env)
 Help(vars.GenerateHelpText(env))
 
-if env['QJson'] != '':
-   env.Append( LIBPATH=os.path.join(env['QJson'],'lib') )
-   env.Append( LIBS='qjson' )
-   env.Append( CPPPATH=os.path.join(env['QJson'],'include') )
-else:
-   env.ParseConfig('pkg-config --libs --cflags QJson')
-if env['QRemoteSignal'] != '':
-   env.Append( LIBPATH=os.path.join(env['QRemoteSignal'],'lib') )
-   env.Append( LIBS='QRemoteSignal' )
-   env.Append( CPPPATH=os.path.join(env['QRemoteSignal'],'include') )
-   env.Append( CPPPATH=os.path.join(env['QRemoteSignal'],'include','qremotesignal') )
-else:
-   env.ParseConfig('pkg-config --libs --cflags QRemoteSignal')
+try:
+   if env['QJson'] != '':
+      env.Append( LIBPATH=os.path.join(env['QJson'],'lib') )
+      env.Append( LIBS='qjson' )
+      env.Append( CPPPATH=os.path.join(env['QJson'],'include') )
+   else:
+      env.ParseConfig('pkg-config --libs --cflags QJson')
+   if env['QRemoteSignal'] != '':
+      env.Append( LIBPATH=os.path.join(env['QRemoteSignal'],'lib') )
+      env.Append( CPPPATH=os.path.join(env['QRemoteSignal'],'include') )
+      env.Append( CPPPATH=os.path.join(env['QRemoteSignal'],'include','qremotesignal') )
+   else:
+      env.ParseConfig('pkg-config --libs --cflags QRemoteSignal')
+except OSError: pass
 
 if  not (ARGUMENTS.get('nocheck') or GetOption('clean') or GetOption('help') ) :
    conf = Configure(env)

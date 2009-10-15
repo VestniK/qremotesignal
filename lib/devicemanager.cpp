@@ -1,6 +1,6 @@
 /**
  * @file devicemanager.cpp
- * @brief $MODLE$ implementation
+ * @brief DeviceManager implementation
  *
  * @author VestniK (Sergey N.Vidyuk) sir.vestnik@gmail.com
  * @date 4 Oct 2009

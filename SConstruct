@@ -4,7 +4,7 @@ from builders import *
 
 BaseEnv=Environment(tools=[],ENV=os.environ)
 BaseEnv['package'] = 'qremotesignal'
-BaseEnv['VERSION'] = '0.6.svn'
+BaseEnv['VERSION'] = '0.6.0svn'
 
 BaseEnv['BUILDERS']['Config'] = Builder(action=Config,suffix='',src_suffix='.in')
 
@@ -42,11 +42,15 @@ BaseEnv['install_dev'] = True
 
 Help(vars.GenerateHelpText(BaseEnv))
 
-if BaseEnv['QJson'] != '':
-   BaseEnv.Append(CPPPATH = os.path.join(BaseEnv['QJson'],'include') )
-   BaseEnv.Append(LIBPATH = os.path.join(BaseEnv['QJson'],'lib') )
-else:
-   BaseEnv.ParseConfig(('pkg-config --cflags --libs-only-L QJson'))
+try:
+   if BaseEnv['QJson'] != '':
+      BaseEnv.Append(CPPPATH = os.path.join(BaseEnv['QJson'],'include') )
+      BaseEnv.Append(LIBPATH = os.path.join(BaseEnv['QJson'],'lib') )
+   else:
+      BaseEnv.ParseConfig(('pkg-config --cflags --libs-only-L QJson'))
+except OSError: pass
+
+BaseEnv.AlwaysBuild( BaseEnv.Config('Doxyfile.in') )
 
 Export('BaseEnv')
 

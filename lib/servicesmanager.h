@@ -17,6 +17,12 @@
 
 namespace qrs {
 
+   /**
+    * @brief Class managing communications between services and clients.
+    *
+    * This class class is used by classes generated from XML remote interface
+    * description to communicate with each other.
+    */
    class QRS_EXPORT ServicesManager : public QObject {
       Q_OBJECT
       public:

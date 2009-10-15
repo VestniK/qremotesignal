@@ -2,8 +2,8 @@
  * @file qrsexport.h
  * @brief QRS_EXPORT macro definition
  *
- * @author VestniK sir.vestnik@gmail.com
- * @date Чтв Окт 15 2009
+ * @author VestniK (Sergey N.Vidyuk) sir.vestnik@gmail.com
+ * @date 15 Oct 2009
  */
 #ifndef _QRS_EXPORT_H
 #define _QRS_EXPORT_H

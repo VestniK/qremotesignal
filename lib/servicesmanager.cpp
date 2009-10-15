@@ -59,3 +59,9 @@ void ServicesManager::registerService(AbsService* service) {
 void ServicesManager::send(const Message& msg) {
    emit send( mSerializer->serialize(msg) );
 }
+
+/**
+ * @page services_concept Services conception
+ * Signals and slots which you client and server application shares between
+ * each other are grouped in services.
+ */
