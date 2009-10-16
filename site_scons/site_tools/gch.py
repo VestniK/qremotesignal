@@ -69,8 +69,8 @@ def generate(env):
         bldsh = GchShBuilder
         env['BUILDERS']['Gch'] = bld
         env['BUILDERS']['GchSh'] = bldsh
-    env['GCHCOM']     = '$CXX -o $TARGET -x c++-header -c $CXXFLAGS $_CCCOMCOM $SOURCE'
-    env['GCHSHCOM']   = '$CXX -o $TARGET -x c++-header -c $SHCXXFLAGS $_CCCOMCOM $SOURCE'
+    env['GCHCOM']     = '$CXX -o $TARGET -x c++-header -c $CXXFLAGS $CCFLAGS $_CCCOMCOM $SOURCE'
+    env['GCHSHCOM']   = '$SHCXX -o $TARGET -x c++-header -c $SHCXXFLAGS $SHCCFLAGS $_CCCOMCOM $SOURCE'
     env['GCHSUFFIX']  = '.gch'
     for suffix in SCons.Util.Split('.c .C .cc .cxx .cpp .c++'):
         env['BUILDERS']['StaticObject'].add_emitter( suffix, static_pch_emitter )

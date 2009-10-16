@@ -11,7 +11,9 @@ if  not (ARGUMENTS.get('nocheck') or GetOption('clean') or GetOption('help') ) :
    if not conf.CheckLibWithHeader('qjson','qjson/parser.h','c++'): Exit(1)
    conf.Finish()
 
-env['GchSh'] = env.GchSh('sharedheaders.h')
+env['GchSh'] = env.GchSh('qremotesignal_pch.h')
+env.NoClean(env['GchSh'])
+env.Append(CPPFLAGS=Split('-include qremotesignal_pch.h'))
 
 Sources = ['baseconverters.cpp','servicesmanager.cpp',
            'jsonserializer.cpp','devicemanager.cpp']
@@ -22,7 +24,7 @@ Headers = ['QRemoteSignal','absservice.h','baseconverters.h',
            'jsonserializer.h','serializationexceptions.h',
            'devicemanager.h','qrsexport.h']
 
-lib = env.SharedLibrary('QRemoteSignal',Sources,CPPFLAGS=Split('-include sharedheaders.h'))
+lib = env.SharedLibrary('QRemoteSignal',Sources)
 
 Pc = env.Config('QRemoteSignal.pc.in')
 env.AlwaysBuild(Pc)
