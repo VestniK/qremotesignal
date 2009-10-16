@@ -5,7 +5,7 @@ Build from source
 To build QRemoteSignal you need to have:
 1. Qt 4.5.0 library or later
 2. QJson library (tested with svn snapshot)
-3. scons build tool (tested with 1.20)
+3. scons build tool (tested with 1.2.0)
 
  * Build
 
@@ -19,6 +19,12 @@ $ scons QJson="C:\Program Files\qjson"
 
 You need to specify path to QJson only once at first scons run since this
 argument is cached
+
+NOTE: If you have several Qt4 installations on POSIX system you should set
+correct order of paths in PKG_CONFIG_PATH and LD_LIBRARY_PATH environment
+varaibles. Usually you need to run the following commands:
+$ export PKG_CONFIG_PATH=${QTDIR}/lib/pkg-config:${PKG_CONFIG_PATH}
+$ export LD_LIBRARY_PATH=${QTDIR}/lib:${LD_LIBRARY_PATH}
 
  * Install
 

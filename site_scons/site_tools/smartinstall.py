@@ -3,6 +3,7 @@ import os
 from SCons.Action import Action
 from SCons.Builder import Builder
 from SCons.Node.FS import File
+from SCons.Script import COMMAND_LINE_TARGETS
 import SCons.Defaults
 import SCons.Tool
 
@@ -47,12 +48,14 @@ def get_default_data_prefix(env):
 # Install functions #
 #####################
 def install_bin(env,src):
+   if not 'install' in COMMAND_LINE_TARGETS: return None
    res = env.Install(env['prefix_bin'],src)
    env.Alias('install',res)
    for obj in res: env.AddPostAction(obj , Chmod(str(obj),bin_mode) )
    return res
 
 def install_lib(env,src):
+   if not 'install' in COMMAND_LINE_TARGETS: return None
    res = []
    if env['PLATFORM'] == 'win32':
       for node in src:
@@ -74,6 +77,7 @@ def install_lib(env,src):
    return res
 
 def install_pc(env,src):
+   if not 'install' in COMMAND_LINE_TARGETS: return None
    if env['install_dev'] :
       res = env.Install(env['prefix_pc'],src)
       env.Alias('install',res)
@@ -81,6 +85,7 @@ def install_pc(env,src):
       return res
 
 def install_inc(env,src):
+   if not 'install' in COMMAND_LINE_TARGETS: return None
    if env['install_dev'] :
       res = env.Install(env['prefix_inc'],src)
       env.Alias('install',res)
@@ -88,6 +93,7 @@ def install_inc(env,src):
       return res
 
 def install_data(env,src,mode=res_mode):
+   if not 'install' in COMMAND_LINE_TARGETS: return None
    res = env.Install(env['prefix_data'],src)
    env.Alias('install',res)
    for obj in res: env.AddPostAction(obj , Chmod(str(obj),mode) )
