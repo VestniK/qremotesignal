@@ -4,7 +4,7 @@ Import('BaseEnv')
 
 env = BaseEnv.Clone()
 env.Tool('qrs_dev_build')
-env.Append(CPPPATH = ['.','#tests','#lib'])
+env.Append(CPPPATH = ['.','#tests','#qremotesignal'])
 env.EnableQt4Modules(['QtCore','QtTest'])
 env.Append(LIBS = 'qjson')
 

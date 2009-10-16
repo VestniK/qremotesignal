@@ -2,7 +2,7 @@ Import('env')
 
 env.Append(CPPPATH=['.','../common'])
 
-Sources=['printserver.cpp','server.cpp']
+Sources=['main.cpp','server.cpp']
 Sources += env.QRSService('../common/print.xml')
 
 env.Program('server',Sources)

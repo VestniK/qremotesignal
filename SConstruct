@@ -56,5 +56,5 @@ Export('BaseEnv')
 
 Depends('tests','qrsc')
 SConscript('qrsc/SConscript')
-SConscript('lib/SConscript')
+SConscript('qremotesignal/SConscript')
 SConscript('tests/SConscript')
