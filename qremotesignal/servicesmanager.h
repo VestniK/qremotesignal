@@ -35,8 +35,8 @@ namespace qrs {
 
          void setSerializer(AbsMessageSerializer* val) {mSerializer = val;};
 
-         /// @brief Set IO device to send receive data
-         void setDevice(QIODevice* dev);
+         /// @brief Add IO device to send receive data
+         void addDevice(QIODevice* dev);
       public slots:
          void receive(const QByteArray& msg);
       signals:
@@ -49,7 +49,10 @@ namespace qrs {
          QMap< QString,AbsService*> mServices;
          AbsMessageSerializer *mSerializer;
 
-         QSharedPointer<DeviceManager> mDevManager;
+         QList< QSharedPointer<DeviceManager> > mDevManagers;
+      private slots:
+         /// @brief Called if device added by addDevice method is deleted
+         void onDeviceDeleted(QObject* dev);
    };
 
 }

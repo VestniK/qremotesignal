@@ -31,19 +31,11 @@ int main(int argc,char **argv) {
    socket->waitForConnected();
    QObject::connect(socket,SIGNAL(disconnected()),
                     &app,SLOT(quit()));
-//   qrs::DeviceManager* dmanager = new qrs::DeviceManager;
 
    qrs::ServicesManager* manager = new qrs::ServicesManager(&app);
    manager->setSerializer(new qrs::JsonSerializer(manager));
    qrs::PrintClient* client = new qrs::PrintClient(manager);
-   manager->setDevice(socket);
-
-//   QObject::connect(manager,SIGNAL(send(QByteArray)),
-//                    dmanager,SLOT(send(const QByteArray&)));
-//   QObject::connect(dmanager,SIGNAL(received(QByteArray)),
-//                    manager,SLOT(receive(const QByteArray&)));
-//    dmanager->setParent(socket);
-//    dmanager->setDevice(socket);
+   manager->addDevice(socket);
 
    if ( QString("-q") == argv[2] ) {
       client->quit();

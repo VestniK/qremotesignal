@@ -29,7 +29,7 @@ namespace qrs {
     *
     * You shouldn't implement real services classes by yourself. Describe
     * service interface in XML document and use XML interface compiler
-    * tool (xic) to generate service and client classes.
+    * tool (qrsc) to generate service and client classes.
     */
    class QRS_EXPORT AbsService : public QObject {
       public:

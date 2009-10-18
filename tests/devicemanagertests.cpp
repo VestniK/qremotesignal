@@ -111,6 +111,75 @@ class DeviceManagerTests: public QObject {
          QCOMPARE(spy.at(0).at(0).toByteArray() , msg1);
          QCOMPARE(spy.at(1).at(0).toByteArray() , msg2);
       };
+
+      /**
+       * This test shouldn't cause segfault or some other unexpected critical
+       * errors. It also checks that DeviceManager doesn't tries to reopen
+       * device to send message.
+       */
+      void testDevUnexpectedlyClosed() {
+         QBuffer dev;
+         dev.open(QIODevice::ReadWrite);
+         qrs::DeviceManager devManager;
+         QSignalSpy spy(&devManager,SIGNAL(deviceUnavailable()));
+
+         devManager.setDevice(&dev);
+         QCOMPARE(spy.count(), 0);
+         dev.close();
+         devManager.send( QByteArray("hello") );
+         QCOMPARE(spy.count(), 1);
+         QVERIFY(!dev.isOpen());
+         QCOMPARE( dev.buffer(),QByteArray() );
+      }
+
+      /**
+       * This test shouldn't cause segfault or some other unexpected critical
+       * errors.
+       */
+      void testDevUnexpectedlyDeleted() {
+         QBuffer *dev = new QBuffer();
+         dev->open(QIODevice::ReadWrite);
+         qrs::DeviceManager devManager;
+         QSignalSpy spy(&devManager,SIGNAL(deviceUnavailable()));
+
+         devManager.setDevice(dev);
+         QCOMPARE(spy.count(), 0);
+         delete dev;
+         QCOMPARE(spy.count(), 1);
+         devManager.send( QByteArray("hello") );
+         QCOMPARE(spy.count(), 2);
+      }
+
+      void testSetDevice() {
+         QBuffer dev;
+         qrs::DeviceManager devManager;
+         QSignalSpy spy(&devManager,SIGNAL(deviceUnavailable()));
+
+         // set 0 device should cause deviceUnavailable signal to be emitted
+         devManager.setDevice(0);
+         QCOMPARE( spy.count(),1 );
+         // set not opened device should cause deviceUnavailable signal to be
+         // emitted
+         devManager.setDevice(&dev);
+         QCOMPARE( spy.count(),2 );
+         // set not writable device should cause deviceUnavailable signal to be
+         // emitted
+         dev.open(QIODevice::ReadOnly);
+         devManager.setDevice(&dev);
+         QCOMPARE( spy.count(),3 );
+         dev.close();
+         // set not opened readable should cause deviceUnavailable signal to be
+         // emitted
+         dev.open(QIODevice::WriteOnly);
+         devManager.setDevice(&dev);
+         QCOMPARE( spy.count(),4 );
+         dev.close();
+         // set device opened for read write should cause deviceUnavailable
+         // signal to be emitted
+         dev.open(QIODevice::ReadWrite);
+         devManager.setDevice(&dev);
+         QCOMPARE( spy.count(),4 );
+      }
    private:
       QBuffer mDevice1,mDevice2;
       qrs::DeviceManager mDevManager1,mDevManager2;

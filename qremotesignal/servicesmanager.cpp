@@ -68,13 +68,33 @@ void ServicesManager::send(const Message& msg) {
  *
  * @sa DeviceManager
  */
-void ServicesManager::setDevice(QIODevice* dev) {
-   if ( !mDevManager ) {
-      mDevManager = QSharedPointer<DeviceManager>( new DeviceManager() );
-      connect(mDevManager.data(),SIGNAL(received(QByteArray)),
-              this,SLOT(receive(const QByteArray&)));
-      connect(this,SIGNAL(send(QByteArray)),
-              mDevManager.data(),SLOT(send(const QByteArray&)));
+void ServicesManager::addDevice(QIODevice* dev) {
+   foreach (const QSharedPointer<DeviceManager> dm, mDevManagers) {
+      if ( dm->device() == dev ) {
+         return;
+      }
    }
-   mDevManager->setDevice(dev);
+   QSharedPointer<DeviceManager> dm( new DeviceManager() );
+   connect(dm.data(),SIGNAL(received(QByteArray)),
+           this,SLOT(receive(const QByteArray&)));
+   connect(this,SIGNAL(send(QByteArray)),
+           dm.data(),SLOT(send(const QByteArray&)));
+   dm->setDevice(dev);
+   mDevManagers.append(dm);
+   connect(dev,SIGNAL(destroyed( QObject* )),
+           this,SLOT(onDeviceDeleted(QObject*)));
+}
+
+/**
+ * This slot handles resources cleanup if one of the devices used by this
+ * services manager to read write messages is deleted.
+ */
+void ServicesManager::onDeviceDeleted(QObject* dev) {
+   QList< QSharedPointer<DeviceManager> >::iterator it;
+   for ( it = mDevManagers.begin(); it != mDevManagers.end(); it++ ) {
+      if ( (*it)->device() == dev ) {
+         mDevManagers.erase(it);
+         return;
+      }
+   }
 }
