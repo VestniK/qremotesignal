@@ -41,6 +41,12 @@ namespace qrs {
          virtual const QString& name() const = 0;
    };
 
+/**
+ * @page services_concept Services conception
+ * Signals and slots which you client and server application shares between
+ * each other are grouped in services.
+ */
+
 }
 
 #endif

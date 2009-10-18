@@ -14,6 +14,7 @@
 #include "absservice.h"
 #include "absmessageserializer.h"
 #include "message.h"
+#include "devicemanager.h"
 
 namespace qrs {
 
@@ -33,6 +34,9 @@ namespace qrs {
          void send(const Message& msg);
 
          void setSerializer(AbsMessageSerializer* val) {mSerializer = val;};
+
+         /// @brief Set IO device to send receive data
+         void setDevice(QIODevice* dev);
       public slots:
          void receive(const QByteArray& msg);
       signals:
@@ -44,6 +48,8 @@ namespace qrs {
       private:
          QMap< QString,AbsService*> mServices;
          AbsMessageSerializer *mSerializer;
+
+         QSharedPointer<DeviceManager> mDevManager;
    };
 
 }

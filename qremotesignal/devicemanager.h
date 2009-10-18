@@ -31,7 +31,7 @@ namespace qrs {
       private slots:
          void onNewData();
       private:
-         QIODevice *mDevice;
+         QPointer<QIODevice> mDevice;
          QDataStream mStream;
          QByteArray mBuffer;
    };

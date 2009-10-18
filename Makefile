@@ -10,4 +10,10 @@ examples:
 clean-examples:
 	make -C examples clean
 
-.PHONY: all clean examples clean-examples
+install:
+	scons nocheck=1 install
+
+uninstall:
+	scons install -c
+
+.PHONY: all clean examples clean-examples install uninstall

@@ -61,7 +61,20 @@ void ServicesManager::send(const Message& msg) {
 }
 
 /**
- * @page services_concept Services conception
- * Signals and slots which you client and server application shares between
- * each other are grouped in services.
+ * This member function provided for convenience.
+ *
+ * Automatically creates device manager which uses given device to send and
+ * receive messages.
+ *
+ * @sa DeviceManager
  */
+void ServicesManager::setDevice(QIODevice* dev) {
+   if ( !mDevManager ) {
+      mDevManager = QSharedPointer<DeviceManager>( new DeviceManager() );
+      connect(mDevManager.data(),SIGNAL(received(QByteArray)),
+              this,SLOT(receive(const QByteArray&)));
+      connect(this,SIGNAL(send(QByteArray)),
+              mDevManager.data(),SLOT(send(const QByteArray&)));
+   }
+   mDevManager->setDevice(dev);
+}
