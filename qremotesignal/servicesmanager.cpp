@@ -9,11 +9,37 @@
 
 using namespace qrs;
 
+/**
+ * Constructs new ServicesManager object. Serializer is not set
+ */
 ServicesManager::ServicesManager(QObject *parent): QObject(parent) {
    mSerializer = 0;
 }
 
+/**
+ * @brief Process received raw message
+ *
+ * This slot can be connected to some signal of class produces raw messages. It
+ * process received message and calls corresponding service message processor.
+ *
+ * If message require to call a method from a service which is not registered
+ * in this ServicesManager it sends error message by emiting send(QByteArray)
+ * signal. Error message will be send a service which method is called can't
+ * process the message received (no such method, wrong arguments or arguments
+ * types).
+ *
+ * This slot do nothing if serializer to serialize/deserialize raw messages is
+ * not set.
+ *
+ * @sa send(QByteArray)
+ * @sa AbsMessageSerializer
+ *
+ * @param msg received raw message
+ */
 void ServicesManager::receive(const QByteArray& msg) {
+   if ( !mSerializer ) {
+      return;
+   }
    MessageAP message;
    try {
       message = mSerializer->deserialize(msg);
@@ -52,10 +78,28 @@ void ServicesManager::receive(const QByteArray& msg) {
    }
 }
 
+/**
+ * This function registers new serilizer in this ServicesManager. If service
+ * with the same name have been already registerd it replace old service object
+ * with the new one.
+ *
+ * Service name is determined with AbsService::name function.
+ *
+ * @sa AbsService
+ *
+ * @param service service object to be registered.
+ */
 void ServicesManager::registerService(AbsService* service) {
    mServices[service->name()] = service;
 }
 
+/**
+ * @internal
+ *
+ * This function provided to be used by client classes generated from service
+ * interface description. You should not use this function manually. It can be
+ * renamed or removed in future versions.
+ */
 void ServicesManager::send(const Message& msg) {
    emit send( mSerializer->serialize(msg) );
 }
@@ -64,8 +108,12 @@ void ServicesManager::send(const Message& msg) {
  * This member function provided for convenience.
  *
  * Automatically creates device manager which uses given device to send and
- * receive messages.
+ * receive messages. Several devices may be added by this function. All of
+ * them will be used to send/receive messages. If QIODevice object pointed by
+ * the dev pointer is deleted corresponding DeviceManager will be removed
+ * automatically.
  *
+ * @param dev device to be used for sending/receiving messages
  * @sa DeviceManager
  */
 void ServicesManager::addDevice(QIODevice* dev) {

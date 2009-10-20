@@ -37,6 +37,8 @@ namespace qrs {
 
          /// @brief Add IO device to send receive data
          void addDevice(QIODevice* dev);
+         /// @brief Returns number of the devices used to send/receive messages
+         int devicesCount() const {return mDevManagers.count();}
       public slots:
          void receive(const QByteArray& msg);
       signals:
@@ -46,8 +48,8 @@ namespace qrs {
           */
          void error();
       private:
-         QMap< QString,AbsService*> mServices;
-         AbsMessageSerializer *mSerializer;
+         QMap< QString, AbsService*> mServices;
+         QPointer<AbsMessageSerializer> mSerializer;
 
          QList< QSharedPointer<DeviceManager> > mDevManagers;
       private slots:
