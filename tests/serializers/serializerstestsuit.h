@@ -16,7 +16,7 @@
 class SerializersTestSuit:public QObject{
    Q_OBJECT
    public:
-      SerializersTestSuit(qrs::AbsMessageSerializer* serializer) {
+      explicit SerializersTestSuit(qrs::AbsMessageSerializer* serializer) {
          mSerializer = serializer;
       }
 
@@ -79,6 +79,8 @@ class SerializersTestSuit:public QObject{
       void testDeserializationError_data();
       void testDeserializationError();
    private:
+      Q_DISABLE_COPY(SerializersTestSuit);
+
       qrs::AbsMessageSerializer *mSerializer;
       QMap<QString,qrs::Message*> mMessages;
       QMap<QString,QByteArray> mRawMessages;

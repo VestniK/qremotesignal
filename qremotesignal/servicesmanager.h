@@ -27,7 +27,7 @@ namespace qrs {
    class QRS_EXPORT ServicesManager : public QObject {
       Q_OBJECT
       public:
-         ServicesManager(QObject *parent = 0);
+         explicit ServicesManager(QObject *parent = 0);
          virtual ~ServicesManager() {};
 
          void registerService(AbsService* service);
@@ -48,6 +48,7 @@ namespace qrs {
           */
          void error();
       private:
+         Q_DISABLE_COPY(ServicesManager);
          QMap< QString, AbsService*> mServices;
          QPointer<AbsMessageSerializer> mSerializer;
 

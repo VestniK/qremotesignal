@@ -28,7 +28,7 @@ namespace qrs {
           * Constructs device manager handling no device. Use setDevice to set
           * device to read and write messages.
           */
-         DeviceManager(QObject *parent = 0): QObject(parent) {mDevice = 0;};
+         explicit DeviceManager(QObject *parent = 0): QObject(parent) {mDevice = 0;};
          DeviceManager(QIODevice *device, QObject *parent);
          ~DeviceManager() {};
 
@@ -56,6 +56,7 @@ namespace qrs {
       private slots:
          void onNewData();
       private:
+         Q_DISABLE_COPY(DeviceManager);
          QPointer<QIODevice> mDevice;
          QDataStream mStream;
          QByteArray mBuffer;

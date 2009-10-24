@@ -18,8 +18,8 @@ class RemoteSignalTests: public QObject {
    private slots:
       /// Prepare test environment
       void initTestCase() {
-         mServerManager = new qrs::ServicesManager;
-         mClientManager = new qrs::ServicesManager;
+         mServerManager = new qrs::ServicesManager(this);
+         mClientManager = new qrs::ServicesManager(this);
          mServerManager->setSerializer(&mSerializer);
          mClientManager->setSerializer(&mSerializer);
          connect(mServerManager,SIGNAL(send(QByteArray)),
@@ -31,8 +31,6 @@ class RemoteSignalTests: public QObject {
       }
       /// Cleanup test environment
       void cleanupTestCase() {
-         delete mServerManager;
-         delete mClientManager;
       }
 
       /// Data provider for test of QString sending

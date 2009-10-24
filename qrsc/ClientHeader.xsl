@@ -14,8 +14,8 @@ namespace qrs {
    class <xsl:value-of select="/service/@name"/>Client : public QObject {
       Q_OBJECT
       public:
-         <xsl:value-of select="/service/@name"/>Client ( QObject* parent=0 ): QObject(parent) {mCManager = 0;};
-         <xsl:value-of select="/service/@name"/>Client ( ServicesManager* parent ): QObject(parent) {mCManager = parent;};
+         explicit <xsl:value-of select="/service/@name"/>Client ( QObject* parent=0 ): QObject(parent) {mCManager = 0;};
+         explicit <xsl:value-of select="/service/@name"/>Client ( ServicesManager* parent ): QObject(parent) {mCManager = parent;};
          virtual ~<xsl:value-of select="/service/@name"/>Client() {};
 
          void setManager(ServicesManager* val) {mCManager = val;};
@@ -28,6 +28,8 @@ namespace qrs {
          void <xsl:value-of select="./@name"/>(<xsl:for-each select="./param">const <xsl:value-of select="./@type"/>&amp; <xsl:value-of select="./@name"/><xsl:if test="position()!=last()">, </xsl:if></xsl:for-each>);</xsl:for-each>
 
       private:
+         Q_DISABLE_COPY(<xsl:value-of select="/service/@name"/>Client);
+
          ServicesManager *mCManager;
          static const QString mName;
    };

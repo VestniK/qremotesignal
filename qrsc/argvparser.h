@@ -16,7 +16,7 @@
  */
 class ArgvParser: public QObject {
    public:
-      ArgvParser(QObject *parent = 0);
+      explicit ArgvParser(QObject *parent = 0);
       virtual ~ArgvParser() {};
 
       void addFlag(const QString& name,
@@ -39,6 +39,8 @@ class ArgvParser: public QObject {
       const QString& executableName() const {return mExecutableName;};
 
    private:
+      Q_DISABLE_COPY(ArgvParser);
+
       QMap<QString,bool> mFlags;
       QMap<QString,QString> mOptions;
       QStringList mArguments;
