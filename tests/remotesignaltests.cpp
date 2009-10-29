@@ -55,23 +55,23 @@ class RemoteSignalTests: public QObject {
       }
 
       /// Data provider for test of int sending
-      void remoteCallIntTest_data() {
-         QTest::addColumn<int>("param");
+      void remoteCallNumTest_data() {
+         QTest::addColumn<quint16>("param");
 
-         QTest::newRow("-1") << -1;
-         QTest::newRow("1") << 1;
-         QTest::newRow("0") << 0;
-         QTest::newRow("70000") << 70000;
+         QTest::newRow("-1") << quint16(-1);
+         QTest::newRow("1") << quint16(1);
+         QTest::newRow("0") << quint16(0);
+         QTest::newRow("50000") << quint16(50000);
       }
       /// Test of int sending
-      void remoteCallIntTest() {
-         QFETCH(int,param);
-         QSignalSpy spy(mService,SIGNAL(intMethod(int)));
+      void remoteCallNumTest() {
+         QFETCH(quint16,param);
+         QSignalSpy spy(mService,SIGNAL(intMethod(quint16)));
 
          mClient->intMethod(param);
 
-         QCOMPARE(spy.count() , 1);
-         QCOMPARE(spy.first().at(0).toInt() , param);
+         QCOMPARE(spy.count() , 1 );
+         QCOMPARE(spy.first().at(0).value<quint16>() , param);
       }
 
       /// Data provider for mixed type parameters sending test

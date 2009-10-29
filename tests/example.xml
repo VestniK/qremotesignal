@@ -2,7 +2,7 @@
 <service name="Example">
 <!--   <customTypes header="someheader.h"/> -->
    <method name="intMethod">
-      <param type="int" name="num"/>
+      <param type="quint16" name="num"/>
    </method>
    <method name="strMethod">
       <param type="QString" name="str"/>
