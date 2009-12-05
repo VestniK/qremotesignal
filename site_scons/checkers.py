@@ -66,6 +66,13 @@ def CheckQt4Tool(context,tool):
    context.Result(res)
    return res
 
+def CheckProg(context,prog):
+   context.Message("Checking for %s program..."%prog)
+   res = context.TryAction('%s --version'%prog)[0]
+   context.Result(res)
+   return res
+
 qrs_custom_tests = {'CheckQt4Version' : CheckQt4Version,
                        'CheckQt4Tool' : CheckQt4Tool,
-                     'CheckQt4Module' : CheckQt4Module,}
+                     'CheckQt4Module' : CheckQt4Module,
+                          'CheckProg' : CheckProg}

@@ -5,4 +5,7 @@
         <file>ClientHeader.xsl</file>
         <file>ClientSource.xsl</file>
     </qresource>
+    <qresource prefix="/schema_updates">
+        <file>UpdateTo.0.7.0.xsl</file>
+    </qresource>
 </RCC>

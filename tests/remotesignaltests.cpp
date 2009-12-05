@@ -102,6 +102,22 @@ class RemoteSignalTests: public QObject {
          QCOMPARE(spy.count() , 1);
       }
 
+      void serviceSignalsTest_data() {
+         QTest::addColumn<bool>("flag");
+
+         QTest::newRow("true") << true;
+         QTest::newRow("false") << false;
+      }
+      /// Service to Client remote call
+      void serviceSignalsTest() {
+         QFETCH(bool,flag);
+
+         QSignalSpy spy(mClient,SIGNAL(boolSignal(bool)));
+         mService->boolSignal(flag);
+         QCOMPARE(spy.count() , 1);
+         QCOMPARE(spy.first().at(0).toBool() , flag);
+      }
+
    private:
       qrs::ServicesManager *mServerManager,*mClientManager;
       qrs::ExampleClient *mClient;

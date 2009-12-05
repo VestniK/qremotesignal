@@ -7,9 +7,13 @@
  */
 #include "interfacecompiler.h"
 
-#include <QtCore>
-#include <QtXmlPatterns>
+#include <QtCore/QFile>
+#include <QtCore/QIODevice>
+#include <QtCore/QFileInfo>
 
+#include <QtXmlPatterns/QXmlQuery>
+
+#include "config.h"
 #include "qtextserializer.h"
 
 bool InterfaceCompiler::compileServiceHeader() {
@@ -18,17 +22,7 @@ bool InterfaceCompiler::compileServiceHeader() {
    xsltFile.open(QIODevice::ReadOnly | QIODevice::Text);
    out.open(QIODevice::WriteOnly | QIODevice::Text | QIODevice::Truncate);
 
-   mInterface->getIODevice()->seek(0);
-   QXmlQuery query(QXmlQuery::XSLT20);
-   query.setFocus(mInterface->getIODevice());
-   query.setQuery(&xsltFile);
-
-   QTextSerializer serializer(query,&out);
-   if ( !query.evaluateTo(&serializer) ) {
-      /// @todo Produce some fail information
-      return false;
-   }
-   return true;
+   return xsltTransformation(out,xsltFile);
 }
 
 bool InterfaceCompiler::compileServiceSource() {
@@ -37,19 +31,7 @@ bool InterfaceCompiler::compileServiceSource() {
    xsltFile.open(QIODevice::ReadOnly | QIODevice::Text);
    out.open(QIODevice::WriteOnly | QIODevice::Text | QIODevice::Truncate);
 
-   mInterface->getIODevice()->seek(0);
-   QXmlQuery query(QXmlQuery::XSLT20);
-   QFileInfo headerInfo(mInterface->serviceHeader());
-   query.bindVariable( "ServiceHeader",QXmlItem(QVariant(headerInfo.fileName())) );
-   query.setFocus(mInterface->getIODevice());
-   query.setQuery(&xsltFile);
-
-   QTextSerializer serializer(query,&out);
-   if ( !query.evaluateTo(&serializer) ) {
-      /// @todo Produce some fail information
-      return false;
-   }
-   return true;
+   return xsltTransformation(out,xsltFile);
 }
 
 bool InterfaceCompiler::compileClientHeader() {
@@ -58,17 +40,7 @@ bool InterfaceCompiler::compileClientHeader() {
    xsltFile.open(QIODevice::ReadOnly | QIODevice::Text);
    out.open(QIODevice::WriteOnly | QIODevice::Text | QIODevice::Truncate);
 
-   mInterface->getIODevice()->seek(0);
-   QXmlQuery query(QXmlQuery::XSLT20);
-   query.setFocus(mInterface->getIODevice());
-   query.setQuery(&xsltFile);
-
-   QTextSerializer serializer(query,&out);
-   if ( !query.evaluateTo(&serializer) ) {
-      /// @todo Produce some fail information
-      return false;
-   }
-   return true;
+   return xsltTransformation(out,xsltFile);
 }
 
 bool InterfaceCompiler::compileClientSource() {
@@ -77,14 +49,28 @@ bool InterfaceCompiler::compileClientSource() {
    xsltFile.open(QIODevice::ReadOnly | QIODevice::Text);
    out.open(QIODevice::WriteOnly | QIODevice::Text | QIODevice::Truncate);
 
+   return xsltTransformation(out,xsltFile);
+}
+
+bool InterfaceCompiler::xsltTransformation(QFile &dest, QFile &xsltFile) {
    mInterface->getIODevice()->seek(0);
    QXmlQuery query(QXmlQuery::XSLT20);
-   QFileInfo headerInfo(mInterface->clientHeader());
-   query.bindVariable( "ClientHeader",QXmlItem(QVariant(headerInfo.fileName())) );
+   // Bind variables
+   query.bindVariable( "QRSC_VERSION",
+                       QXmlItem(QVariant(VERSION)) );
+   query.bindVariable( "SRC_INTERFACE",
+                       QXmlItem(QVariant(mInterface->sourceName())) );
+   QFileInfo serviceHeaderInfo(mInterface->serviceHeader());
+   query.bindVariable( "ServiceHeader",
+                       QXmlItem(QVariant(serviceHeaderInfo.fileName())) );
+   QFileInfo clientHeaderInfo(mInterface->clientHeader());
+   query.bindVariable( "ClientHeader",
+                       QXmlItem(QVariant(clientHeaderInfo.fileName())) );
+   // prepare query
    query.setFocus(mInterface->getIODevice());
    query.setQuery(&xsltFile);
-
-   QTextSerializer serializer(query,&out);
+   // Transform
+   QTextSerializer serializer(query,&dest);
    if ( !query.evaluateTo(&serializer) ) {
       /// @todo Produce some fail information
       return false;

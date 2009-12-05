@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <service name="CustomType">
    <customTypes header="customconverters.h"/>
-   <method name="sendCustomStruct">
+   <slot name="sendCustomStruct">
       <param type="CustomStruct" name="val"/>
-   </method>
+   </slot>
 </service>

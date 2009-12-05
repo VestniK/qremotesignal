@@ -19,6 +19,9 @@ class InterfaceCompiler {
       bool compileServiceSource();
       bool compileClientHeader();
       bool compileClientSource();
+
+   protected:
+      bool xsltTransformation(QFile &source, QFile &xsltFile);
    private:
       InterfaceDocument *mInterface;
 };

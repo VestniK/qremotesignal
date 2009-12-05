@@ -4,7 +4,7 @@ from builders import *
 
 BaseEnv=Environment(tools=[],ENV=os.environ)
 BaseEnv['package'] = 'qremotesignal'
-BaseEnv['VERSION'] = '0.6.0svn'
+BaseEnv['VERSION'] = '0.7.0'
 
 BaseEnv['BUILDERS']['Config'] = Builder(action=Config,suffix='',src_suffix='.in')
 
@@ -50,11 +50,14 @@ try:
       BaseEnv.ParseConfig(('pkg-config --cflags --libs-only-L QJson'))
 except OSError: pass
 
+qmake_feature = BaseEnv.Config('qremotesignal.prf.in')
+BaseEnv.InstallData('mkspecs/features',qmake_feature)
+
 BaseEnv.AlwaysBuild( BaseEnv.Config('Doxyfile.in') )
+BaseEnv.AlwaysBuild( qmake_feature )
 
 Export('BaseEnv')
 
-Depends('tests','qrsc')
 SConscript('qrsc/SConscript')
 SConscript('qremotesignal/SConscript')
 SConscript('tests/SConscript')

@@ -44,6 +44,12 @@ def get_default_data_prefix(env):
    else:
       return os.path.join(env['prefix'],'share',env['package'])
 
+def get_default_man_prefix(env):
+   if env['PLATFORM'] == 'win32':
+      return None
+   else:
+      return os.path.join(env['prefix'],'share','man')
+
 #####################
 # Install functions #
 #####################
@@ -92,9 +98,17 @@ def install_inc(env,src):
       for obj in res: env.AddPostAction(obj , Chmod(str(obj),res_mode) )
       return res
 
-def install_data(env,src,mode=res_mode):
+def install_data(env,dest_subdir,src,mode=res_mode):
    if not 'install' in COMMAND_LINE_TARGETS: return None
-   res = env.Install(env['prefix_data'],src)
+   res = env.Install(os.path.join(env['prefix_data'],dest_subdir),src)
+   env.Alias('install',res)
+   for obj in res: env.AddPostAction(obj , Chmod(str(obj),mode) )
+   return res
+
+def install_man(env,src,section,mode=res_mode):
+   if not 'install' in COMMAND_LINE_TARGETS: return None
+   if env['PLATFORM'] == 'win32': return None
+   res = env.Install(os.path.join(env['prefix_man'],'man%s'%section),src)
    env.Alias('install',res)
    for obj in res: env.AddPostAction(obj , Chmod(str(obj),mode) )
    return res
@@ -123,7 +137,11 @@ def generate(env):
    try:
       if env['prefix_data'] == '':
          env['prefix_data'] = get_default_data_prefix(env)
-   except: env['prefix_pc'] = get_default_data_prefix(env)
+   except: env['prefix_data'] = get_default_data_prefix(env)
+   try:
+      if env['prefix_man'] == '':
+         env['prefix_man'] = get_default_man_prefix(env)
+   except: env['prefix_man'] = get_default_man_prefix(env)
    # install or no development files
    try: env['install_dev']
    except: env['install_dev'] = False
@@ -131,4 +149,5 @@ def generate(env):
    env.AddMethod(install_lib,'InstallLibrary')
    env.AddMethod(install_pc,'InstallPkgConfig')
    env.AddMethod(install_inc,'InstallHeader')
+   env.AddMethod(install_man,'InstallMan')
    env.AddMethod(install_data,'InstallData')

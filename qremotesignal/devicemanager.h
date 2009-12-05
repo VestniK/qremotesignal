@@ -17,7 +17,14 @@ namespace qrs {
    /**
     * @brief Class to manage messages delivery using QIODevice
     *
-    * @todo write detailed documentation.
+    * @internal
+    *
+    * @deprecated use ServicesManager::addDevice(QIODevice *) instead.
+    *
+    * This classes is keeped in the library public interface for backward
+    * compatibility with the version 0.6.0. In future version it may be
+    * not available. You should use qrs::ServicesManager::addDevice function
+    * instead of this class.
     */
    class QRS_EXPORT DeviceManager : public QObject {
       Q_OBJECT

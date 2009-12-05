@@ -17,27 +17,31 @@
 class ArgvParser: public QObject {
    public:
       explicit ArgvParser(QObject *parent = 0);
-      virtual ~ArgvParser() {};
+      virtual ~ArgvParser() {}
 
-      void addFlag(const QString& name,
-                  const QString& desc,
-                  const QChar& shortName = QChar());
-      void addOption(const QString& name,
-                     const QString& desc,
-                     const QChar& shortName = QChar(),
-                     const QString& defaultVal = QString());
+      void addFlag(const QString &name,
+                  const QString &desc,
+                  const QChar &shortName = QChar());
+      void addOption(const QString &name,
+                     const QString &desc,
+                     const QChar &shortName = QChar(),
+                     const QString &defaultVal = QString());
 
       bool parse();
-      const QString& errorMessage() {return mError;};
+      const QString &errorMessage() {return mError;}
 
       QString helpStr() const;
+      QString qtVersionStr() const;
+      QString versionStr() const;
 
-      const QMap<QString,bool>& flags() const {return mFlags;};
-      const QMap<QString,QString>& options() const {return mOptions;};
-      const QStringList& arguments() const {return mArguments;};
-      const QString& execStr() const {return mExecStr;};
-      const QString& executableName() const {return mExecutableName;};
+      const QMap<QString,bool> &flags() const {return mFlags;}
+      const QMap<QString,QString> &options() const {return mOptions;}
+      const QStringList &arguments() const {return mArguments;}
+      const QString &execStr() const {return mExecStr;}
+      const QString &executableName() const {return mExecutableName;}
+      const QString &appDescription() const {return mAppDescription;}
 
+      void setAppDescription(const QString &val) {mAppDescription = val;}
    private:
       Q_DISABLE_COPY(ArgvParser);
 
@@ -46,6 +50,7 @@ class ArgvParser: public QObject {
       QStringList mArguments;
       QString mExecStr;
       QString mExecutableName;
+      QString mAppDescription;
 
       QString mError;
 

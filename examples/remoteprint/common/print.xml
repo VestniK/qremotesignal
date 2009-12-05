@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <service name="Print">
-   <method name="print">
+   <slot name="print">
       <param type="QString" name="line"/>
-   </method>
-   <method name="quit"/>
+   </slot>
+   <slot name="quit"/>
 </service>

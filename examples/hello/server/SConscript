@@ -1,0 +1,8 @@
+Import('env')
+
+env.Append(CPPPATH=['.','../services'])
+
+Sources = ['main.cpp','server.cpp','connection.cpp']
+Sources += env.QRSService('../services/hello.xml')
+
+env.Program('server',Sources)

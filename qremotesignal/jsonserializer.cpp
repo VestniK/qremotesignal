@@ -12,16 +12,16 @@
 #include <qjson/serializer.h>
 
 // Json mesage types
-#define ERROR_TYPE "Error"
-#define REMOTE_CALL_TYPE "RemoteCall"
+const QString ERROR_TYPE = "Error";
+const QString REMOTE_CALL_TYPE = "RemoteCall";
 // General message keys
-#define SERVICE_KEY "service"
-#define METHOD_KEY "method"
+const QString SERVICE_KEY = "service";
+const QString METHOD_KEY = "method";
 // Error keys
-#define ERROR_DESCRIPTION_KEY "description"
-#define ERROR_CODE_KEY "errorCode"
+const QString ERROR_DESCRIPTION_KEY = "description";
+const QString ERROR_CODE_KEY = "errorCode";
 // Remote call keys
-#define RC_PARAMS_KEY "params"
+const QString RC_PARAMS_KEY = "params";
 
 using namespace qrs;
 

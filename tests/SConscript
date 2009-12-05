@@ -3,7 +3,7 @@ from checkers import *
 Import('BaseEnv')
 
 env = BaseEnv.Clone()
-env.Tool('qrs_dev_build')
+env.Tool('qrs')
 env.Append(CPPPATH = ['.','#tests','#qremotesignal'])
 env.EnableQt4Modules(['QtCore','QtTest'])
 env.Append(LIBS = 'qjson')
@@ -30,13 +30,16 @@ tests.append( env.Program('RemoteSignalTests',Service+Client+['remotesignaltests
 tests.append( env.Program('ErrorTests',Service+['errortests.cpp']) )
 tests.append( env.Program('ConvertersTests',['converterstests.cpp']) )
 tests.append( env.Program('DeviceManagerTests',['devicemanagertests.cpp']) )
-tests.append( SConscript('customtypestest/SConscript',exports='env') )
+tests.append( env.Program('ServicesManagerTests',
+              Service+Client+['servicesmanagertests.cpp']) )
 
-tests += SConscript('serializers/SConscript',exports='env')
+tests.append( SConscript('customtypestest/SConscript',exports='env') )
+tests.append( SConscript('serializers/SConscript',exports='env') )
 
 env['BUILDERS']['QTest'] = Builder(action=('$SOURCE -xml -o $TARGET'),
                                    src_suffix='',
                                    suffix='.xml')
 
 for test in tests:
-   env.QTest(test)
+   report = env.QTest(test)
+   AlwaysBuild(report)

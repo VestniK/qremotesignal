@@ -78,21 +78,43 @@ bool ArgvParser::parse() {
 QString ArgvParser::helpStr() const {
    QString res;
    QTextStream out(&res,QIODevice::WriteOnly);
-   out << qApp->applicationName() << endl;
    /// @todo store " [options] interface.xml" in some custumizable variable
-   out << "\t" << mExecutableName << " [options] interface.xml" << endl;
+   out << tr("Usage: ") << mExecutableName << " [options] interface.xml" << endl;
    out << endl;
+   if ( ! mAppDescription.isEmpty() ) {
+      out << mAppDescription << endl;
+      out << endl;
+   }
    out << tr("Options:") << endl;
    foreach ( QString name, mDescriptions.keys() ) {
-      out << "\t--" << name;
+      out << "\t";
       QChar shortName = mShortNames.key(name);
       if ( shortName != QChar() ) {
-         out << ", -" << shortName;
+         out << "-" << shortName << ", ";
       }
+      out << "--" << name;
       if ( mOptions.contains(name) ) {
          out << " " << name;
       }
       out << "\t\t" << mDescriptions[name] << endl;
    }
+   return res;
+}
+
+QString ArgvParser::qtVersionStr() const {
+   QString res;
+   QTextStream out(&res,QIODevice::WriteOnly);
+   out << tr("Compiled with Qt: %1").arg(QT_VERSION_STR) << endl;
+   out << tr("Running with Qt version: %1").arg(qVersion()) << endl;
+   return res;
+}
+
+QString ArgvParser::versionStr() const {
+   QString res;
+   QTextStream out(&res,QIODevice::WriteOnly);
+   out << mExecutableName << " ("
+       << qApp->applicationName()
+       << ") " << qApp->applicationVersion()
+       << endl;
    return res;
 }

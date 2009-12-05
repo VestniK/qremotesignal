@@ -16,6 +16,11 @@ NOTE: On windows you need to set correct path to Qt4 to QTDIR environment
 variable and you need to use QJson argument to specify path to your QJson
 installation:
 $ scons QJson="C:\Program Files\qjson"
+NOTE: On windows build may fail with strange dialog box on attempt to run
+library tests. Try to rebuild library with additional linker flag
+"--enable-auto-import":
+$ scons -c
+$ scons LINKFLAGS="-Wl,--enable-auto-import"
 
 You need to specify path to QJson only once at first scons run since this
 argument is cached

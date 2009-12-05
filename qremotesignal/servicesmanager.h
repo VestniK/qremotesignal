@@ -21,8 +21,41 @@ namespace qrs {
    /**
     * @brief Class managing communications between services and clients.
     *
-    * This class class is used by classes generated from XML remote interface
+    * This class is used by classes generated from XML remote interface
     * description to communicate with each other.
+    *
+    * Every service and client class generated from XML remote interface
+    * description should be registered in a ServicesManager class instance.
+    * ServicesManager sends and recieves raw messages and deliver them to
+    * correct service classes. It also provides error messages handling.
+    *
+    * The simpliest way to register service or client class is to pass
+    * pointer to ServicesManager instance to the service class constructor
+    * @code
+    * qrs::ServiceManager manager = new ServicesManager();
+    * qrs::MyService service = new qrs::MyService(manager);
+    * @endcode
+    * in this case ServicesManager takes ownership on the service and you don't
+    * have to warry about deleting service instance.
+    *
+    * If this approach is not acceptable for your needs for some reasons you
+    * can register your service with registerService function.
+    *
+    * Before you can use ServicesManager you need to set serializer to be used
+    * to convert raw messages to internal library message representation. This
+    * version of library comes with only one serializer JsonSerializer. You can
+    * use it or you can write your own serializer (see AbsMessageSerializer
+    * documentation for detailes how to do it).
+    *
+    * There are two ways how to send and receive messages:
+    * @li Using addDevice function to set device to be used to send/receive
+    * messages. This class designed to work with sequential QIODevices (for
+    * example QTcpSocket, QUdpSocket, QProcess).
+    * @li Using receive slot to pass received message to the ServicesManager
+    * and listening send signal to obtain raw messages to be sent. In this case
+    * you need to write your own mechanism to send/receive raw messages.
+    *
+    * @sa @ref generated_classes
     */
    class QRS_EXPORT ServicesManager : public QObject {
       Q_OBJECT
@@ -30,7 +63,12 @@ namespace qrs {
          explicit ServicesManager(QObject *parent = 0);
          virtual ~ServicesManager() {};
 
-         void registerService(AbsService* service);
+         /// @brief Register service or client instance
+         void registerService(AbsService *service);
+         /// @brief Unregister service or client with given name
+         AbsService *unregister(const QString &name);
+         /// @brief Unregister service or client instance
+         void unregister(AbsService *service);
          void send(const Message& msg);
 
          void setSerializer(AbsMessageSerializer* val) {mSerializer = val;};
@@ -42,11 +80,16 @@ namespace qrs {
       public slots:
          void receive(const QByteArray& msg);
       signals:
+         /**
+          * This signal is emited when a message should be sent.
+          */
          void send(QByteArray msg);
          /**
           * This signal is emmited if error message received.
           */
-         void error();
+         void error(qrs::ServicesManager *sender,
+                    qrs::Message::ErrorType error,
+                    QString description);
       private:
          Q_DISABLE_COPY(ServicesManager);
          QMap< QString, AbsService*> mServices;

@@ -1,5 +1,5 @@
 /**
- * @file sharedheaders.h
+ * @file qremotesignal_pch.h
  * @brief List of precompiled headers
  *
  * This file includes headers which should be prcompiled to improve

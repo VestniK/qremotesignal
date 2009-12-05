@@ -1,18 +1,17 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <service name="Example">
-<!--   <customTypes header="someheader.h"/> -->
-   <method name="intMethod">
+   <slot name="intMethod">
       <param type="quint16" name="num"/>
-   </method>
-   <method name="strMethod">
+   </slot>
+   <slot name="strMethod">
       <param type="QString" name="str"/>
-   </method>
-<!--   <method name="intVectorMethod">
-      <param type='QVector&lt;int>' name="vector"/>
-   </method> -->
-   <method name="mixedMethod">
+   </slot>
+   <slot name="mixedMethod">
       <param type="QString" name="str"/>
       <param type="int" name="num"/>
-   </method>
-   <method name="voidMethod"/>
+   </slot>
+   <slot name="voidMethod"/>
+   <signal name="boolSignal">
+      <param type="bool" name="flag"/>
+   </signal>
 </service>

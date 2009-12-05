@@ -14,6 +14,30 @@
 
 #include "message.h"
 
+class ErrorSignalSpy:public QObject {
+   Q_OBJECT
+   public:
+      int count;
+      QList<qrs::ServicesManager *> senders;
+      QList<qrs::Message::ErrorType> types;
+      QList<QString> reasons;
+
+      ErrorSignalSpy(qrs::ServicesManager *obj):count(0) {
+         connect(obj,SIGNAL(error(qrs::ServicesManager*, qrs::Message::ErrorType, QString)),
+                 this,SLOT(catchSignal(qrs::ServicesManager*, qrs::Message::ErrorType, QString)));
+      }
+   public slots:
+      void catchSignal(qrs::ServicesManager *sender,
+                       qrs::Message::ErrorType type,
+                       QString reason
+                      ) {
+         count++;
+         senders.append(sender);
+         types.append(type);
+         reasons.append(reason);
+      }
+};
+
 class ErrorTests: public QObject {
    Q_OBJECT
    private slots:
@@ -30,14 +54,18 @@ class ErrorTests: public QObject {
       }
 
       void errorSignalTest() {
-         QSignalSpy spy( mServerManager,SIGNAL(error()) );
+         ErrorSignalSpy spy( mServerManager );
          qrs::Message msg;
+         QString errorMsg = "test error";
          msg.setErrorType(qrs::Message::UnknownService);
-         msg.setError("test error");
+         msg.setError(errorMsg);
 
          mServerManager->receive( mSerializer->serialize(msg) );
 
-         QCOMPARE( spy.count(), 1 );
+         QCOMPARE( spy.count, 1 );
+         QCOMPARE( spy.senders[0], mServerManager );
+         QCOMPARE( spy.types[0] , qrs::Message::UnknownService );
+         QCOMPARE( spy.reasons[0] , errorMsg );
       }
 
       void incorrectCallTest_data() {

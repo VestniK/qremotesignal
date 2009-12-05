@@ -2,7 +2,7 @@
 # Project related configuration options
 #---------------------------------------------------------------------------
 DOXYFILE_ENCODING      = UTF-8
-PROJECT_NAME           = %(package)s
+PROJECT_NAME           = QRemoteSignal
 PROJECT_NUMBER         = %(VERSION)s
 OUTPUT_DIRECTORY       = doc
 CREATE_SUBDIRS         = YES
@@ -69,12 +69,12 @@ SORT_BY_SCOPE_NAME     = NO
 GENERATE_TODOLIST      = YES
 GENERATE_TESTLIST      = YES
 GENERATE_BUGLIST       = YES
-GENERATE_DEPRECATEDLIST= YES
+GENERATE_DEPRECATEDLIST= NO
 ENABLED_SECTIONS       = 
 MAX_INITIALIZER_LINES  = 30
 SHOW_USED_FILES        = YES
-SHOW_DIRECTORIES       = YES
-SHOW_FILES             = YES
+SHOW_DIRECTORIES       = NO
+SHOW_FILES             = NO
 SHOW_NAMESPACES        = YES
 FILE_VERSION_FILTER    = 
 #---------------------------------------------------------------------------
@@ -143,7 +143,7 @@ HTML_DYNAMIC_SECTIONS  = NO
 BINARY_TOC             = NO
 TOC_EXPAND             = NO
 DISABLE_INDEX          = NO
-ENUM_VALUES_PER_LINE   = 4
+ENUM_VALUES_PER_LINE   = 1
 GENERATE_TREEVIEW      = NONE
 TREEVIEW_WIDTH         = 250
 FORMULA_FONTSIZE       = 10

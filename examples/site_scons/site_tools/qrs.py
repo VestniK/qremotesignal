@@ -16,16 +16,20 @@ def qrsc_emiter(target, source, env):
 def service_action(env,interface):
    cpp = env.File( os.path.splitext(str(interface))[0]+'service.cpp' )
    service = env.QRSBuildService(cpp,interface)
+   env.Depends(service[0] , env['QRSC'])
+   env.Depends(service[1] , env['QRSC'])
    targets = [ service[0] ]
-   if not os.path.exists(str(service[0])) and not os.path.exists(str(service[1])):
+   if not os.path.exists(str(service[1])):
       targets.append(env.Moc4(service[1]))
    return targets
 
 def client_action(env,interface):
    cpp = env.File( os.path.splitext(str(interface))[0]+'client.cpp' )
    client = env.QRSBuildClient(cpp,interface)
+   env.Depends(client[0] , env['QRSC'])
+   env.Depends(client[1] , env['QRSC'])
    targets = [ client[0] ]
-   if not os.path.exists(str(client[0])) and not os.path.exists(str(client[1])):
+   if not os.path.exists(str(client[1])):
       targets.append(env.Moc4(client[1]))
    return targets
 
@@ -47,7 +51,8 @@ def generate(env):
    try: env['QTDIR']
    except KeyError: env.Tool('qt4')
 
-   env['QRSC'] = find_qrsc(env)
+   try: env['QRSC']
+   except KeyError: env['QRSC'] = find_qrsc(env)
    env['BUILDERS']['QRSBuildService'] = Builder(emitter=qrsc_emiter,
       action="$QRSC --service --header ${TARGETS[1]} --source ${TARGETS[0]} $SOURCE")
    env['BUILDERS']['QRSBuildClient'] = Builder(emitter=qrsc_emiter,
