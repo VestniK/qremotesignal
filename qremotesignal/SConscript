@@ -1,0 +1,36 @@
+Import('BaseEnv')
+
+env = BaseEnv.Clone()
+env.EnableQt4Modules(['QtCore'])
+
+env.Append(CPPPATH = ['.'])
+env.Append(CPPDEFINES=['BUILD_QRS_SHARED_LIB'])
+
+if  not (ARGUMENTS.get('nocheck') or GetOption('clean') or GetOption('help') ) :
+   conf = Configure(env)
+   if not conf.CheckLibWithHeader('qjson','qjson/parser.h','c++'): Exit(1)
+   conf.Finish()
+
+env['GchSh'] = env.GchSh('qremotesignal_pch.h')
+env.NoClean(env['GchSh'])
+env.Append(CPPFLAGS=Split('-include qremotesignal_pch.h'))
+
+Sources = ['baseconverters.cpp','servicesmanager.cpp',
+           'jsonserializer.cpp','devicemanager.cpp']
+
+Headers = ['QRemoteSignal','absservice.h','baseconverters.h',
+           'servicesmanager.h','baseexception.h',
+           'message.h','absmessageserializer.h',
+           'jsonserializer.h','serializationexceptions.h',
+           'devicemanager.h','qrsexport.h']
+
+lib = env.SharedLibrary('QRemoteSignal',Sources)
+
+Pc = env.Config('QRemoteSignal.pc.in')
+env.AlwaysBuild(Pc)
+
+env.InstallLibrary(lib)
+env.InstallHeader(Headers)
+env.InstallPkgConfig(Pc)
+
+BaseEnv['QRemoteSignalLib'] = lib
