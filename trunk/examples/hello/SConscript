@@ -1,2 +1,0 @@
-SConscript('server/SConscript')
-SConscript('client/SConscript')

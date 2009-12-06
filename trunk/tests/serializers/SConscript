@@ -1,8 +1,0 @@
-Import('env')
-
-Sources = ['json.cpp','serializerstestsuit.cpp','messagetesttools.cpp']
-
-results = []
-results.append( env.Program('#tests/JsonSerializerTestSuit',Sources) )
-
-Return('results')

@@ -1,6 +1,0 @@
-Import('env')
-
-Sources = ['main.cpp','client.cpp']
-Sources += env.QRSClient('../services/hello.xml')
-
-env.Program('client',Sources)
