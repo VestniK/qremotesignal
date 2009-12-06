@@ -1,0 +1,15 @@
+1. Indendation: 3 spaces
+
+2. Blocks {}: opening bracket on the same line one space after operator. Example:
+>if ( condition ) {
+>   do1();
+>   do2();
+>}
+
+3. Classes and Types names: SomeClassName
+
+4. Class members names: mSomeMember
+4.1 Getters names: someMember
+4.2 Setters names: setSomeMember
+
+5. Class methods names: someMethod

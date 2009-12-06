@@ -1,0 +1,9 @@
+<service name="Hello">
+   <slot name="setName">
+      <param name="name" type="QString"/>
+   </slot>
+   <slot name="quit"/>
+   <signal name="hello">
+      <param name="greetings" type="QString"/>
+   </signal>
+</service>

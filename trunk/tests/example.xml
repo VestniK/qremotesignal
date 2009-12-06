@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<service name="Example">
+   <slot name="intMethod">
+      <param type="quint16" name="num"/>
+   </slot>
+   <slot name="strMethod">
+      <param type="QString" name="str"/>
+   </slot>
+   <slot name="mixedMethod">
+      <param type="QString" name="str"/>
+      <param type="int" name="num"/>
+   </slot>
+   <slot name="voidMethod"/>
+   <signal name="boolSignal">
+      <param type="bool" name="flag"/>
+   </signal>
+</service>

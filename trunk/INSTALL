@@ -1,0 +1,56 @@
+Build from source
+
+ * Requirements
+
+To build QRemoteSignal you need to have:
+1. Qt 4.5.0 library or later
+2. QJson library (tested with svn snapshot)
+3. scons build tool (tested with 1.2.0)
+
+ * Build
+
+To build QRemoteSignal library, qrsc tool and unit tests run:
+$ scons
+
+NOTE: On windows you need to set correct path to Qt4 to QTDIR environment
+variable and you need to use QJson argument to specify path to your QJson
+installation:
+$ scons QJson="C:\Program Files\qjson"
+NOTE: On windows build may fail with strange dialog box on attempt to run
+library tests. Try to rebuild library with additional linker flag
+"--enable-auto-import":
+$ scons -c
+$ scons LINKFLAGS="-Wl,--enable-auto-import"
+
+You need to specify path to QJson only once at first scons run since this
+argument is cached
+
+NOTE: If you have several Qt4 installations on POSIX system you should set
+correct order of paths in PKG_CONFIG_PATH and LD_LIBRARY_PATH environment
+varaibles. Usually you need to run the following commands:
+$ export PKG_CONFIG_PATH=${QTDIR}/lib/pkg-config:${PKG_CONFIG_PATH}
+$ export LD_LIBRARY_PATH=${QTDIR}/lib:${LD_LIBRARY_PATH}
+
+ * Install
+
+To install run:
+$ scons prefix=<installation path> install
+
+This will build qrsc and library and then install it to the location specified
+by "prefix" value. If "prefix" argument is not specified library will be
+installed to "/usr/local" on POSIX systems and to
+"C:\Program Files\qremotesignal" on Windows.
+
+You don't need to specify prefix every time since it's value cached. Specify it
+when installing first time or if you want to change installation path.
+
+ * Uninstall
+
+To uninstall QRemoteSignal use the following command:
+$ scons install -c
+
+ * Additional parameters
+
+There are several build arguments which you can use to customize QRemoteSignal
+build and installation process. Use `scons --help` for detales. All of those
+parameters are cached you don't need to specify them evry time.
