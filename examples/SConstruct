@@ -45,7 +45,7 @@ if  not (ARGUMENTS.get('nocheck') or GetOption('clean') or GetOption('help') ) :
 
 Export('env')
 
-Subdirs=['remoteprint','hello']
+Subdirs=['print','hello']
 
 for example in Subdirs:
    SConscript(join(example,'SConscript'))
