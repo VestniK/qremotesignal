@@ -10,14 +10,13 @@
 #include <exception>
 #include <limits>
 
-#include <QtTest>
-#include <QtDebug>
+#include <QtCore/QtDebug>
 
 #include "messagetesttools.h"
 
 typedef QMap<QString,int> QIntMap;
 
-Q_DECLARE_METATYPE(QList<long>);
+Q_DECLARE_METATYPE(QList<int>);
 Q_DECLARE_METATYPE(QIntMap);
 Q_DECLARE_METATYPE(signed char);
 
@@ -32,7 +31,7 @@ void SerializersTestSuit::addDeserializationErrorTestCase(const QString& name, c
  * @brief filling test messages list
  */
 void SerializersTestSuit::initTestCase() {
-   qRegisterMetaType< QList<long> >("QList<long>");
+   qRegisterMetaType< QList<int> >("QList<int>");
    qRegisterMetaType< QMap<QString,int> >("QMap<QString,int>");
    qRegisterMetaType<signed char>("signed char");
 
@@ -120,8 +119,7 @@ void SerializersTestSuit::testQCharSerialization() {
       QVERIFY( qrs::getArgValue(res->params()["arg"] , res_arg) );
       QCOMPARE(res_arg , arg);
    } catch(const qrs::UnsupportedTypeException& e) {
-      qWarning("Unsupported type");
-      QFAIL( e.what() );
+      QSKIP("This serializer doesn't support QChar serialization",SkipAll);
    } catch(const qrs::MessageParsingException& e) {
       qWarning("Can't parse message created by myself");
       QFAIL( e.what() );
@@ -158,8 +156,7 @@ void SerializersTestSuit::testCharSerialization() {
       QVERIFY( qrs::getArgValue(res->params()["arg"] , res_arg) );
       QCOMPARE(res_arg , arg);
    } catch(const qrs::UnsupportedTypeException& e) {
-      qWarning("Unsupported type");
-      QFAIL( e.what() );
+      QSKIP("This serializer doesn't support char serialization",SkipAll);
    } catch(const qrs::MessageParsingException& e) {
       qWarning("Can't parse message created by myself");
       QFAIL( e.what() );
@@ -197,8 +194,7 @@ void SerializersTestSuit::testSignedCharSerialization() {
       QVERIFY( qrs::getArgValue(res->params()["arg"] , res_arg) );
       QCOMPARE(res_arg , arg);
    } catch(const qrs::UnsupportedTypeException& e) {
-      qWarning("Unsupported type");
-      QFAIL( e.what() );
+      QSKIP("This serializer doesn't support signed char serialization",SkipAll);
    } catch(const qrs::MessageParsingException& e) {
       qWarning("Can't parse message created by myself");
       QFAIL( e.what() );
@@ -234,8 +230,7 @@ void SerializersTestSuit::testUnsignedCharSerialization() {
       QVERIFY( qrs::getArgValue(res->params()["arg"] , res_arg) );
       QCOMPARE(res_arg , arg);
    } catch(const qrs::UnsupportedTypeException& e) {
-      qWarning("Unsupported type");
-      QFAIL( e.what() );
+      QSKIP("This serializer doesn't support unsigned serialization",SkipAll);
    } catch(const qrs::MessageParsingException& e) {
       qWarning("Can't parse message created by myself");
       QFAIL( e.what() );
@@ -272,8 +267,7 @@ void SerializersTestSuit::testShortSerialization() {
       QVERIFY( qrs::getArgValue(res->params()["arg"] , res_arg) );
       QCOMPARE(res_arg , arg);
    } catch(const qrs::UnsupportedTypeException& e) {
-      qWarning("Unsupported type");
-      QFAIL( e.what() );
+      QSKIP("This serializer doesn't support short serialization",SkipAll);
    } catch(const qrs::MessageParsingException& e) {
       qWarning("Can't parse message created by myself");
       QFAIL( e.what() );
@@ -309,8 +303,7 @@ void SerializersTestSuit::testUShortSerialization() {
       QVERIFY( qrs::getArgValue(res->params()["arg"] , res_arg) );
       QCOMPARE(res_arg , arg);
    } catch(const qrs::UnsupportedTypeException& e) {
-      qWarning("Unsupported type");
-      QFAIL( e.what() );
+      QSKIP("This serializer doesn't support unsigned short serialization",SkipAll);
    } catch(const qrs::MessageParsingException& e) {
       qWarning("Can't parse message created by myself");
       QFAIL( e.what() );
@@ -348,7 +341,7 @@ void SerializersTestSuit::testIntSerialization() {
       QVERIFY( qrs::getArgValue(res->params()["arg"] , res_arg) );
       QCOMPARE(res_arg , arg);
    } catch(const qrs::UnsupportedTypeException& e) {
-      qWarning("Unsupported type");
+      qWarning("This serializer doesn't support int serialization");
       QFAIL( e.what() );
    } catch(const qrs::MessageParsingException& e) {
       qWarning("Can't parse message created by myself");
@@ -386,8 +379,7 @@ void SerializersTestSuit::testUIntSerialization() {
       QVERIFY( qrs::getArgValue(res->params()["arg"] , res_arg) );
       QCOMPARE(res_arg , arg);
    } catch(const qrs::UnsupportedTypeException& e) {
-      qWarning("Unsupported type");
-      QFAIL( e.what() );
+      QSKIP("This serializer doesn't support unsigned int serialization",SkipAll);
    } catch(const qrs::MessageParsingException& e) {
       qWarning("Can't parse message created by myself");
       QFAIL( e.what() );
@@ -424,8 +416,7 @@ void SerializersTestSuit::testLongSerialization() {
       QVERIFY( qrs::getArgValue(res->params()["arg"] , res_arg) );
       QCOMPARE(res_arg , arg);
    } catch(const qrs::UnsupportedTypeException& e) {
-      qWarning("Unsupported type");
-      QFAIL( e.what() );
+      QSKIP("This serializer doesn't support long serialization",SkipAll);
    } catch(const qrs::MessageParsingException& e) {
       qWarning("Can't parse message created by myself");
       QFAIL( e.what() );
@@ -461,8 +452,7 @@ void SerializersTestSuit::testULongSerialization() {
       QVERIFY( qrs::getArgValue(res->params()["arg"] , res_arg) );
       QCOMPARE(res_arg , arg);
    } catch(const qrs::UnsupportedTypeException& e) {
-      qWarning("Unsupported type");
-      QFAIL( e.what() );
+      QSKIP("This serializer doesn't support unigned long serialization",SkipAll);
    } catch(const qrs::MessageParsingException& e) {
       qWarning("Can't parse message created by myself");
       QFAIL( e.what() );
@@ -499,8 +489,7 @@ void SerializersTestSuit::testLongLongSerialization() {
       QVERIFY( qrs::getArgValue(res->params()["arg"] , res_arg) );
       QCOMPARE(res_arg , arg);
    } catch(const qrs::UnsupportedTypeException& e) {
-      qWarning("Unsupported type");
-      QFAIL( e.what() );
+      QSKIP("This serializer doesn't support long long serialization",SkipAll);
    } catch(const qrs::MessageParsingException& e) {
       qWarning("Can't parse message created by myself");
       QFAIL( e.what() );
@@ -536,8 +525,7 @@ void SerializersTestSuit::testULongLongSerialization() {
       QVERIFY( qrs::getArgValue(res->params()["arg"] , res_arg) );
       QCOMPARE(res_arg , arg);
    } catch(const qrs::UnsupportedTypeException& e) {
-      qWarning("Unsupported type");
-      QFAIL( e.what() );
+      QSKIP("This serializer doesn't support unsigned long long serialization",SkipAll);
    } catch(const qrs::MessageParsingException& e) {
       qWarning("Can't parse message created by myself");
       QFAIL( e.what() );
@@ -571,8 +559,7 @@ void SerializersTestSuit::testBoolSerialization() {
       QVERIFY( qrs::getArgValue(res->params()["arg"] , res_arg) );
       QCOMPARE(res_arg , arg);
    } catch(const qrs::UnsupportedTypeException& e) {
-      qWarning("Unsupported type");
-      QFAIL( e.what() );
+      QSKIP("This serializer doesn't support bool serialization",SkipAll);
    } catch(const qrs::MessageParsingException& e) {
       qWarning("Can't parse message created by myself");
       QFAIL( e.what() );
@@ -608,7 +595,7 @@ void SerializersTestSuit::testQStringSerialization() {
       QVERIFY( qrs::getArgValue(res->params()["arg"] , res_arg) );
       QCOMPARE(res_arg , arg);
    } catch(const qrs::UnsupportedTypeException& e) {
-      qWarning("Unsupported type");
+      qWarning("This serializer doesn't support QString serialization");
       QFAIL( e.what() );
    } catch(const qrs::MessageParsingException& e) {
       qWarning("Can't parse message created by myself");
@@ -622,13 +609,13 @@ void SerializersTestSuit::testQStringSerialization() {
 }
 
 void SerializersTestSuit::testQListSerialization_data() {
-   QTest::addColumn< QList<long> >("arg");
+   QTest::addColumn< QList<int> >("arg");
 
-   QTest::newRow("simple") << ( QList<long>() << 1l << 2l << 3l << -4096l );
-   QTest::newRow("empty") << QList<long>();
+   QTest::newRow("simple") << ( QList<int>() << 1 << 2 << 3 << -4096 );
+   QTest::newRow("empty") << QList<int>();
 }
 void SerializersTestSuit::testQListSerialization() {
-   QFETCH(QList<long>,arg);
+   QFETCH(QList<int>,arg);
    qrs::Message src;
    src.setService(TEST_SERVICE_NAME);
    src.setMethod(TEST_METHOD_NAME);
@@ -639,12 +626,11 @@ void SerializersTestSuit::testQListSerialization() {
       qrs::MessageAP res = mSerializer->deserialize(raw);
 
       QCOMPARE(*res , src);
-      QList<long> res_arg;
+      QList<int> res_arg;
       QVERIFY( qrs::getArgValue(res->params()["arg"] , res_arg) );
       QCOMPARE(res_arg , arg);
    } catch(const qrs::UnsupportedTypeException& e) {
-      qWarning("Unsupported type");
-      QFAIL( e.what() );
+      QSKIP("This serializer doesn't support QList serialization",SkipAll);
    } catch(const qrs::MessageParsingException& e) {
       qWarning("Can't parse message created by myself");
       QFAIL( e.what() );
@@ -682,8 +668,7 @@ void SerializersTestSuit::testQMapSerialization() {
       QVERIFY( qrs::getArgValue(res->params()["arg"] , res_arg) );
       QCOMPARE(res_arg , arg);
    } catch(const qrs::UnsupportedTypeException& e) {
-      qWarning("Unsupported type");
-      QFAIL( e.what() );
+      QSKIP("This serializer doesn't support QMap serialization",SkipAll);
    } catch(const qrs::MessageParsingException& e) {
       qWarning("Can't parse message created by myself");
       QFAIL( e.what() );
@@ -746,6 +731,7 @@ void SerializersTestSuit::testDeserializationError() {
       serializer.deserialize(rawMsg);
       QFAIL("Incorrect message was parsed. Exception wasn't thrown");
    } catch (const qrs::MessageParsingException& e) {
+      // All ok the message given should cause this exception
    } catch ( const std::exception& e ) {
       qWarning("Caught exception of incorrect type");
       QFAIL( e.what() );

@@ -8,8 +8,11 @@
 #ifndef _MessageTestTools_H
 #define _MessageTestTools_H
 
-#include <QtCore>
-#include <QtTest>
+#include <QtCore/QVariant>
+#include <QtCore/QVariantMap>
+#include <QtCore/QVariantList>
+#include <QtCore/QTextStream>
+#include <QtTest/QtTest>
 
 #include "QRemoteSignal"
 

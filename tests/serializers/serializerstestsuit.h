@@ -8,8 +8,11 @@
 #ifndef _SerializersTestSuit_H
 #define _SerializersTestSuit_H
 
-#include <QtCore>
-#include <QtTest>
+#include <QtCore/QObject>
+#include <QtCore/QMap>
+#include <QtCore/QString>
+#include <QtCore/QByteArray>
+#include <QtTest/QtTest>
 
 #include "QRemoteSignal"
 

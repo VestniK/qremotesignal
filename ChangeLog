@@ -1,6 +1,9 @@
 SVN Version
 	* Added singleton factory for serializers. Explicit serializer
 	creation is no more required.
+	* Serializer test suit skips test instead of fail it is serializer
+	doesn't suport argument type. (The only type that any serializer must
+	support are QString and int)
 
 2009-11-30 Version 0.7.0
 	* Build issues on windows are fixed.
