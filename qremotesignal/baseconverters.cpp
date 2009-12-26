@@ -288,13 +288,13 @@ namespace qrs {
  *
  * @li @b createArg takes value of your type and creates QVariant tree
  * containing elements of types supported by the library.
- * @li @b getArgValue takes QVariant, chcks that it contains value of your type
+ * @li @b getArgValue takes QVariant, cheks that it contains value of your type
  * and put this value to the @b res argument. It should return @c false if it
  * can't get value of you type from @b arg parameter.
  *
  * You should specify header files with declaration of those functions for all
  * custom types which are used in signals or slots parameters in a service XML
- * description file. You can use
+ * description file using
  * @code <customtypes header="filename.h"/> @endcode
- * element to do it.
+ * element.
  */

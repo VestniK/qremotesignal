@@ -1,5 +1,5 @@
 all:
-	scons nocheck=1
+	scons
 
 clean:
 	scons -c
@@ -11,7 +11,7 @@ clean-examples:
 	make -C examples clean
 
 install:
-	scons nocheck=1 install
+	scons install
 
 uninstall:
 	scons install -c

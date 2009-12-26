@@ -22,8 +22,6 @@ class ServicesManagerTests:public QObject {
       void initTestCase() {
          mManager = new qrs::ServicesManager;
          qrs::ExampleClient *client = new qrs::ExampleClient(mManager);
-         mSerializer = new qrs::JsonSerializer(this);
-         mManager->setSerializer(mSerializer);
 
          QBuffer dev;
          dev.open(QIODevice::ReadWrite);
@@ -55,7 +53,6 @@ class ServicesManagerTests:public QObject {
          QSignalSpy spy(mService,SIGNAL(voidMethod()));
 
          dev.open(QIODevice::ReadWrite);
-         mManager->setSerializer(mSerializer);
          mManager->addDevice(&dev);
          // Sending message to dev
          QVERIFY( dev.data().isEmpty() );
@@ -74,7 +71,6 @@ class ServicesManagerTests:public QObject {
 
          dev1.open(QIODevice::ReadWrite);
          dev2.open(QIODevice::ReadWrite);
-         mManager->setSerializer(mSerializer);
          mManager->addDevice(&dev1);
          mManager->addDevice(&dev2);
          // Sending message
@@ -96,6 +92,7 @@ class ServicesManagerTests:public QObject {
       void testSendWithoutSerializer() {
          QBuffer dev;
          dev.open(QIODevice::ReadWrite);
+         mManager->setSerializer(0);
          mManager->addDevice(&dev);
          // Sending message to dev
          QVERIFY( dev.data().isEmpty() );
@@ -106,6 +103,7 @@ class ServicesManagerTests:public QObject {
       void testReceiveWithoutSerializer() {
          QBuffer dev;
          dev.open(QIODevice::ReadWrite);
+         mManager->setSerializer(0);
          mManager->addDevice(&dev);
          mManager->receive("some data");
          // There shouldn't be any segmantation faults here
@@ -116,7 +114,6 @@ class ServicesManagerTests:public QObject {
          QBuffer dev;
          QBuffer *tmpDev = new QBuffer();
 
-         mManager->setSerializer(mSerializer);
          dev.open(QIODevice::ReadWrite);
          QCOMPARE(mManager->devicesCount() , 0);
          mManager->addDevice(&dev);
@@ -135,7 +132,6 @@ class ServicesManagerTests:public QObject {
    private:
       qrs::ServicesManager *mManager;
       qrs::ExampleService *mService;
-      qrs::AbsMessageSerializer *mSerializer;
       QByteArray mRawMsg;
 
       void sendMsgToDev(QIODevice *dev, const QByteArray &msg) {

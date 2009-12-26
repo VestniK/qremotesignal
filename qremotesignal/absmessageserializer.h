@@ -8,7 +8,10 @@
 #ifndef _AbsMessageSerializer_H
 #define _AbsMessageSerializer_H
 
-#include <QtCore>
+#include <memory>
+
+#include <QtCore/QObject>
+#include <QtCore/QByteArray>
 
 #include "qrsexport.h"
 #include "message.h"
@@ -25,6 +28,21 @@ namespace qrs {
     * instance of qrs::Message from raw protocol message. Instance created by the
     * deserialize function from raw messagege returned by the serialize function
     * should be equal to the initial instance.
+    *
+    * When implementing this two function keep thread safety in mind. The best
+    * way is implement this function to be reentrant. In this case you can use
+    * one single global instance of your serializer in all threads.
+    *
+    * There is a simple template class which helps to create and manage single
+    * global instance of serializer: qrs::GlobalSerializer. Serializers which
+    * comes with the library itself uses this class to store global instace.
+    * It's done with macro like:
+    * @code
+    * #define jsonSerializer qrs::GlobalSerializer<qrs::JsonSerializer>::instance()
+    * @endcode
+    * Common rule is name of macro is the same as class name but the first
+    * letter is lowercase. You can use the same approach when implementing your
+    * own serializers.
     *
     * Current version of library comes with only one serializer JsonSerializer
     * but you can simply write your own serializer just implementing this two
@@ -48,24 +66,7 @@ namespace qrs {
     *
     * Here is example of main function for tests of the JsonSerializer class
     * which comes with this library:
-    * @code
-    * #include <QtTest>
-    *
-    * #include "serializerstestsuit.h"
-    * #include "jsonserializer.h"
-    *
-    * int main(int argc, char** argv) {
-    *    qrs::JsonSerializer json;
-    *    SerializersTestSuit testsuit(&json);
-    *
-    *    testsuit.addDeserializationErrorTestCase("NotJson",(QByteArray)"12345");
-    *    testsuit.addDeserializationErrorTestCase("EmptyMessage",(QByteArray)"{}");
-    *    testsuit.addDeserializationErrorTestCase("NoType", (QByteArray)"{\"service\":\"Example\",\"method\":\"voidMethod\"}");
-    *    testsuit.addDeserializationErrorTestCase("WrongType", (QByteArray)"{\"Wrong\":{\"service\":\"Example\",\"method\":\"voidMethod\"}}");
-    *
-    *    return QTest::qExec(&testsuit,argc,argv);
-    * }
-    * @endcode
+    * @include serializers/json.cpp
     */
    class QRS_EXPORT AbsMessageSerializer: public QObject {
       public:

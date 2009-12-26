@@ -8,8 +8,10 @@
 #ifndef Server_h
 #define Server_h
 
-#include <QtCore>
-#include <QtNetwork>
+#include <QtCore/QObject>
+#include <QtCore/QLinkedList>
+#include <QtNetwork/QTcpSocket>
+#include <QtNetwork/QTcpServer>
 
 #include <QRemoteSignal>
 

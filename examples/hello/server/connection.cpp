@@ -7,9 +7,9 @@
  */
 #include "connection.h"
 
-#include <QRemoteSignal>
+#include <QtCore/QCoreApplication>
 
-qrs::AbsMessageSerializer *Connection::serializer = 0;
+#include <QRemoteSignal>
 
 Connection::Connection (QTcpSocket *socket, QObject *parent):QObject(parent) {
    socket->setParent(this);
@@ -23,10 +23,6 @@ Connection::Connection (QTcpSocket *socket, QObject *parent):QObject(parent) {
    connect(mService,SIGNAL(quit()),
            qApp,SLOT(quit()));
 
-   if ( serializer == 0 ) {
-      serializer = new qrs::JsonSerializer(qApp);
-   }
-   manager->setSerializer(serializer);
    manager->addDevice(socket);
 }
 

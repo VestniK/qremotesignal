@@ -22,7 +22,7 @@ Headers = ['QRemoteSignal','absservice.h','baseconverters.h',
            'servicesmanager.h','baseexception.h',
            'message.h','absmessageserializer.h',
            'jsonserializer.h','serializationexceptions.h',
-           'devicemanager.h','qrsexport.h']
+           'devicemanager.h','qrsexport.h','globalserializer.h']
 
 lib = env.SharedLibrary('QRemoteSignal',Sources)
 

@@ -5,13 +5,13 @@
  * @author VestniK (Sergey N.Vidyuk) sir.vestnik@gmail.com
  * @date 10 Aug 2009
  */
-#include <QtCore>
-#include <QtTest>
+#include <QtCore/QObject>
+#include <QtTest/QtTest>
 
-#include "servicesmanager.h"
+#include <QRemoteSignal>
+
 #include "exampleclient.h"
 #include "exampleservice.h"
-#include "jsonserializer.h"
 
 class RemoteSignalTests: public QObject {
    Q_OBJECT
@@ -20,8 +20,6 @@ class RemoteSignalTests: public QObject {
       void initTestCase() {
          mServerManager = new qrs::ServicesManager(this);
          mClientManager = new qrs::ServicesManager(this);
-         mServerManager->setSerializer(&mSerializer);
-         mClientManager->setSerializer(&mSerializer);
          connect(mServerManager,SIGNAL(send(QByteArray)),
                  mClientManager,SLOT(receive(const QByteArray&)));
          connect(mClientManager,SIGNAL(send(QByteArray)),
@@ -122,7 +120,6 @@ class RemoteSignalTests: public QObject {
       qrs::ServicesManager *mServerManager,*mClientManager;
       qrs::ExampleClient *mClient;
       qrs::ExampleService *mService;
-      qrs::JsonSerializer mSerializer;
 };
 
 QTEST_MAIN(RemoteSignalTests);

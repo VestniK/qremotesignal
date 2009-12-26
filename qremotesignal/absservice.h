@@ -8,7 +8,8 @@
 #ifndef _AbsService_H
 #define _AbsService_H
 
-#include <QtCore>
+#include <QtCore/QObject>
+#include <QtCore/QString>
 
 #include "qrsexport.h"
 #include "baseexception.h"
@@ -56,7 +57,7 @@ namespace qrs {
           * @brief Unique service name.
           *
           * Each service have it's unique name which is used during reistration
-          * in a ServicesManager instance and is sended in remote call request
+          * in a ServicesManager instance and is sent in remote call request
           * message. Service and Client classes shares the same name.
           *
           * @return service or client name.
@@ -74,12 +75,12 @@ namespace qrs {
          void setManager(ServicesManager* val) {mManager = val;}
          /**
           * @return ServicesManager instance which is used for sending outgoing
-          * messages
+          * messages.
           */
          ServicesManager* manager() {return mManager;}
          /**
           * @return constan pointer to ServicesManager instance which is used
-          * for sending outgoing messages
+          * for sending outgoing messages.
           */
          const ServicesManager* manager() const {return mManager;}
 
@@ -106,7 +107,8 @@ namespace qrs {
  * When you calls a slot in a service class it generates Message with remote
  * call request and sends it using ServicesManager. And each time Services
  * manager recieves a message with request for remote call adressed to your
- * service service class emits the signal specified in the request.
+ * service corresponding service class emits the signal specified in the
+ * request.
  *
  * Normally you have two services classes one to be used in a server applicatin
  * and another one is for client applicatin. Both of them are generated from

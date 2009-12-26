@@ -5,9 +5,10 @@
  * @author VestniK (Sergey N.Vidyuk) sir.vestnik@gmail.com
  * @date 12 Sep 2009
  */
-#include <QtCore>
-#include <QtNetwork>
-#include <QtDebug>
+#include <QtCore/QCoreApplication>
+#include <QtCore/QStringList>
+#include <QtNetwork/QTcpSocket>
+#include <QtCore/QtDebug>
 
 #include <QRemoteSignal>
 
@@ -33,7 +34,6 @@ int main(int argc,char **argv) {
                     &app,SLOT(quit()));
 
    qrs::ServicesManager* manager = new qrs::ServicesManager(&app);
-   manager->setSerializer(new qrs::JsonSerializer(manager));
    qrs::PrintClient* client = new qrs::PrintClient(manager);
    manager->addDevice(socket);
 

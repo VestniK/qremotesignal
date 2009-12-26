@@ -1,3 +1,7 @@
+SVN Version
+	* Added singleton factory for serializers. Explicit serializer
+	creation is no more required.
+
 2009-11-30 Version 0.7.0
 	* Build issues on windows are fixed.
 	* Added ability to work with QIODevice to the ServicesManager class.

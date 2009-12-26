@@ -5,14 +5,12 @@
  * @author VestniK (Sergey N.Vidyuk) sir.vestnik@gmail.com
  * @date 5 Sep 2009
  */
-#include <QtCore>
-#include <QtTest>
+#include <QtCore/QObject>
+#include <QtTest/QtTest>
 
-#include "servicesmanager.h"
+#include <QRemoteSignal>
+
 #include "exampleservice.h"
-#include "jsonserializer.h"
-
-#include "message.h"
 
 class ErrorSignalSpy:public QObject {
    Q_OBJECT
@@ -44,8 +42,6 @@ class ErrorTests: public QObject {
       /// Prepare test environment
       void initTestCase() {
          mServerManager = new qrs::ServicesManager;
-         mSerializer = new qrs::JsonSerializer(mServerManager);
-         mServerManager->setSerializer(mSerializer);
          mService = new qrs::ExampleService(mServerManager);
       }
       /// Cleanup test environment
@@ -60,7 +56,8 @@ class ErrorTests: public QObject {
          msg.setErrorType(qrs::Message::UnknownService);
          msg.setError(errorMsg);
 
-         mServerManager->receive( mSerializer->serialize(msg) );
+         qrs::AbsMessageSerializer *serializer = mServerManager->serializer();
+         mServerManager->receive( serializer->serialize(msg) );
 
          QCOMPARE( spy.count, 1 );
          QCOMPARE( spy.senders[0], mServerManager );
@@ -94,16 +91,16 @@ class ErrorTests: public QObject {
          msg.setService(service);
          msg.setMethod(method);
          msg.params().insert("str","test");
-         mServerManager->receive(mSerializer->serialize(msg));
+         qrs::AbsMessageSerializer *serializer = mServerManager->serializer();
+         mServerManager->receive(serializer->serialize(msg));
          QCOMPARE( spy.count(), 1 );
-         qrs::MessageAP err = mSerializer->deserialize( spy.first().at(0).toByteArray() );
+         qrs::MessageAP err = serializer->deserialize( spy.first().at(0).toByteArray() );
          QVERIFY( err->type() == qrs::Message::Error );
          QCOMPARE( (int)err->errorType(), expectedErr );
       }
    private:
       qrs::ServicesManager *mServerManager,*mClientManager;
       qrs::ExampleService *mService;
-      qrs::JsonSerializer *mSerializer;
 };
 
 #include "errortests.moc"

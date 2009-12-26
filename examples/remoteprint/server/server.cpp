@@ -9,6 +9,10 @@
 
 #include <stdio.h>
 
+#include <QtCore/QCoreApplication>
+#include <QtCore/QTextStream>
+#include <QtCore/QTimer>
+
 #include <QRemoteSignal>
 
 #include "printservice.h"
@@ -26,7 +30,6 @@ Server::Server (QObject *parent):QObject(parent) {
    cleanupTimer->start(CLEANUP_INTERVAL);
 
    mManager = new qrs::ServicesManager(this);
-   mManager->setSerializer(new qrs::JsonSerializer(mManager));
    qrs::PrintService* print_service = new qrs::PrintService(mManager);
    connect(print_service,SIGNAL(print(QString)),
            this,SLOT(print(const QString&)));

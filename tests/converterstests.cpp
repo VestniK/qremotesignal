@@ -9,10 +9,14 @@
 
 #include <limits>
 
-#include <QtCore>
-#include <QtTest>
+#include <QtCore/QObject>
+#include <QtCore/QChar>
+#include <QtCore/QString>
+#include <QtCore/QMap>
+#include <QtCore/QList>
+#include <QtTest/QtTest>
 
-#include <QtDebug>
+#include <QtCore/QtDebug>
 
 typedef QMap<QString,int> QIntMap;
 

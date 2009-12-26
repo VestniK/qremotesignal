@@ -5,10 +5,12 @@
  * @author VestniK (Sergey N.Vidyuk) sir.vestnik@gmail.com
  * @date 7 Oct 2009
  */
-#include <QtCore>
-#include <QtTest>
+#include <QtCore/QObject>
+#include <QtCore/QBuffer>
+#include <QtCore/QByteArray>
+#include <QtTest/QTest>
 
-#include <QtDebug>
+#include <QtCore/QtDebug>
 
 #include "QRemoteSignal"
 

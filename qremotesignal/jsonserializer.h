@@ -10,6 +10,7 @@
 
 #include "qrsexport.h"
 #include "absmessageserializer.h"
+#include "globalserializer.h"
 
 namespace qrs {
 
@@ -17,7 +18,8 @@ namespace qrs {
     * @brief Message serializer for simple JSON based remote call protocol
     *
     * This class serializes internal library message representation to a simple
-    * JSON based protocol message.
+    * JSON based protocol message. You can get pointer to single global
+    * instance of this class with jsonSerializer macro.
     *
     * Top level element of JSON object can be @b RemoteCall or @b Error it
     * contains child JSON object with detailed information about slot to be
@@ -111,5 +113,10 @@ namespace qrs {
    };
 
 }
+
+/**
+ * Pointer to single global instance of JsonSerializer class
+ */
+#define jsonSerializer qrs::GlobalSerializer<qrs::JsonSerializer>::instance()
 
 #endif

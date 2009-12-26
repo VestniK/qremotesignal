@@ -24,7 +24,6 @@ class Connection : public QObject {
       void onSetName(const QString& name);
    private:
       qrs::HelloService *mService;
-      static qrs::AbsMessageSerializer *serializer;
 };
 
 #endif

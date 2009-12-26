@@ -5,8 +5,8 @@
  * @author VestniK (Sergey N.Vidyuk) sir.vestnik@gmail.com
  * @date 16 Sep 2009
  */
-#include <QtCore>
-#include <QtTest>
+#include <QtCore/QObject>
+#include <QtTest/QTest>
 
 #include "QRemoteSignal"
 
@@ -27,9 +27,6 @@ class CustomTypesTests: public QObject {
       void initTestCase() {
          mServerManager = new qrs::ServicesManager(this);
          mClientManager = new qrs::ServicesManager(this);
-         mSerializer = new qrs::JsonSerializer(this);
-         mServerManager->setSerializer(mSerializer);
-         mClientManager->setSerializer(mSerializer);
          connect(mServerManager,SIGNAL(send(QByteArray)),
                  mClientManager,SLOT(receive(const QByteArray&)));
          connect(mClientManager,SIGNAL(send(QByteArray)),
@@ -73,7 +70,6 @@ class CustomTypesTests: public QObject {
       qrs::ServicesManager *mServerManager,*mClientManager;
       qrs::CustomTypeService *mService;
       qrs::CustomTypeClient *mClient;
-      qrs::JsonSerializer *mSerializer;
 
       CustomStruct mLastReceived;
 };

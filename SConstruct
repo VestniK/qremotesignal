@@ -4,7 +4,7 @@ from builders import *
 
 BaseEnv=Environment(tools=[],ENV=os.environ)
 BaseEnv['package'] = 'qremotesignal'
-BaseEnv['VERSION'] = '0.7.0'
+BaseEnv['VERSION'] = '0.7.0svn'
 
 BaseEnv['BUILDERS']['Config'] = Builder(action=Config,suffix='',src_suffix='.in')
 

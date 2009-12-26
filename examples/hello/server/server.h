@@ -16,7 +16,7 @@ class Server : public QObject {
    public:
       Server (quint32 port, QObject *parent = 0);
       virtual ~Server() {};
-   public slots:
+   private slots:
       void onNewConnection();
    private:
       QTcpServer *mTcpServer;

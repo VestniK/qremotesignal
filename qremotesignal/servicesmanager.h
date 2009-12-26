@@ -8,7 +8,13 @@
 #ifndef _ServicesManager_H
 #define _ServicesManager_H
 
-#include <QtCore>
+#include <QtCore/QObject>
+#include <QtCore/QString>
+#include <QtCore/QByteArray>
+#include <QtCore/QPointer>
+#include <QtCore/QSharedPointer>
+#include <QtCore/QMap>
+#include <QtCore/QList>
 
 #include "qrsexport.h"
 #include "absservice.h"
@@ -41,12 +47,6 @@ namespace qrs {
     * If this approach is not acceptable for your needs for some reasons you
     * can register your service with registerService function.
     *
-    * Before you can use ServicesManager you need to set serializer to be used
-    * to convert raw messages to internal library message representation. This
-    * version of library comes with only one serializer JsonSerializer. You can
-    * use it or you can write your own serializer (see AbsMessageSerializer
-    * documentation for detailes how to do it).
-    *
     * There are two ways how to send and receive messages:
     * @li Using addDevice function to set device to be used to send/receive
     * messages. This class designed to work with sequential QIODevices (for
@@ -71,7 +71,21 @@ namespace qrs {
          void unregister(AbsService *service);
          void send(const Message& msg);
 
+         /**
+          * This function sets serializer to be used to convert internal
+          * library message representation into raw messages of some RPC
+          * protocol. Each serializer comes with this library has single
+          * global instance of it which can be accessed with macro. It's
+          * better to use this global instance instead of creating your own
+          * instance and control its lifecicle.
+          *
+          * @sa AbsMessageSerializer
+          */
          void setSerializer(AbsMessageSerializer* val) {mSerializer = val;};
+         /**
+          * @return pointer to currently used serializer
+          */
+         AbsMessageSerializer *serializer() {return mSerializer;};
 
          /// @brief Add IO device to send receive data
          void addDevice(QIODevice* dev);

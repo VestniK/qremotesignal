@@ -5,6 +5,8 @@
  * @author VestniK (Sergey N.Vidyuk) sir.vestnik@gmail.com
  * @date 12 Sep 2009
  */
+#include <QtCore/QCoreApplication>
+
 #include "server.h"
 
 int main(int argc, char** argv) {

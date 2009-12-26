@@ -4,10 +4,13 @@
 #include "qrsexport.h"
 
 #include "absservice.h"
-#include "servicesmanager.h"
 #include "devicemanager.h"
 #include "baseconverters.h"
+
+#include "globalserializer.h"
 #include "absmessageserializer.h"
 #include "jsonserializer.h"
+
+#include "servicesmanager.h"
 
 #endif

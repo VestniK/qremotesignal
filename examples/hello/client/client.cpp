@@ -23,7 +23,6 @@ Client::Client(QTcpSocket *socket, QObject *parent ):QObject(parent) {
    connect(mClient,SIGNAL(hello(QString)),
            this,SLOT(onHello(const QString &)));
 
-   manager->setSerializer( new qrs::JsonSerializer(this) );
    manager->addDevice(mSocket);
 }
 
