@@ -10,7 +10,7 @@
 
 #include <exception>
 
-#include <QtCore>
+#include <QtCore/QString>
 
 namespace qrs {
 

@@ -4,7 +4,6 @@
 #include "qrsexport.h"
 
 #include "absservice.h"
-#include "devicemanager.h"
 #include "baseconverters.h"
 
 #include "globalserializer.h"

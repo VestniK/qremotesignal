@@ -13,6 +13,7 @@
 #include <QtCore/QtDebug>
 
 #include "QRemoteSignal"
+#include "devicemanager.h"
 
 class DeviceManagerTests: public QObject {
    Q_OBJECT
@@ -122,7 +123,7 @@ class DeviceManagerTests: public QObject {
       void testDevUnexpectedlyClosed() {
          QBuffer dev;
          dev.open(QIODevice::ReadWrite);
-         qrs::DeviceManager devManager;
+         qrs::internals::DeviceManager devManager;
          QSignalSpy spy(&devManager,SIGNAL(deviceUnavailable()));
 
          devManager.setDevice(&dev);
@@ -141,7 +142,7 @@ class DeviceManagerTests: public QObject {
       void testDevUnexpectedlyDeleted() {
          QBuffer *dev = new QBuffer();
          dev->open(QIODevice::ReadWrite);
-         qrs::DeviceManager devManager;
+         qrs::internals::DeviceManager devManager;
          QSignalSpy spy(&devManager,SIGNAL(deviceUnavailable()));
 
          devManager.setDevice(dev);
@@ -154,7 +155,7 @@ class DeviceManagerTests: public QObject {
 
       void testSetDevice() {
          QBuffer dev;
-         qrs::DeviceManager devManager;
+         qrs::internals::DeviceManager devManager;
          QSignalSpy spy(&devManager,SIGNAL(deviceUnavailable()));
 
          // set 0 device should cause deviceUnavailable signal to be emitted
@@ -184,7 +185,7 @@ class DeviceManagerTests: public QObject {
       }
    private:
       QBuffer mDevice1,mDevice2;
-      qrs::DeviceManager mDevManager1,mDevManager2;
+      qrs::internals::DeviceManager mDevManager1,mDevManager2;
 
       void sendDataToDev2(const QByteArray& data) {
          qint64 pos = mDevice2.pos();

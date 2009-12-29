@@ -16,15 +16,18 @@ env.NoClean(env['GchSh'])
 env.Append(CPPFLAGS=Split('-include qremotesignal_pch.h'))
 
 Sources = ['baseconverters.cpp','servicesmanager.cpp',
-           'jsonserializer.cpp','devicemanager.cpp']
+           'jsonserializer.cpp']
+
+InternalsSources = ['devicemanager.cpp']
 
 Headers = ['QRemoteSignal','absservice.h','baseconverters.h',
            'servicesmanager.h','baseexception.h',
            'message.h','absmessageserializer.h',
            'jsonserializer.h','serializationexceptions.h',
-           'devicemanager.h','qrsexport.h','globalserializer.h']
+           'qrsexport.h','globalserializer.h']
 
-lib = env.SharedLibrary('QRemoteSignal',Sources)
+InternalsLib = env.StaticLibrary('QrsInternals',InternalsSources);
+lib = env.SharedLibrary('QRemoteSignal',Sources, LIBS=['$LIBS',InternalsLib])
 
 Pc = env.Config('QRemoteSignal.pc.in')
 env.AlwaysBuild(Pc)
@@ -34,3 +37,4 @@ env.InstallHeader(Headers)
 env.InstallPkgConfig(Pc)
 
 BaseEnv['QRemoteSignalLib'] = lib
+BaseEnv['QrsInternalsLib'] = InternalsLib

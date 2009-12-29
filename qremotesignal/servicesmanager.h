@@ -11,18 +11,21 @@
 #include <QtCore/QObject>
 #include <QtCore/QString>
 #include <QtCore/QByteArray>
-#include <QtCore/QPointer>
-#include <QtCore/QSharedPointer>
-#include <QtCore/QMap>
-#include <QtCore/QList>
 
 #include "qrsexport.h"
-#include "absservice.h"
-#include "absmessageserializer.h"
 #include "message.h"
-#include "devicemanager.h"
+
+// Forward declarations
+class QIODevice;
 
 namespace qrs {
+
+   // Forward declarations
+   namespace internals {
+      class ServicesManagerPrivate;
+   };
+   class AbsMessageSerializer;
+   class AbsService;
 
    /**
     * @brief Class managing communications between services and clients.
@@ -61,7 +64,7 @@ namespace qrs {
       Q_OBJECT
       public:
          explicit ServicesManager(QObject *parent = 0);
-         virtual ~ServicesManager() {};
+         virtual ~ServicesManager();
 
          /// @brief Register service or client instance
          void registerService(AbsService *service);
@@ -71,26 +74,16 @@ namespace qrs {
          void unregister(AbsService *service);
          void send(const Message& msg);
 
-         /**
-          * This function sets serializer to be used to convert internal
-          * library message representation into raw messages of some RPC
-          * protocol. Each serializer comes with this library has single
-          * global instance of it which can be accessed with macro. It's
-          * better to use this global instance instead of creating your own
-          * instance and control its lifecicle.
-          *
-          * @sa AbsMessageSerializer
-          */
-         void setSerializer(AbsMessageSerializer* val) {mSerializer = val;};
+         void setSerializer(AbsMessageSerializer* val);
          /**
           * @return pointer to currently used serializer
           */
-         AbsMessageSerializer *serializer() {return mSerializer;};
+         AbsMessageSerializer *serializer();
 
          /// @brief Add IO device to send receive data
          void addDevice(QIODevice* dev);
          /// @brief Returns number of the devices used to send/receive messages
-         int devicesCount() const {return mDevManagers.count();}
+         int devicesCount() const;
       public slots:
          void receive(const QByteArray& msg);
       signals:
@@ -106,10 +99,7 @@ namespace qrs {
                     QString description);
       private:
          Q_DISABLE_COPY(ServicesManager);
-         QMap< QString, AbsService*> mServices;
-         QPointer<AbsMessageSerializer> mSerializer;
-
-         QList< QSharedPointer<DeviceManager> > mDevManagers;
+         internals::ServicesManagerPrivate *const d;
       private slots:
          /// @brief Called if device added by addDevice method is deleted
          void onDeviceDeleted(QObject* dev);

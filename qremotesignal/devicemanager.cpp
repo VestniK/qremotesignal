@@ -8,6 +8,7 @@
 #include "devicemanager.h"
 
 using namespace qrs;
+using namespace qrs::internals;
 
 /**
  * @brief Constructs new device manager using given device for IO operations

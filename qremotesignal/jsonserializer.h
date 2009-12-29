@@ -104,8 +104,10 @@ namespace qrs {
          explicit JsonSerializer (QObject *parent=0):AbsMessageSerializer(parent) {};
          virtual ~JsonSerializer() {};
 
+         /// @copydoc AbsMessageSerializer::serialize
          virtual QByteArray serialize ( const Message& msg )
                throw(UnsupportedTypeException);
+         /// @copydoc AbsMessageSerializer::deserialize
          virtual MessageAP deserialize ( const QByteArray& msg )
                throw(MessageParsingException);
       private:

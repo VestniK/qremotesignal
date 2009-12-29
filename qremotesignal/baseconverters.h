@@ -1,6 +1,6 @@
 /**
  * @file baseconverters.h
- * @brief A set of converters from and to QtSoapType
+ * @brief Set of convertors of different types from and to Message argumenat
  *
  * @author VestniK (Sergey N.Vidyuk) sir.vestnik@gmail.com
  * @date 10 Jul 2009
@@ -8,7 +8,10 @@
 #ifndef _BaseConverters_H
 #define _BaseConverters_H
 
-#include <QtCore>
+#include <QtCore/QString>
+#include <QtCore/QChar>
+#include <QtCore/QList>
+#include <QtCore/QMap>
 
 #include "qrsexport.h"
 #include "message.h"

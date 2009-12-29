@@ -8,25 +8,26 @@
 #ifndef _DeviceManager_H
 #define _DeviceManager_H
 
-#include <QtCore>
+#include <QtCore/QObject>
+#include <QtCore/QIODevice>
+#include <QtCore/QByteArray>
+#include <QtCore/QPointer>
+#include <QtCore/QDataStream>
 
 #include "qrsexport.h"
 
 namespace qrs {
+namespace internals {
 
    /**
-    * @brief Class to manage messages delivery using QIODevice
-    *
     * @internal
     *
     * @deprecated use ServicesManager::addDevice(QIODevice *) instead.
     *
-    * This classes is keeped in the library public interface for backward
-    * compatibility with the version 0.6.0. In future version it may be
-    * not available. You should use qrs::ServicesManager::addDevice function
-    * instead of this class.
+    * This class is removed from  the library public interface you should use
+    * ServicesManager::addDevice(QIODevice *) instead.
     */
-   class QRS_EXPORT DeviceManager : public QObject {
+   class DeviceManager : public QObject {
       Q_OBJECT
       public:
          /**
@@ -69,6 +70,7 @@ namespace qrs {
          QByteArray mBuffer;
    };
 
-}
+} // namespace internals
+} // namespace qrs
 
 #endif

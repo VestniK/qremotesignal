@@ -7,7 +7,28 @@
  */
 #include "servicesmanager.h"
 
+#include <QtCore/QPointer>
+#include <QtCore/QSharedPointer>
+#include <QtCore/QMap>
+#include <QtCore/QList>
+
 #include "jsonserializer.h"
+#include "devicemanager.h"
+#include "absmessageserializer.h"
+#include "absservice.h"
+
+namespace qrs {
+   namespace internals {
+
+      class ServicesManagerPrivate {
+         public:
+            QMap< QString, AbsService*> mServices;
+            QPointer<AbsMessageSerializer> mSerializer;
+            QList< QSharedPointer<DeviceManager> > mDevManagers;
+      };
+
+   }
+}
 
 using namespace qrs;
 
@@ -16,12 +37,43 @@ using namespace qrs;
  * you can use setSerializer function to change it. Also you can define
  * DEFAULT_SERIALIZER macro which will be used to set default serializer.
  */
-ServicesManager::ServicesManager(QObject *parent): QObject(parent) {
+ServicesManager::ServicesManager(QObject *parent):
+      QObject(parent),
+      d(new internals::ServicesManagerPrivate) {
 #ifdef DEFAULT_SERIALIZER
-   mSerializer = DEFAULT_SERIALIZER;
+   d->mSerializer = DEFAULT_SERIALIZER;
 #else
-   mSerializer = jsonSerializer;
+   d->mSerializer = jsonSerializer;
 #endif
+}
+
+ServicesManager::~ServicesManager() {
+   delete d;
+}
+
+AbsMessageSerializer *ServicesManager::serializer() {
+   return d->mSerializer;
+}
+
+/**
+ * This function sets serializer to be used to convert internal library message
+ * representation into raw messages of some RPC protocol. Each serializer comes
+ * with this library has single global instance of it which can be accessed
+ * with macro. It's better to use this global instance instead of creating your
+ * own instance and control its lifecicle.
+ *
+ * If you do want to create your own instance please remember that this
+ * function will not take ownership on the instance given as parameter you have
+ * to control your serializer delition manually.
+ *
+ * @sa AbsMessageSerializer
+ */
+void ServicesManager::setSerializer(AbsMessageSerializer *serializer) {
+   d->mSerializer = serializer;
+}
+
+int ServicesManager::devicesCount() const {
+   return d->mDevManagers.count();
 }
 
 /**
@@ -45,25 +97,25 @@ ServicesManager::ServicesManager(QObject *parent): QObject(parent) {
  * @param msg received raw message
  */
 void ServicesManager::receive(const QByteArray& msg) {
-   if ( !mSerializer ) {
+   if ( !d->mSerializer ) {
       return;
    }
    MessageAP message;
    try {
-      message = mSerializer->deserialize(msg);
+      message = d->mSerializer->deserialize(msg);
    } catch (const MessageParsingException& e) {
       Message err;
       err.setErrorType(e.mErrorType);
       err.setError( e.reason() );
-      emit mSerializer->serialize(err);
+      emit d->mSerializer->serialize(err);
       return;
    }
    if ( message->type() == Message::Error ) {
       emit error(this, message->errorType(), message->error());
       return;
    }
-   QMap<QString,AbsService*>::iterator res = mServices.find(message->service());
-   if ( res != mServices.end() ) {
+   QMap<QString,AbsService*>::iterator res = d->mServices.find(message->service());
+   if ( res != d->mServices.end() ) {
       try {
          (*res)->processMessage(*message);
       } catch ( IncorrectMethodException& e ) {
@@ -72,7 +124,7 @@ void ServicesManager::receive(const QByteArray& msg) {
          err.setError(e.reason());
          err.setService(message->service());
          err.setMethod(message->method());
-         emit send( mSerializer->serialize(err) );
+         emit send( d->mSerializer->serialize(err) );
          return;
       }
    } else {
@@ -80,7 +132,7 @@ void ServicesManager::receive(const QByteArray& msg) {
       err.setErrorType(Message::UnknownService);
       err.setError(QString("Unknown service: \"%1\"").arg(message->service()));
       err.setService(message->service());
-      emit send( mSerializer->serialize(err) );
+      emit send( d->mSerializer->serialize(err) );
       return;
    }
 }
@@ -104,7 +156,7 @@ void ServicesManager::registerService(AbsService* service) {
    if ( service->manager() != 0 ) {
       service->manager()->unregister(service);
    }
-   mServices[service->name()] = service;
+   d->mServices[service->name()] = service;
    service->setManager(this);
 }
 
@@ -123,11 +175,11 @@ void ServicesManager::registerService(AbsService* service) {
  * instance of ServicesManager class exits.
  */
 AbsService *ServicesManager::unregister(const QString &name) {
-   QMap<QString, AbsService*>::iterator it = mServices.find(name);
+   QMap<QString, AbsService*>::iterator it = d->mServices.find(name);
    AbsService *res = 0;
-   if ( it != mServices.end() ) {
+   if ( it != d->mServices.end() ) {
       res = it.value();
-      mServices.erase(it);
+      d->mServices.erase(it);
       res->setManager(0);
    }
    return res;
@@ -140,9 +192,9 @@ AbsService *ServicesManager::unregister(const QString &name) {
  * other case it is doing nothing.
  */
 void ServicesManager::unregister(AbsService *instance) {
-   QMap<QString, AbsService*>::iterator it = mServices.find(instance->name());
-   if ( it != mServices.end() && it.value() == instance ) {
-      mServices.erase(it);
+   QMap<QString, AbsService*>::iterator it = d->mServices.find(instance->name());
+   if ( it != d->mServices.end() && it.value() == instance ) {
+      d->mServices.erase(it);
       instance->setManager(0);
    }
 }
@@ -155,8 +207,8 @@ void ServicesManager::unregister(AbsService *instance) {
  * renamed or removed in future versions.
  */
 void ServicesManager::send(const Message& msg) {
-   if ( !mSerializer ) return;
-   emit send( mSerializer->serialize(msg) );
+   if ( !d->mSerializer ) return;
+   emit send( d->mSerializer->serialize(msg) );
 }
 
 /**
@@ -173,35 +225,37 @@ void ServicesManager::send(const Message& msg) {
  * @param dev device to be used for sending/receiving messages
  */
 void ServicesManager::addDevice(QIODevice* dev) {
-   foreach (const QSharedPointer<DeviceManager> dm, mDevManagers) {
+   foreach (const QSharedPointer<internals::DeviceManager> dm, d->mDevManagers) {
       if ( dm->device() == dev ) {
          return;
       }
    }
-   QSharedPointer<DeviceManager> dm( new DeviceManager() );
+   QSharedPointer<internals::DeviceManager> dm( new internals::DeviceManager() );
    connect(dm.data(),SIGNAL(received(QByteArray)),
            this,SLOT(receive(const QByteArray&)));
    connect(this,SIGNAL(send(QByteArray)),
            dm.data(),SLOT(send(const QByteArray&)));
    dm->setDevice(dev);
-   mDevManagers.append(dm);
+   d->mDevManagers.append(dm);
    connect(dev,SIGNAL(destroyed( QObject* )),
            this,SLOT(onDeviceDeleted(QObject*)));
 }
 
 /**
+ * @internal
+ *
  * This slot handles resources cleanup if one of the devices used by this
  * services manager to read write messages is deleted.
  */
 void ServicesManager::onDeviceDeleted(QObject* dev) {
-   QList< QSharedPointer<DeviceManager> >::iterator it;
-   for ( it = mDevManagers.begin(); it != mDevManagers.end(); it++ ) {
+   QList< QSharedPointer<internals::DeviceManager> >::iterator it;
+   for ( it = d->mDevManagers.begin(); it != d->mDevManagers.end(); it++ ) {
       QObject *currentDev = (*it)->device();
       // DeviceManager stores QPointer instead of normal pointers and it can
       // know that dev is deleted before this slot is called. That's why I
       // should check that currentDev is non-zero.
       if ( !currentDev || currentDev == dev ) {
-         mDevManagers.erase(it);
+         d->mDevManagers.erase(it);
          return;
       }
    }
@@ -214,6 +268,10 @@ void ServicesManager::onDeviceDeleted(QObject* dev) {
  * @li @ref services_concept
  * @li @ref qrsc
  * @li @ref converters
+ *
+ * @section changelog Changelog
+ *
+ * @verbinclude ChangeLog
  */
 
 /// @example hello/services/hello.xml
