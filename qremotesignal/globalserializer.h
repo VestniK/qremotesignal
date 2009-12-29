@@ -10,6 +10,9 @@
 
 #include <memory>
 
+#include <QtCore/QMutex>
+#include <QtCore/QMutexLocker>
+
 #include "absmessageserializer.h"
 
 namespace qrs {
@@ -28,6 +31,7 @@ namespace qrs {
    class GlobalSerializer {
       public:
          static AbsMessageSerializer* instance() {
+            QMutexLocker locker(&mMutex);
             if ( mInstance.get() == 0 ) {
                mInstance.reset ( new T() );
             }
@@ -35,10 +39,14 @@ namespace qrs {
          }
       private:
          static std::auto_ptr<T> mInstance;
+         static QMutex mMutex;
    };
 
    template<class T>
-   std::auto_ptr<T> GlobalSerializer<T>::mInstance = std::auto_ptr<T>();
+   std::auto_ptr<T> GlobalSerializer<T>::mInstance;
+
+   template<class T>
+   QMutex GlobalSerializer<T>::mMutex;
 
 }
 
