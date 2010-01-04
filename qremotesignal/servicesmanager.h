@@ -72,6 +72,10 @@ namespace qrs {
          AbsService *unregister(const QString &name);
          /// @brief Unregister service or client instance
          void unregister(AbsService *service);
+
+         /// @brief Get registered service by name
+         AbsService *service(const QString &name);
+
          void send(const Message& msg);
 
          void setSerializer(AbsMessageSerializer* val);

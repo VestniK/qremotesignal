@@ -48,6 +48,24 @@ class ServicesManagerTests:public QObject {
          QCOMPARE(mManager->devicesCount() , 1);
       }
 
+      void testGetRegisteredService() {
+         QCOMPARE(mManager->service("Example") , mService);
+      }
+
+      void testUnregisterServiceByName() {
+         QCOMPARE(mManager->service("Example") , mService);
+         QCOMPARE(mManager->unregister("Example") , mService);
+         QVERIFY(mManager->service("Example") == 0);
+         delete mService;
+      }
+
+      void testUnregisterServiceByPointer() {
+         QCOMPARE(mManager->service("Example") , mService);
+         mManager->unregister(mService);
+         QVERIFY(mManager->service("Example") == 0);
+         delete mService;
+      }
+
       void testUsingDevice() {
          QBuffer dev;
          QSignalSpy spy(mService,SIGNAL(voidMethod()));

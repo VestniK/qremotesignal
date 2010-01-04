@@ -200,6 +200,14 @@ void ServicesManager::unregister(AbsService *instance) {
 }
 
 /**
+ * @return service with this name if such service is registered in this manager
+ * instance or 0.
+ */
+AbsService *ServicesManager::service(const QString &name) {
+   return d->mServices.value(name,0);
+}
+
+/**
  * @internal
  *
  * This function provided to be used by client classes generated from service
