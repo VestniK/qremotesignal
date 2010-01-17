@@ -101,6 +101,13 @@ namespace qrs {
          void error(qrs::ServicesManager *sender,
                     qrs::Message::ErrorType error,
                     QString description);
+         /**
+          * This signal is emmited before sending error message in response on
+          * incorrect incomming protocol message.
+          */
+         void clientError(qrs::ServicesManager *sender,
+                          qrs::Message::ErrorType error,
+                          QString description);
       private:
          Q_DISABLE_COPY(ServicesManager);
          internals::ServicesManagerPrivate *const d;

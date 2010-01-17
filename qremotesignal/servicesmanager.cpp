@@ -125,6 +125,7 @@ void ServicesManager::receive(const QByteArray& msg) {
          err.setService(message->service());
          err.setMethod(message->method());
          emit send( d->mSerializer->serialize(err) );
+         emit clientError(this, err.errorType(), err.error());
          return;
       }
    } else {
@@ -133,6 +134,7 @@ void ServicesManager::receive(const QByteArray& msg) {
       err.setError(QString("Unknown service: \"%1\"").arg(message->service()));
       err.setService(message->service());
       emit send( d->mSerializer->serialize(err) );
+      emit clientError(this, err.errorType(), err.error());
       return;
    }
 }
@@ -378,7 +380,6 @@ void ServicesManager::onDeviceDeleted(QObject* dev) {
  * @dontinclude hello/server/connection.cpp
  * @skip SIGNAL(setName
  * @until SLOT(onSetName
- * @endcode
  *
  * After that we need add socket to the list of devices used by @b manager for
  * sending/receiving raw messages:

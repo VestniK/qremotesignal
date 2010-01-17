@@ -6,6 +6,8 @@ SVN Version
 	support are QString and int)
 	* DeviceManager class removed from library public interface. Use
 	ServicesManager::addDevice instead of it.
+	* Added signal clientError which is emited if received message is
+	incorrect.
 
 2009-11-30 Version 0.7.0
 	* Build issues on windows are fixed.
