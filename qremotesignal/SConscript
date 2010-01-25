@@ -16,7 +16,7 @@ env.NoClean(env['GchSh'])
 env.Append(CPPFLAGS=Split('-include qremotesignal_pch.h'))
 
 Sources = ['baseconverters.cpp','servicesmanager.cpp',
-           'jsonserializer.cpp']
+           'jsonserializer.cpp','message.cpp']
 
 InternalsSources = ['devicemanager.cpp']
 
