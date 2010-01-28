@@ -68,6 +68,7 @@ MessageAP JsonSerializer::deserialize ( const QByteArray& msg )
    if ( messageType == ERROR_TYPE ) {
       QVariantMap msgBody = result[ERROR_TYPE].toMap();
       MessageAP err(new Message);
+      err->setType(Message::Error);
       err->setError(msgBody.value(ERROR_DESCRIPTION_KEY).toString());
       err->setService(msgBody.value(SERVICE_KEY).toString());
       err->setMethod(msgBody.value(METHOD_KEY).toString());

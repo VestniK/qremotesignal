@@ -41,7 +41,7 @@ namespace qrs {
             Message();
             virtual ~Message();
             
-            enum MsgType {RemoteCall,Error};
+            enum MsgType {RemoteCall = 0,Error = -1};
             enum ErrorType {
                 /// if received error code is not described here or not received
                 UnknownErrorCode = -1,
@@ -67,18 +67,18 @@ namespace qrs {
             void setType(MsgType val) {mType = val;};
             
             ErrorType errorType() const {return mErrorType;};
-            void setErrorType(ErrorType val) {mType = Error; mErrorType = val;};
+            void setErrorType(ErrorType val) {mErrorType = val;};
             
             /**
             * @brief Returns error description
             */
             const QString& error() const {return mError;};
             /**
-            * @brief Set error description and change message type to Message::Error
+            * @brief Set error description
             *
             * @param val human readable error description
             */
-            void setError(const QString& val) {mError = val; mType = Error;};
+            void setError(const QString& val) {mError = val;};
             
             /**
             * @brief Set name of the destination service

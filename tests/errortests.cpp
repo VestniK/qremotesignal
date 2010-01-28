@@ -55,6 +55,7 @@ class ErrorTests: public QObject {
             ErrorSignalSpy spy( mServerManager );
             qrs::Message msg;
             QString errorMsg = "test error";
+            msg.setType(qrs::Message::Error);
             msg.setErrorType(qrs::Message::UnknownService);
             msg.setError(errorMsg);
 

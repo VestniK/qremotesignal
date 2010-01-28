@@ -28,11 +28,16 @@ void printParam(const QVariant& param, int indent, QTextStream& out);
 void printMapParam(const QVariantMap& param, int indent, QTextStream& out);
 void printListParam(const QVariantList& param, int indent, QTextStream& out);
 
+char *Message2String (const qrs::Message &msg);
+
 namespace QTest {
    /**
     * @brief qrs::Message textual representation for debug printing
     */
-   char* toString (const qrs::Message& msg);
+   template<>
+   inline char* toString (const qrs::Message& msg) {
+       return Message2String(msg);
+   }
 }
 
 #endif

@@ -1,8 +1,9 @@
 Import('env')
 
-Sources = ['json.cpp','serializerstestsuit.cpp','messagetesttools.cpp']
+CommonSources = ['serializerstestsuit.cpp','messagetesttools.cpp']
 
 results = []
-results.append( env.Program('#tests/JsonSerializerTestSuit',Sources) )
+results.append( env.Program('#tests/JsonSerializerTestSuit',['json.cpp']+CommonSources) )
+results.append( env.Program('#tests/QDataStreamSerializerTestSuit',['qdatastream.cpp']+CommonSources) )
 
 Return('results')

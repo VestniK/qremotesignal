@@ -105,9 +105,11 @@ void ServicesManager::receive(const QByteArray& msg) {
       message = d->mSerializer->deserialize(msg);
    } catch (const MessageParsingException& e) {
       Message err;
+      err.setType(Message::Error);
       err.setErrorType(e.mErrorType);
       err.setError( e.reason() );
       emit d->mSerializer->serialize(err);
+      emit clientError(this, err.errorType(), err.error());
       return;
    }
    if ( message->type() == Message::Error ) {
@@ -120,6 +122,7 @@ void ServicesManager::receive(const QByteArray& msg) {
          (*res)->processMessage(*message);
       } catch ( IncorrectMethodException& e ) {
          Message err;
+         err.setType(Message::Error);
          err.setErrorType(Message::IncorrectMethod);
          err.setError(e.reason());
          err.setService(message->service());
@@ -130,6 +133,7 @@ void ServicesManager::receive(const QByteArray& msg) {
       }
    } else {
       Message err;
+      err.setType(Message::Error);
       err.setErrorType(Message::UnknownService);
       err.setError(QString("Unknown service: \"%1\"").arg(message->service()));
       err.setService(message->service());
