@@ -11,8 +11,10 @@
 #include <QtCore/QSharedPointer>
 #include <QtCore/QMap>
 #include <QtCore/QList>
+#include <QtCore/QMutex>
+#include <QtCore/QMutexLocker>
 
-#include "jsonserializer.h"
+#include "qdatastreamserializer.h"
 #include "devicemanager.h"
 #include "absmessageserializer.h"
 #include "absservice.h"
@@ -32,19 +34,56 @@ namespace qrs {
 
 using namespace qrs;
 
+AbsMessageSerializer *ServicesManager::mDefaultSerializer = 0;
+
 /**
- * Constructs new ServicesManager object. By default it will use JsonSerializer
- * you can use setSerializer function to change it. Also you can define
- * DEFAULT_SERIALIZER macro which will be used to set default serializer.
+ * This static method allows you to set serializer which will be used by all
+ * ServiceManager instances by default.
+ * 
+ * This function is thread safe.
+ * 
+ * @note Changing default serializer with this function will not affect earlier
+ * create instances.
+ */
+void ServicesManager::setDefaultSerializer(AbsMessageSerializer *serializer) {
+    static QMutex mutex;
+    QMutexLocker locker(&mutex);
+    mDefaultSerializer = serializer;
+}
+
+/**
+ * @return pointer to default serializer.
+ * 
+ * @note Until setDefaultSerializer is not explicitly called this function will
+ * always return 0 and all serializer instances will use QDataStreamSerializer
+ * using data stream protocol of verion QDataStream::Qt_4_5.
+ *
+ * @sa ServicesManager::setDefaultSerializer
+ */
+AbsMessageSerializer *ServicesManager::defaultSerializer() {
+    return mDefaultSerializer;
+}
+
+/**
+ * Constructs new ServicesManager object.
+ * 
+ * By default new instance will use serializer set by the  static function 
+ * ServicesManager::setDefaultSerializer or QDataStreamSerializer with data
+ * stream protocol version QDataStream::Qt_4_5 if default serializer wasn't
+ * set explicitly.
+ * 
+ * @note This constructor accesses global data in thread safe way.
  */
 ServicesManager::ServicesManager(QObject *parent):
       QObject(parent),
       d(new internals::ServicesManagerPrivate) {
-#ifdef DEFAULT_SERIALIZER
-   d->mSerializer = DEFAULT_SERIALIZER;
-#else
-   d->mSerializer = jsonSerializer;
-#endif
+   static QMutex mutex;
+   QMutexLocker locker(&mutex);
+   if ( mDefaultSerializer == 0 ) {
+       d->mSerializer = qDataStreamSerializer_4_5;
+   } else {
+       d->mSerializer = mDefaultSerializer;
+   }
 }
 
 ServicesManager::~ServicesManager() {

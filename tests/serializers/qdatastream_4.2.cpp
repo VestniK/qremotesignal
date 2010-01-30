@@ -1,5 +1,5 @@
 /**
- * @file qdatastream.cpp
+ * @file qdatastream_4.2.cpp
  * @brief Entry point for QDataStreamSerializer tests
  *
  * @author VestniK (Sergey N.Vidyuk) sir.vestnik@gmail.com
@@ -11,6 +11,6 @@
 #include "qdatastreamserializer.h"
 
 int main(int argc, char** argv) {
-    SerializersTestSuit testsuit(qDataStreamSerializer);
+    SerializersTestSuit testsuit(qDataStreamSerializer_4_2);
     return QTest::qExec(&testsuit,argc,argv);
 }

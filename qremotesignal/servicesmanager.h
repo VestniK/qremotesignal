@@ -83,6 +83,9 @@ namespace qrs {
           * @return pointer to currently used serializer
           */
          AbsMessageSerializer *serializer();
+         
+         static void setDefaultSerializer(AbsMessageSerializer *serializer);
+         static AbsMessageSerializer *defaultSerializer();
 
          /// @brief Add IO device to send receive data
          void addDevice(QIODevice* dev);
@@ -111,6 +114,8 @@ namespace qrs {
       private:
          Q_DISABLE_COPY(ServicesManager);
          internals::ServicesManagerPrivate *const d;
+         
+         static AbsMessageSerializer *mDefaultSerializer;
       private slots:
          /// @brief Called if device added by addDevice method is deleted
          void onDeviceDeleted(QObject* dev);

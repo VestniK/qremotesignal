@@ -38,3 +38,25 @@ QDataStream &operator>>(QDataStream &stream, Message &msg) {
     msg.setParams(params);
     return stream;
 }
+
+MessageAP QDataStreamSerializer::deserialize(const QByteArray& msg)
+        throw(MessageParsingException) {
+    QBuffer dev;
+    dev.setData(msg);
+    dev.open(QIODevice::ReadOnly);
+    QDataStream stream(&dev);
+    if ( version() != 0 ) stream.setVersion( version() );
+    Message *message = new Message;
+    stream >> *message;
+    return MessageAP(message);
+}
+
+QByteArray QDataStreamSerializer::serialize( const Message& msg )
+        throw(UnsupportedTypeException) {
+    QBuffer dev;
+    dev.open(QIODevice::WriteOnly);
+    QDataStream stream(&dev);
+    if ( version() != 0 ) stream.setVersion( version() );
+    stream << msg;
+    return dev.data();
+}

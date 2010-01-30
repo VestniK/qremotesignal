@@ -99,9 +99,11 @@ namespace qrs {
     * remote calls from application which is not using QRemoteSignal library.
     */
    class QRS_EXPORT JsonSerializer: public AbsMessageSerializer {
-      Q_OBJECT
       public:
-         explicit JsonSerializer (QObject *parent=0):AbsMessageSerializer(parent) {};
+         explicit JsonSerializer (QObject *parent=0):
+            AbsMessageSerializer(parent) {};
+         explicit JsonSerializer (int version, QObject *parent=0):
+            AbsMessageSerializer(version,parent) {};
          virtual ~JsonSerializer() {};
 
          /// @copydoc AbsMessageSerializer::serialize
