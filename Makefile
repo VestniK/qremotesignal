@@ -5,10 +5,10 @@ clean:
 	scons -c
 
 examples:
-	make -C examples
+	cd examples && scons
 
 clean-examples:
-	make -C examples clean
+	cd examples && scons -c
 
 install:
 	scons install

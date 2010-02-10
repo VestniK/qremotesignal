@@ -21,15 +21,17 @@ int main(int argc,char **argv) {
    if ( args.size() != 3 ) {
       qWarning() << "Ussage:";
       qWarning() << "Send message to a server";
-      qWarning() << "\t" << argv[0] << " host message";
+      qWarning() << "\t" << args[0] << " host message";
       qWarning() << "Shoutdown a server";
-      qWarning() << "\t" << argv[0] << " host -q";;
+      qWarning() << "\t" << args[0] << " host -q";;
       return -1;
    }
 
    QTcpSocket* socket = new QTcpSocket(&app);
    socket->connectToHost(args[1],8081);
-   socket->waitForConnected();
+   if ( !socket->waitForConnected() ) {
+       qFatal("Can't connect to host '%s'",argv[1]);
+   }
    QObject::connect(socket,SIGNAL(disconnected()),
                     &app,SLOT(quit()));
 
@@ -37,7 +39,7 @@ int main(int argc,char **argv) {
    qrs::PrintClient* client = new qrs::PrintClient(manager);
    manager->addDevice(socket);
 
-   if ( QString("-q") == argv[2] ) {
+   if ( QString("-q") == args[2] ) {
       client->quit();
    } else {
       client->print(args[2]);

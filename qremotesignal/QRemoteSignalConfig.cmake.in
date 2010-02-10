@@ -1,0 +1,41 @@
+set(QRemoteSignal_INCLUDE_DIR %(prefix_inc)s)
+set(QRemoteSignal_LIBRARY %(prefix_lib)s/libQRemoteSignal.so)
+set(QRemoteSignal_QRSC_EXECUTABLE %(prefix_bin)s/qrsc)
+
+macro(qrs_wrap_service output)
+  foreach(it ${ARGN})
+    get_filename_component(_basename ${it} NAME_WE)
+    get_filename_component(_service ${it} ABSOLUTE)
+    set(_service_header ${CMAKE_CURRENT_BINARY_DIR}/${_basename}service.h)
+    set(_service_source ${CMAKE_CURRENT_BINARY_DIR}/${_basename}service.cpp)
+    add_custom_command(
+      OUTPUT ${_service_header} ${_service_source}
+      COMMAND ${QRemoteSignal_QRSC_EXECUTABLE} --service --header ${_service_header} --source ${_service_source} ${_service}
+      DEPENDS ${_service}
+    )
+    qt4_wrap_cpp(_service_moc ${_service_header})
+    set_source_files_properties(${_service_header} PROPERTIES GENERATED 1)
+    set_source_files_properties(${_service_source} PROPERTIES GENERATED 1)
+    set(${output} ${${output}} ${_service_source})
+    set(${output} ${${output}} ${_service_moc})
+  endforeach(it)
+endmacro(qrs_wrap_service)
+
+macro(qrs_wrap_client output)
+  foreach(it ${ARGN})
+    get_filename_component(_basename ${it} NAME_WE)
+    get_filename_component(_service ${it} ABSOLUTE)
+    set(_client_header ${CMAKE_CURRENT_BINARY_DIR}/${_basename}client.h)
+    set(_client_source ${CMAKE_CURRENT_BINARY_DIR}/${_basename}client.cpp)
+    add_custom_command(
+      OUTPUT ${_client_header} ${_client_source}
+      COMMAND ${QRemoteSignal_QRSC_EXECUTABLE} --client --header ${_client_header} --source ${_client_source} ${_service}
+      DEPENDS ${_service}
+    )
+    qt4_wrap_cpp(_client_moc ${_client_header})
+    set_source_files_properties(${_client_header} PROPERTIES GENERATED 1)
+    set_source_files_properties(${_client_source} PROPERTIES GENERATED 1)
+    set(${output} ${${output}} ${_client_source})
+    set(${output} ${${output}} ${_client_moc})
+  endforeach(it)
+endmacro(qrs_wrap_client)

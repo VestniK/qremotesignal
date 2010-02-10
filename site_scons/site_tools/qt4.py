@@ -1,3 +1,4 @@
+# -*- coding: utf-8 -*-
 
 """SCons.Tool.qt
 
@@ -257,6 +258,7 @@ def generate(env):
 		QT4_RCC = locateQt4Command(env,'rcc', env['QTDIR']),
 		QT4_LUPDATE = locateQt4Command(env,'lupdate', env['QTDIR']),
 		QT4_LRELEASE = locateQt4Command(env,'lrelease', env['QTDIR']),
+		QT4_QMAKE = locateQt4Command(env,'qmake', env['QTDIR']),
 		QT4_LIB = '', # KLUDGE to avoid linking qt3 library
 
 		QT4_AUTOSCAN = 1, # Should the qt tool try to figure out, which sources are to be moc'ed?

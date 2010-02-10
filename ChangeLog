@@ -10,6 +10,7 @@ SVN Version
 	incorrect.
 	* Added serializer versioning support.
 	* Added QDataStream based serializer.
+	* Added CMake Config file installation.
 
 2009-11-30 Version 0.7.0
 	* Build issues on windows are fixed.

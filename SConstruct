@@ -1,10 +1,20 @@
 import os
+import time
 from checkers import *
 from builders import *
 
 BaseEnv=Environment(tools=[],ENV=os.environ)
-BaseEnv['package'] = 'qremotesignal'
-BaseEnv['VERSION'] = '0.7.0svn'
+BaseEnv['package'] = 'QRemoteSignal'
+BaseEnv['MAJOR_VERSION'] = '0'
+BaseEnv['MINOR_VERSION'] = '7'
+BaseEnv['PATCH_VERSION'] = '0'
+BaseEnv['TWEAK_VERSION'] = time.strftime('%Y%m%dsvn',time.gmtime())
+BaseEnv['VERSION'] = '%s.%s.%s.%s'%(
+   BaseEnv['MAJOR_VERSION'],
+   BaseEnv['MINOR_VERSION'],
+   BaseEnv['PATCH_VERSION'],
+   BaseEnv['TWEAK_VERSION']
+)
 
 BaseEnv['BUILDERS']['Config'] = Builder(action=Config,suffix='',src_suffix='.in')
 
@@ -28,6 +38,7 @@ vars.Add('prefix_lib','libraries install prefix','')
 vars.Add('prefix_pc','pkg-config files install prefix','')
 vars.Add('prefix_inc','headers install prefix','')
 vars.Add('prefix_data','package data install prefix','')
+vars.Add('prefix_qmake_feature','Qt4 QMake features install prefix. If you set it to "GLOBAL" QMake features will be installed in Qt4 features directory.','')
 vars.Add('QJson','QJson library path. Live blank to detect it using pkg-config','')
 vars.Update(BaseEnv)
 # Hack: need to convert flags lists from strings to lists
@@ -51,7 +62,7 @@ try:
 except OSError: pass
 
 qmake_feature = BaseEnv.Config('qremotesignal.prf.in')
-BaseEnv.InstallData('mkspecs/features',qmake_feature)
+BaseEnv.InstallQMakeFeature(qmake_feature)
 
 BaseEnv.AlwaysBuild( BaseEnv.Config('Doxyfile.in') )
 BaseEnv.AlwaysBuild( qmake_feature )

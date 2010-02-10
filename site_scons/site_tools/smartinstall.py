@@ -1,3 +1,4 @@
+# -*- coding: utf-8 -*-
 import os
 
 from SCons.Action import Action
@@ -11,6 +12,8 @@ from SCons.Script import Chmod
 
 bin_mode = 0755
 res_mode = 0644
+
+class ToolSmartinstallWarning(SCons.Warnings.Warning): pass
 
 def exists(env):
    if env.has_key('package') and env['package']:
@@ -42,13 +45,16 @@ def get_default_data_prefix(env):
    if env['PLATFORM'] == 'win32':
       return os.path.join(env['prefix'],'data')
    else:
-      return os.path.join(env['prefix'],'share',env['package'])
+      return os.path.join(env['prefix'],'share',str(env['package']).lower())
 
 def get_default_man_prefix(env):
    if env['PLATFORM'] == 'win32':
       return None
    else:
       return os.path.join(env['prefix'],'share','man')
+
+def get_default_qmake_feature_prefix(env):
+   return os.path.join(env['prefix'],'share','qt4','mkspecs','features')
 
 #####################
 # Install functions #
@@ -113,6 +119,27 @@ def install_man(env,src,section,mode=res_mode):
    for obj in res: env.AddPostAction(obj , Chmod(str(obj),mode) )
    return res
 
+def install_qmake_feature(env,src,mode=res_mode):
+   if not 'install' in COMMAND_LINE_TARGETS: return None
+   inst_path = env['prefix_qmake_feature']
+   if inst_path == 'GLOBAL':
+       try:
+          cmd_line = '%s -query QMAKE_MKSPECS'%(env['QT4_QMAKE'])
+          inst_path = os.popen( cmd_line ).read().strip()
+       except KeyError:
+          inst_path = get_default_qmake_feature_prefix(env)
+          SCons.Warnings.warn(
+             ToolSmartinstallWarning,
+             'Qt4 qmake utility not found. Can\'t install QMake feature "%s" to global features loaction. It will be installed to "%s" directory'
+             %(str(src),inst_path)
+          )
+   res = env.Install(inst_path,src)
+   env.Alias('install',res)
+   return res
+
+#####################
+# Generate function #
+#####################
 def generate(env):
    try:
       if env['prefix'] == '':
@@ -142,6 +169,10 @@ def generate(env):
       if env['prefix_man'] == '':
          env['prefix_man'] = get_default_man_prefix(env)
    except: env['prefix_man'] = get_default_man_prefix(env)
+   try:
+      if env['prefix_qmake_feature'] == '':
+         env['prefix_qmake_feature'] = get_default_qmake_feature_prefix(env)
+   except: env['prefix_qmake_feature'] = get_default_qmake_feature_prefix(env)
    # install or no development files
    try: env['install_dev']
    except: env['install_dev'] = False
@@ -150,4 +181,5 @@ def generate(env):
    env.AddMethod(install_pc,'InstallPkgConfig')
    env.AddMethod(install_inc,'InstallHeader')
    env.AddMethod(install_man,'InstallMan')
+   env.AddMethod(install_qmake_feature,'InstallQMakeFeature')
    env.AddMethod(install_data,'InstallData')
