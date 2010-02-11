@@ -35,14 +35,16 @@ lib = env.SharedLibrary('QRemoteSignal',Sources, LIBS=['$LIBS',InternalsLib])
 
 Pc = env.Config('QRemoteSignal.pc.in')
 CMakeConfig = env.Config('QRemoteSignalConfig.cmake.in')
+qmake_feature = env.Config('qremotesignal.prf.in')
+env.AlwaysBuild( qmake_feature )
 env.AlwaysBuild(CMakeConfig)
 env.AlwaysBuild(Pc)
 
 env.InstallLibrary(lib)
 env.InstallHeader(Headers)
 env.InstallPkgConfig(Pc)
-env.Alias('install',env.Install(os.path.join(env['prefix_lib'],'cmake','QRemoteSignal'),CMakeConfig))
-
+env.InstallQMakeFeature(qmake_feature)
+env.InstallCMakeConfig(CMakeConfig)
 
 BaseEnv['QRemoteSignalLib'] = lib
 BaseEnv['QrsInternalsLib'] = InternalsLib

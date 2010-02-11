@@ -9,12 +9,6 @@ BaseEnv['MAJOR_VERSION'] = '0'
 BaseEnv['MINOR_VERSION'] = '7'
 BaseEnv['PATCH_VERSION'] = '0'
 BaseEnv['TWEAK_VERSION'] = time.strftime('%Y%m%dsvn',time.gmtime())
-BaseEnv['VERSION'] = '%s.%s.%s.%s'%(
-   BaseEnv['MAJOR_VERSION'],
-   BaseEnv['MINOR_VERSION'],
-   BaseEnv['PATCH_VERSION'],
-   BaseEnv['TWEAK_VERSION']
-)
 
 BaseEnv['BUILDERS']['Config'] = Builder(action=Config,suffix='',src_suffix='.in')
 
@@ -50,6 +44,13 @@ vars.Save('%s_build.conf'%BaseEnv['PLATFORM'],BaseEnv)
 
 BaseEnv.Tool('smartinstall')
 BaseEnv['install_dev'] = True
+BaseEnv['VERSION'] = '%s.%s.%s'%(
+   BaseEnv['MAJOR_VERSION'],
+   BaseEnv['MINOR_VERSION'],
+   BaseEnv['PATCH_VERSION']
+)
+if BaseEnv['TWEAK_VERSION'] != None:
+   BaseEnv['VERSION'] = "%s-%s"%(BaseEnv['VERSION'],BaseEnv['TWEAK_VERSION'])
 
 Help(vars.GenerateHelpText(BaseEnv))
 
@@ -61,11 +62,7 @@ try:
       BaseEnv.ParseConfig(('pkg-config --cflags --libs-only-L QJson'))
 except OSError: pass
 
-qmake_feature = BaseEnv.Config('qremotesignal.prf.in')
-BaseEnv.InstallQMakeFeature(qmake_feature)
-
 BaseEnv.AlwaysBuild( BaseEnv.Config('Doxyfile.in') )
-BaseEnv.AlwaysBuild( qmake_feature )
 
 Export('BaseEnv')
 

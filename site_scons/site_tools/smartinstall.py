@@ -77,14 +77,29 @@ def install_lib(env,src):
             if env['install_dev'] :
                res.extend( env.Install(env['prefix_lib'],node) )
    else:
-      # todo create autotools like symlinks for .so files
-      # (libMy.so -> libMy.so.1 -> libMy.so.1.4 -> libMy.so.1.4.2)
-      res = env.Install(env['prefix_lib'],src)
-      for obj in res:
-         if os.path.splitext( str(obj) )[1] == env['SHLIBSUFFIX']:
-            env.AddPostAction(obj , Chmod(str(obj),bin_mode) )
+      for node in src:
+         if os.path.splitext( str(node) )[1] == env['SHLIBSUFFIX']:
+            item_name = '%s.%s.%s.%s'%(
+               os.path.basename(str(node)),
+               env['MAJOR_VERSION'],
+               env['MINOR_VERSION'],
+               env['PATCH_VERSION']
+            )
+            item_major_link = '%s.%s'%(
+               os.path.basename(str(node)),
+               env['MAJOR_VERSION'],
+            )
+            item_link = os.path.basename(str(node))
+            item_path = os.path.join(env['prefix_lib'],item_name)
+            item = env.InstallAs(item_path,node)
+            for it in item: env.AddPostAction(it , Chmod(str(it),bin_mode) )
+            res.extend( item )
+            res.append( env.Command(os.path.join(env['prefix_lib'],item_major_link),os.path.join(env['prefix_lib'],item_name),'ln -s ${SOURCE.file} ${TARGET.file}',chdir=env['prefix_lib']) )
+            res.append( env.Command(os.path.join(env['prefix_lib'],item_link),os.path.join(env['prefix_lib'],item_name),'ln -s ${SOURCE.file} ${TARGET.file}',chdir=env['prefix_lib']) )
          else:
-            env.AddPostAction(obj , Chmod(str(obj),res_mode) )
+            item = env.Install(env['prefix_lib'],node)
+            for it in item: env.AddPostAction(it , Chmod(str(it),res_mode) )
+            res.extend(item)
    env.Alias('install',res)
    return res
 
@@ -121,6 +136,7 @@ def install_man(env,src,section,mode=res_mode):
 
 def install_qmake_feature(env,src,mode=res_mode):
    if not 'install' in COMMAND_LINE_TARGETS: return None
+   if not env['install_dev']: return None
    inst_path = env['prefix_qmake_feature']
    if inst_path == 'GLOBAL':
        try:
@@ -135,6 +151,16 @@ def install_qmake_feature(env,src,mode=res_mode):
           )
    res = env.Install(inst_path,src)
    env.Alias('install',res)
+   for obj in res: env.AddPostAction(obj , Chmod(str(obj),mode) )
+   return res
+
+def install_cmake_config(env,src,mode=res_mode):
+   if not 'install' in COMMAND_LINE_TARGETS: return None
+   if not env['install_dev']: return None
+   inst_path = os.path.join(env['prefix_lib'],'cmake',env['package'])
+   res = env.Install(inst_path,src)
+   env.Alias('install',res)
+   for obj in res: env.AddPostAction(obj , Chmod(str(obj),mode) )
    return res
 
 #####################
@@ -176,10 +202,19 @@ def generate(env):
    # install or no development files
    try: env['install_dev']
    except: env['install_dev'] = False
+   try: env['MAJOR_VERSION']
+   except: env['MAJOR_VERSION'] = '0'
+   try: env['MINOR_VERSION']
+   except: env['MINOR_VERSION'] = '1'
+   try: env['PATCH_VERSION']
+   except: env['PATCH_VERSION'] = '0'
+   try: env['TWEAK_VERSION']
+   except: env['TWEAK_VERSION'] = None
    env.AddMethod(install_bin,'InstallProgram')
    env.AddMethod(install_lib,'InstallLibrary')
    env.AddMethod(install_pc,'InstallPkgConfig')
    env.AddMethod(install_inc,'InstallHeader')
    env.AddMethod(install_man,'InstallMan')
    env.AddMethod(install_qmake_feature,'InstallQMakeFeature')
+   env.AddMethod(install_cmake_config,'InstallCMakeConfig')
    env.AddMethod(install_data,'InstallData')
