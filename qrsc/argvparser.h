@@ -8,7 +8,7 @@
 #ifndef ArgvParser_H
 #define ArgvParser_H
 
-#include <QtCore>
+#include <QtCore/QObject>
 
 /**
  * Parses command line and store configuration
@@ -23,6 +23,7 @@ class ArgvParser: public QObject {
                   const QString &desc,
                   const QChar &shortName = QChar());
       void addOption(const QString &name,
+                     const QString &paramName,
                      const QString &desc,
                      const QChar &shortName = QChar(),
                      const QString &defaultVal = QString());
@@ -42,6 +43,7 @@ class ArgvParser: public QObject {
       const QString &appDescription() const {return mAppDescription;}
 
       void setAppDescription(const QString &val) {mAppDescription = val;}
+      void addUsageDescription(const QString &val) {mUsageDescriptions.append(val);};
    private:
       Q_DISABLE_COPY(ArgvParser);
 
@@ -56,6 +58,7 @@ class ArgvParser: public QObject {
 
       QMap<QChar,QString> mShortNames;
       QMap<QString,QString> mDescriptions;
+      QList<QString> mUsageDescriptions;
 };
 
 #endif

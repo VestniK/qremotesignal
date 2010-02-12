@@ -6,6 +6,7 @@ To build QRemoteSignal you need to have:
 1. Qt 4.5.0 library or later
 2. QJson library (tested with svn snapshot)
 3. scons build tool (tested with 1.2.0)
+4. help2man utility (optional)
 
  * Build
 

@@ -11,6 +11,10 @@ SVN Version
 	* Added serializer versioning support.
 	* Added QDataStream based serializer.
 	* Added CMake Config file installation.
+	* Added ability to install QMake feature file into Qt4 installation
+	directory.
+	* Output of qrsc --help improved to better satisfy help2man
+	requirements. Generated man page looks much better then before.
 
 2009-11-30 Version 0.7.0
 	* Build issues on windows are fixed.
