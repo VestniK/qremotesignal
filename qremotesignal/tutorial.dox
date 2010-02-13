@@ -1,13 +1,19 @@
 /// @example hello/services/hello.xml
 
 /// @example hello/server/main.cpp
+
 /// @example hello/server/server.h
+
 /// @example hello/server/server.cpp
+
 /// @example hello/server/connection.h
+
 /// @example hello/server/connection.cpp
 
 /// @example hello/client/main.cpp
+
 /// @example hello/client/client.h
+
 /// @example hello/client/client.cpp
 
 /**
