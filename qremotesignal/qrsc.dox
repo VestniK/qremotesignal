@@ -1,0 +1,275 @@
+/**
+ * @page qrsc XML service description
+ *
+ * Slots you want to call remotely should be described in an XML file which
+ * will be used to generate C++ classes you can use in your application. One
+ * XML file describes one service (see @ref services_concept for details about
+ * services).
+ *
+ * @section schema File format
+ *
+ * Here is a simple example of service XML description:
+ * @code
+ * <service name="Example">
+ *    <customtypes header="customtypesconverters.h"/>
+ *    <slot name="mySlot">
+ *       <param name="num" type="qint32"/>
+ *    </slot>
+ *    <signal name="mySignal">
+ *       <param name="str" type="QString"/>
+ *    </signal>
+ * </service>
+ * @endcode
+ *
+ * @li Root element @b service must have @b name attribute with a service name.
+ *
+ * @li You can have any number of @b customtypes elements with @b header
+ * attribute specifying C++ header file with convertors functions for your
+ * custom types (see @ref converters for details). This header is included in
+ * the *.h files with the interface of the service and cient classes.
+ *
+ * @li @b slot element describes slot which can be called remotelly. Attribute
+ * @b name specifies the name of this slot. This element can have any number of
+ * child @b param elements.
+ *
+ * @li @b signal element describes signal which can be emited to remote
+ * application. Attribute @b name specifies the name of this signal. This
+ * element can have any number of child @b param elements.
+ *
+ * @li @b param element is used inside @b signal and @b slot elements to
+ * describe signal or slot parameter. It has two attributes @b type which
+ * specifies C++ type of the corresponding signal or slot argument and
+ * @b name which specifies parameter name. Both of this attributes are
+ * obligitary.
+ *
+ * @section code_generation C++ code generation with qrsc utility
+ *
+ * Once you've described your application remote interface in XML files you can
+ * generate classes which you can use in your application. You can do this with
+ * @b qrsc application (qrsc is abbriviation for QRemoteSignal compiler).
+ *
+ * To generate a @e Sevice class (the one to be used in a server application)
+ * use the following command:
+ * @code
+ * qrsc --service --header exampleservice.h --source exampleservice.cpp example.xml
+ * @endcode
+ * it will create two files @b exampleservice.h and @b exampleservice.cpp
+ * with declaration and implementation of class describing your service.
+ *
+ * To generate a @e Client class (the one to be use in a client application)
+ * use the following command:
+ * @code
+ * qrsc --client --header exampleclient.h --source exampleclient.cpp example.xml
+ * @endcode
+ * it will create two files @b exampleclient.h and @b exampleclient.cpp with
+ * declaration and implementation of class describing interface for calling
+ * your service slots and reciving its signals from the client application.
+ *
+ * You can find more information about @b qrsc in its unix man page or by
+ * running
+ * @code
+ * qrsc --help
+ * @endcode
+ *
+ * @note If you have interface files for the version 0.6.0 of the QRemoteSignal
+ * library or older you should rename all @b method elements to @b slot or run
+ * @code
+ * qrsc --update old_file.xml new_file.xml
+ * @endcode
+ * to do it automatically. You still can use your old interface with the new
+ * version of @b qrsc utility but it will print warning message about outdated
+ * format of your service.
+ *
+ * @section generated_classes Using generated classes in your application
+ *
+ * Classes generated from XML interface description can be used to call slots
+ * and emit signals between different application.
+ *
+ * First of all you need to register instances of generated class in a
+ * qrs::ServicesManager class instance (see this class documentation for
+ * detales). After your service or client class is registered in manager
+ * you can connect signals and slots it has to you application classes
+ * signals and slots. Each time you call a slot in generated class
+ * services manager sends a message to another application to call
+ * corresponding signal in it.
+ *
+ * @subsection generated_service Using generated class in the server application.
+ *
+ * Here is public signals and slots of the service class generated from the
+ * example XML file you can find in the beggining of this page:
+ * @code
+ * namespace qrs {
+ *
+ *    class ExampleService: public AbsService {
+ *       ...
+ *       public slots:
+ *          void mySignal(const QString &str);
+ *       signals:
+ *          void mySlot(const quint32 &num);
+ *    };
+ *
+ * }
+ * @endcode
+ *
+ * Each time you server receives request to call slot @b mySlot instance of
+ * this class emits signal @b mySlot you can connect it to any slot in you
+ * application to provide meaningfull reaction on this event.
+ *
+ * Each time you want your server to emit remote signal @b mySignal you need
+ * to call @b mySignal slot and you server sends request to the client
+ * application to call necessary function.
+ *
+ * @subsection generated_client Using generated class in the client application.
+ *
+ * Here is public signals and slots of the client class generated from the
+ * example XML file you can find in the beggining of this page:
+ * @code
+ * namespace qrs {
+ *
+ *    class ExampleClient: public AbsService {
+ *       ...
+ *       public slots:
+ *          void mySlot(const quint32 &num);
+ *       signals:
+ *          void mySignal(const QString &str);
+ *    };
+ *
+ * }
+ * @endcode
+ *
+ * Each time you call slot @b mySlot you client application sends to your
+ * server application request to call corresponding function.
+ *
+ * Each time your server application sends signal @b mySignal to you client
+ * application signal @b mySignal is emitted. You can connect this signal to
+ * some slot in your class to provide meaningfull reaction on this event.
+ *
+ * @section build_systems How to invoke qrsc from different build systems
+ *
+ * You can invoke @b qrsc manually each time your XML service description is
+ * updated or new one added but it's better to do this from your build system
+ * scrits. Here are some tips how to run @b qrsc from different buildsystems.
+ *
+ * @subsection scons
+ *
+ * You can find scons tool to invoke @b qrsc from scons in the
+ * @e site_scons/site_tools/qrsc.py file of the library distribution. Just use
+ * it in you project.
+ *
+ * @note This tool depends on qt4 tool which you can find in this library
+ * distribution or download from the official project repository. See project
+ * home page: http://www.iua.upf.edu/~dgarcia/Codders/sconstools.html
+ *
+ * This tool provides two builders
+ * @li QRSService which creates services classes from XML service descritptions
+ * and returns list of C++ sources files.
+ * @li QRSClient which creates clients classes from XML service descritptions
+ * and returns list of C++ sources files.
+ *
+ * Here is example how to use them in your SConstruct:
+ * @code
+ * env = Environment()
+ * env.Tool('qt4')
+ * env.Tool('qrs')
+ *
+ * env.EnableQt4Modules(['QtCore'])
+ *
+ * ServerSources=['server.cpp']
+ * ServerSources += env.QRSService('service.xml')
+ *
+ * ClientSources=['client.cpp']
+ * ClientSources += env.QRSClient('service.xml')
+ *
+ * env.Program('server',ServerSources)
+ * env.Program('client',ClientSources)
+ * @endcode
+ *
+ * @subsection cmake
+ *
+ * This version of  QRemoteSignal library comes with CMake config file with
+ * macroses to invoke @b qrsc during build. This file is installed to the
+ * @c ${prefix_lib}/cmake/QRemoteSignal directory. If you haven't specified
+ * @b prefix_lib variable during building QRemoteSignal its value is
+ * @c ${prefix}/lib where @b ${prefix} is library installation file.
+ * 
+ * If you want to use QRemoteSignal library in a project which is using CMake
+ * as build system you can simply use find_package macro. After that two new
+ * macro will be available: @b qrs_wrap_client and @b qrs_wrap_service.
+ * 
+ * @li @b qrs_wrap_client(DEST_VAR SERVICES) macro add target which generates
+ * Client classes with @b qrsc for every file in the SERVICES list and then
+ * invokes Qt4 @b moc utility on each produced C++ header file. List of all
+ * generated C++ sources is added to the DEST_VAR output parameter.
+ * @li @b qrs_wrap_service(DEST_VAR SERVICES) macro add target which generates
+ * Service classes with @b qrsc for every file in the SERVICES list and then
+ * invokes Qt4 @b moc utility on each produced C++ header file. List of all
+ * generated C++ sources is added to the DEST_VAR output parameter.
+ * 
+ * Here is simple example of @b CMakeLists.txt file for project using
+ * QRemoteSignal library:
+ * @code
+ * # According to CMake documentation minimum cmake version which looks
+ * # for CMake config files in the ${prefix}/lib/cmake/${PackageName}*
+ * # dirictories is 2.6.3
+ * cmake_minimum_required(VERSION 2.6.3)
+ * project(CMakeExample)
+ *
+ * find_package(Qt4 4.5.0 COMPONENTS QtCore QtNetwork REQUIRED)
+ * find_package(QRemoteSignal REQUIRED)
+ * include(${QT_USE_FILE})
+ * include_directories(${QRemoteSignal_INCLUDE_DIR})
+ *
+ * set(SERVER_SRC server.cpp)
+ * set(CLIENT_SRC client.cpp)
+ * set(SERVICES service.xml)
+ * 
+ * qrs_wrap_service(SERVER_SERVICES_SRC ${SERVICES})
+ * qrs_wrap_client(CLIENT_SERVICES_SRC ${SERVICES})
+ * include_directories(${CMAKE_CURRENT_BINARY_DIR})
+ * 
+ * add_executable(server ${SERVER_SRC} ${SERVER_SERVICES_SRC})
+ * target_link_libraries(server ${QT_LIBRARIES} ${QRemoteSignal_LIBRARY})
+ *
+ * add_executable(client ${CLIENT_SRC} ${CLIENT_SERVICES_SRC})
+ * target_link_libraries(client ${QT_LIBRARIES} ${QRemoteSignal_LIBRARY})
+ * @endcode
+ *
+ * @subsection qmake
+ *
+ * This version of QRemoteSignal library comes with qmake custom feature file.
+ * You can find it in the library installation directory its name is
+ * @b qremotesignal.prf. First of all you need to enshure that the directory
+ * containig this file is searched by qmake for configuration features. The
+ * simpliest way to do it is to add this directory path to the @b QMAKEFEATURES
+ * envirunment variable. If scons was installed with @b prefix_qmake_feature=GLOBAL
+ * option then feature file is added to the standart Qt4 features search
+ * directory.
+ * 
+ * After that you can use this feature in you qmake
+ * projects. Use @b QRS_SERVICE_INTERFACES variable in you project file to
+ * specify which XML file should be used to generate servces classes. Use
+ * @b QRS_CLIENT_INTERFACES variable to specify which XML files should be
+ * used to generate client classes.
+ *
+ * Here is example of this feature ussage:
+ * @li server.pro
+ * @code
+ * TEMPLATE = app
+ * TARGET = server
+ *
+ * SOURCES = server.cpp
+ * QRS_SERVICE_INTERFACES = service.xml
+ *
+ * CONFIG += qremotesignal
+ * @endcode
+ * @li client.pro
+ * @code
+ * TEMPLATE = app
+ * TARGET = client
+ *
+ * SOURCES = client.cpp
+ * QRS_CLIENT_INTERFACES = service.xml
+ *
+ * CONFIG += qremotesignal
+ * @endcode
+ */

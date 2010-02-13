@@ -18,7 +18,7 @@
 #include "serializationexceptions.h"
 
 namespace qrs {
-    
+
     /**
      * @brief Abstrac tinterface for all remote call serializers.
      *

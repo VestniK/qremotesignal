@@ -1,0 +1,208 @@
+/// @example hello/services/hello.xml
+
+/// @example hello/server/main.cpp
+/// @example hello/server/server.h
+/// @example hello/server/server.cpp
+/// @example hello/server/connection.h
+/// @example hello/server/connection.cpp
+
+/// @example hello/client/main.cpp
+/// @example hello/client/client.h
+/// @example hello/client/client.cpp
+
+/**
+ * @page tutorial Tutorial
+ *
+ * This article provides step by step tutorial of creation client-server
+ * applications with the QRemoteSignal library. You can find compleate source
+ * code of the example application described here in the @e examples/hello
+ * directory of the libbrary source package.
+ *
+ * @section hello_service Application remote interface
+ *
+ * Lets create simple client-server application. The client can connect to the
+ * server and send a name. The server will send the string "Hello "+name in
+ * response on the message from client.
+ *
+ * First of all we need to create some services describing server remote
+ * interface. For our small server it will be enough to have only one service.
+ * Lets create XML file with the name @b hello.xml with the following content:
+ * @dontinclude hello/services/hello.xml
+ * @line service
+ * @skip slot
+ * @until /slot
+ * @skip signal
+ * @until service
+ * It contains one slot @b setName which allows our client to send a name to
+ * the server and one signal @b hello which allows our server to send greetings
+ * string to our client.
+ *
+ * Now we can generate C++ classes which we can use in our application (see
+ * @ref code_generation for details). We can do it with the following commands:
+ * @code
+ * qrsc --service --header helloservice.h --source helloservice.cpp hello.xml
+ * qrsc --client --header helloclient.h --source helloclient.cpp hello.xml
+ * @endcode
+ * Or we can write some build script which will invoke this commands from build
+ * system (some help on this topic you can find in @ref build_systems document).
+ *
+ * We will get 4 files:
+ * @li @b helloservice.h and @b helloservice.cpp which we will use in the
+ * server application.
+ * @li @b helloclient.h and @b helloclient.cpp which we will use in the
+ * client application.
+ *
+ * @section hello_server Server application
+ *
+ * Our server application will contain Server class which creates QTcpServer
+ * listening some port and processing new incomming connections. After new
+ * connection established it creates Connection class instance which will work
+ * with the socket. This instance will be deleted if socket is disconnected.
+ *
+ * Main function and Server class contain no QRemoteSignal specific code it's
+ * just usual QtNetwork library ussage. Here is the code:
+ * @li @link hello/server/main.cpp server/main.cpp @endlink
+ * @li @link hello/server/server.h server/server.h @endlink
+ * @li @link hello/server/server.cpp server/server.cpp @endlink
+ *
+ * All magick is done in the @b Connection class. First of all in its
+ * constructor we should create qrs::ServicesManager class instance. Then we
+ * can create @b HelloService class instance and register it in our services
+ * manager:
+ * @dontinclude hello/server/connection.cpp
+ * @skip new qrs::ServicesManager
+ * @until new qrs::HelloService
+ * Now @b mService instance also become a child of @b manager instance and will
+ * be deleted if @b manager is deleted. QRemoteSignal library actively uses Qt4
+ * memory management features to simplify memory management in you application.
+ * Constructor generated for the @b HelloService class which takes pointer to a
+ * qrs::ServicesManager class instance automatically registers newly created
+ * @b HelloService instace in the qrs::ServicesManager instance passed to it
+ * and set this manager instance to be its parent.
+ *
+ * Now we need to connect @b HelloService signals and slots to some signal and
+ * slots in our application to provide meaningfull reaction on incomming
+ * requests. For our small server it's enough to provide one slot which will
+ * be connected to @b HelloService::setName signal. This slot will call
+ * @b HelloService::hello slot with greetings string:
+ * @dontinclude hello/server/connection.cpp
+ * @skip Connection::onSetName
+ * @until }
+ *
+ * And in the @b Connection class constructor we need to connect @b setName
+ * signal to this slot right after @b HelloService instance creation:
+ * @dontinclude hello/server/connection.cpp
+ * @skip SIGNAL(setName
+ * @until SLOT(onSetName
+ *
+ * After that we need add socket to the list of devices used by @b manager for
+ * sending/receiving raw messages:
+ * @dontinclude hello/server/connection.cpp
+ * @skipline addDevice
+ *
+ * Lets take a look on compleate @b Connection class code:
+ * @li connection.h
+ * @include hello/server/connection.h
+ * @li connection.cpp
+ * @dontinclude hello/server/connection.cpp
+ * @skip #
+ * @until SLOT(onSetName
+ * @skip addDevice
+ * @until }
+ * @until }
+ *
+ * Server application is ready!
+ *
+ * @section hello_client Client application
+ *
+ * Our client application will be simple console application which takes two
+ * command line parameters: host to connect to and your name. It sends your
+ * name to the server, and waits for @b hello signal from the server. Once this
+ * signal is received it prints received string and stops.
+ *
+ * Lets create @b Client class which takes connected socket in constructor and
+ * creates qrs::ServicesManager using this socket to send/receive raw messages.
+ * Also this class will have @b onHello slot which will listen for a @b hello
+ * signal from the server. This class is similair to @b Connection class in the
+ * server. Here is its code:
+ * @li client.h
+ * @include hello/client/client.h
+ * @li client.cpp
+ * @include hello/client/client.cpp
+ *
+ * We have created qrs::ServicesManager instance, created @b HelloClient
+ * instance and registered it in manager, connected @b hello signal to slot
+ * providing meaningfull reaction on incoming message everything like in the
+ * @b Connection class of the server application.
+ *
+ * In our main function we will check command line arguments, connect to the
+ * server, create @b Client class instance and send the name to the server:
+ * @li main.cpp
+ * @dontinclude hello/client/main.cpp
+ * @skip #
+ * @until client(socket)
+ * @skipline setName
+ * @skip return
+ * @until }
+ *
+ * Now our client applicaion ready! Lets run the server and and try it:
+ * @code
+ * vestnik@vestnik-laptop:~/Development/QRemoteSignal/examples$ ./hello/client/client localhost VestniK
+ * "Hello VestniK"
+ * vestnik@vestnik-laptop:~/Development/QRemoteSignal/examples$
+ * @endcode
+ *
+ * @section extending_hello Extending example with more slots
+ *
+ * The most important thing I'm trying to implement in the QRemoteSignal
+ * library is simple extesibility of client server applications with new remote
+ * callable slots. Lets extend our application with one new function to see how
+ * simple it to do.
+ *
+ * It's a bit annoying to search your server in the processes list and kill.
+ * Lets add ability to shoutdown server application from the client (sure it's
+ * not secure but this is simple "hello world" example).
+ *
+ * First of all we need to add one more slot to the @b hello.xml file:
+ * @dontinclude hello/services/hello.xml
+ * @skipline quit
+ * It takes no parameters and just shoutdown the server.
+ *
+ * Now we need to regenerate @b HelloService and @b HelloClient classes and
+ * connect @b HelloService::quit signal to @b qApp->quit slot in the
+ * @b Connection class constructor. Lets add the following lines after
+ * @b HelloService instance creation:
+ * @dontinclude hello/server/connection.cpp
+ * @skip SIGNAL(quit
+ * @until qApp
+ *
+ * Server now provides support of remote shoutdown feature!
+ *
+ * Lets modify our client to use this feature. We will just replece this line
+ * in the main.cpp file of the client application:
+ * @dontinclude hello/client/main.cpp
+ * @skipline client.hello()->setName
+ * With this several lines:
+ * @dontinclude hello/client/main.cpp
+ * @skip if ( args[2] == "-q" )
+ * @until }
+ * @until }
+ * and that's all we have to do!
+ *
+ * @section files_list Full example sources
+ *
+ * Service:
+ * @li @link hello/services/hello.xml services/hello.xml @endlink
+ *
+ * Server:
+ * @li @link hello/server/main.cpp server/main.cpp @endlink
+ * @li @link hello/server/server.h server/server.h @endlink
+ * @li @link hello/server/server.cpp server/server.cpp @endlink
+ * @li @link hello/server/connection.h server/connection.h @endlink
+ * @li @link hello/server/connection.cpp server/connection.cpp @endlink
+ *
+ * Client:
+ * @li @link hello/client/main.cpp client/main.cpp @endlink
+ * @li @link hello/client/client.h client/client.h @endlink
+ * @li @link hello/client/client.cpp client/client.cpp @endlink
+ */

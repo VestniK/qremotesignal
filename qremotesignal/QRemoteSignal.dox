@@ -1,0 +1,7 @@
+/**
+ * @file QRemoteSignal
+ * @brief Public library header file containing all necessary classes
+ *
+ * Include this header file to automatically include all necessary internall
+ * header files.
+ */

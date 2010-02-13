@@ -88,37 +88,6 @@ namespace qrs {
          ServicesManager *mManager;
    };
 
-/**
- * @page services_concept Services conception
- *
- * Each signal or slot shared using QRemoteSignal library should belong to some
- * service. Service can have any number of signals and slots. Each service has
- * a name which should be unique.
- *
- * Service is a class derived from AbsService abstract class. You don't have to
- * create it manualy since it should be creaed by @b qrsc utility from XML
- * file with remote interface description. See @ref qrsc for more detailes.
- *
- * Each service class instance should be registered in ServicesManager class
- * instance and then you can connect its signal and slots to your application
- * classes signal and slots. @note You can't register several services with the
- * same name in one ServicesManager instance.
- *
- * When you calls a slot in a service class it generates Message with remote
- * call request and sends it using ServicesManager. And each time Services
- * manager recieves a message with request for remote call adressed to your
- * service corresponding service class emits the signal specified in the
- * request.
- *
- * Normally you have two services classes one to be used in a server applicatin
- * and another one is for client applicatin. Both of them are generated from
- * the same XML file. Each signal in one of tose two classes have corresponding
- * slot in another one class. Both signal and slot have the same name, same
- * parameters types and order. Those classes names beggins with service name
- * (which is the same for both services) and ends with @b Service for one class
- * and @b Client for another.
- */
-
 }
 
 #endif
