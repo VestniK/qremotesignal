@@ -32,7 +32,7 @@ tests.append( env.Program('RemoteSignalTests',Service+Client+['remotesignaltests
 tests.append( env.Program('ErrorTests',Service+['errortests.cpp']) )
 tests.append( env.Program('ConvertersTests',['converterstests.cpp']) )
 tests.append( env.Program('DeviceManagerTests',['devicemanagertests.cpp'],
-                          LIBS=['$LIBS','QrsInternals']) )
+                          LIBS=['QrsInternals','$LIBS']) )
 tests.append( env.Program('ServicesManagerTests',
                           Service+Client+['servicesmanagertests.cpp']) )
 

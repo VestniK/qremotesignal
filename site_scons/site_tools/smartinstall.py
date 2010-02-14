@@ -141,7 +141,7 @@ def install_qmake_feature(env,src,mode=res_mode):
    if inst_path == 'GLOBAL':
        try:
           cmd_line = '%s -query QMAKE_MKSPECS'%(env['QT4_QMAKE'])
-          inst_path = os.popen( cmd_line ).read().strip()
+          inst_path = os.path.join(os.popen( cmd_line ).read().strip(),'features')
        except KeyError:
           inst_path = get_default_qmake_feature_prefix(env)
           SCons.Warnings.warn(

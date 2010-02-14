@@ -1,6 +1,6 @@
-set(QRemoteSignal_INCLUDE_DIR %(prefix_inc)s)
-set(QRemoteSignal_LIBRARY %(prefix_lib)s/libQRemoteSignal.so)
-set(QRemoteSignal_QRSC_EXECUTABLE %(prefix_bin)s/qrsc)
+set(QRemoteSignal_INCLUDE_DIR "%(IncludesDirForCmake)s")
+set(QRemoteSignal_LIBRARY "%(LibraryPathForCmake)s")
+set(QRemoteSignal_QRSC_EXECUTABLE "%(QrscPathForCmake)s")
 
 macro(qrs_wrap_service output)
   foreach(it ${ARGN})

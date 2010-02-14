@@ -31,7 +31,19 @@ Headers = ['QRemoteSignal','absservice.h','baseconverters.h',
            'qdatastreamserializer.h']
 
 InternalsLib = env.StaticLibrary('QrsInternals',InternalsSources);
-lib = env.SharedLibrary('QRemoteSignal',Sources, LIBS=['$LIBS',InternalsLib])
+lib = env.SharedLibrary('QRemoteSignal',Sources, LIBS=[InternalsLib,'$LIBS'])
+
+# Ugly hack requiring more elegant fix
+env['IncludesDirForCmake'] = str(env['prefix_inc']).replace('\\','/')
+if env['PLATFORM'] == 'win32' or env['PLATFORM'] == 'cigwin':
+   env['LibraryPathForCmake'] = "%s/libQRemoteSignal.a"%str(env['prefix_lib']).replace('\\','/')
+else:
+   env['LibraryPathForCmake'] = "%s/libQRemoteSignal.so"%str(env['prefix_lib']).replace('\\','/')
+
+if env['PLATFORM'] == 'win32' or env['PLATFORM'] == 'cigwin':
+   env['QrscPathForCmake'] = "%s/qrsc.exe"%str(env['prefix_bin']).replace('\\','/')
+else:
+   env['QrscPathForCmake'] = "%s/qrsc"%str(env['prefix_bin']).replace('\\','/')
 
 Pc = env.Config('QRemoteSignal.pc.in')
 CMakeConfig = env.Config('QRemoteSignalConfig.cmake.in')
