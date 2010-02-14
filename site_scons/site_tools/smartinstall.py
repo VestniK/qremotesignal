@@ -36,7 +36,7 @@ def get_default_lib_prefix(env):
    return os.path.join(env['prefix'],'lib')
 
 def get_default_inc_prefix(env):
-   return os.path.join(env['prefix'],'include',env['package'])
+   return os.path.join(env['prefix'],'include',str(env['package']).lower())
 
 def get_default_pc_prefix(env):
    return os.path.join(env['prefix'],'lib','pkgconfig')

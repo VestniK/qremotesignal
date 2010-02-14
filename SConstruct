@@ -5,10 +5,10 @@ from builders import *
 
 BaseEnv=Environment(tools=[],ENV=os.environ)
 BaseEnv['package'] = 'QRemoteSignal'
-BaseEnv['MAJOR_VERSION'] = '0'
-BaseEnv['MINOR_VERSION'] = '7'
+BaseEnv['MAJOR_VERSION'] = '1'
+BaseEnv['MINOR_VERSION'] = '0'
 BaseEnv['PATCH_VERSION'] = '0'
-BaseEnv['TWEAK_VERSION'] = time.strftime('%Y%m%dsvn',time.gmtime())
+BaseEnv['TWEAK_VERSION'] = None
 
 BaseEnv['BUILDERS']['Config'] = Builder(action=Config,suffix='',src_suffix='.in')
 

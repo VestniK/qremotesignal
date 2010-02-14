@@ -1,4 +1,4 @@
-SVN Version
+2010-02-14 Version 1.0.0
 	* Added singleton factory for serializers. Explicit serializer
 	creation is no more required.
 	* Serializer test suit skips test instead of fail it if serializer
