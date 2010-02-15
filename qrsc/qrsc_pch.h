@@ -11,6 +11,5 @@
 #include <cstdio>
 
 #include <QtCore>
-#include <QtXml>
 #include <QtXmlPatterns>
 
