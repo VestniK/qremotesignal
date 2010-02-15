@@ -79,6 +79,7 @@ def install_lib(env,src):
    else:
       for node in src:
          if os.path.splitext( str(node) )[1] == env['SHLIBSUFFIX']:
+            print str(node)
             item_name = '%s.%s.%s.%s'%(
                os.path.basename(str(node)),
                env['MAJOR_VERSION'],
@@ -92,10 +93,19 @@ def install_lib(env,src):
             item_link = os.path.basename(str(node))
             item_path = os.path.join(env['prefix_lib'],item_name)
             item = env.InstallAs(item_path,node)
+            print str(item[0])
             for it in item: env.AddPostAction(it , Chmod(str(it),bin_mode) )
             res.extend( item )
-            res.append( env.Command(os.path.join(env['prefix_lib'],item_major_link),os.path.join(env['prefix_lib'],item_name),'ln -s ${SOURCE.file} ${TARGET.file}',chdir=env['prefix_lib']) )
-            res.append( env.Command(os.path.join(env['prefix_lib'],item_link),os.path.join(env['prefix_lib'],item_name),'ln -s ${SOURCE.file} ${TARGET.file}',chdir=env['prefix_lib']) )
+            res.append( env.Command(os.path.join(env['prefix_lib'],item_major_link),
+                                    item[0],
+                                    'ln -s ${SOURCE.file} ${TARGET.file}',
+                                    chdir=os.path.dirname(str(item[0]))
+                                   ) )
+            res.append( env.Command(os.path.join(env['prefix_lib'],item_link),
+                                    item[0],
+                                    'ln -s ${SOURCE.file} ${TARGET.file}',
+                                    chdir=os.path.dirname(str(item[0]))
+                                   ) )
          else:
             item = env.Install(env['prefix_lib'],node)
             for it in item: env.AddPostAction(it , Chmod(str(it),res_mode) )

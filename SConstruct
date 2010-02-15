@@ -8,7 +8,7 @@ BaseEnv['package'] = 'QRemoteSignal'
 BaseEnv['MAJOR_VERSION'] = '1'
 BaseEnv['MINOR_VERSION'] = '0'
 BaseEnv['PATCH_VERSION'] = '0'
-BaseEnv['TWEAK_VERSION'] = None
+BaseEnv['TWEAK_VERSION'] = time.strftime('%Y%m%dsvn',time.gmtime())
 
 BaseEnv['BUILDERS']['Config'] = Builder(action=Config,suffix='',src_suffix='.in')
 
