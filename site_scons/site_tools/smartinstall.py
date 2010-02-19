@@ -5,6 +5,7 @@ from SCons.Action import Action
 from SCons.Builder import Builder
 from SCons.Node.FS import File
 from SCons.Script import COMMAND_LINE_TARGETS
+from SCons.Script import GetOption
 import SCons.Defaults
 import SCons.Tool
 
@@ -79,7 +80,6 @@ def install_lib(env,src):
    else:
       for node in src:
          if os.path.splitext( str(node) )[1] == env['SHLIBSUFFIX']:
-            print str(node)
             item_name = '%s.%s.%s.%s'%(
                os.path.basename(str(node)),
                env['MAJOR_VERSION'],
@@ -93,18 +93,18 @@ def install_lib(env,src):
             item_link = os.path.basename(str(node))
             item_path = os.path.join(env['prefix_lib'],item_name)
             item = env.InstallAs(item_path,node)
-            print str(item[0])
+            real_inst_path = os.path.dirname( str(item[0]) )
             for it in item: env.AddPostAction(it , Chmod(str(it),bin_mode) )
             res.extend( item )
-            res.append( env.Command(os.path.join(env['prefix_lib'],item_major_link),
+            res.extend( env.Command(os.path.join(real_inst_path,item_major_link),
                                     item[0],
                                     'ln -s ${SOURCE.file} ${TARGET.file}',
-                                    chdir=os.path.dirname(str(item[0]))
+                                    chdir=real_inst_path
                                    ) )
-            res.append( env.Command(os.path.join(env['prefix_lib'],item_link),
+            res.extend( env.Command(os.path.join(real_inst_path,item_link),
                                     item[0],
                                     'ln -s ${SOURCE.file} ${TARGET.file}',
-                                    chdir=os.path.dirname(str(item[0]))
+                                    chdir=real_inst_path
                                    ) )
          else:
             item = env.Install(env['prefix_lib'],node)

@@ -190,17 +190,17 @@
  * macroses to invoke @b qrsc during build. This file is installed to the
  * @c ${prefix_lib}/cmake/QRemoteSignal directory. If you haven't specified
  * @b prefix_lib variable during building QRemoteSignal its value is
- * @c ${prefix}/lib where @b ${prefix} is library installation file.
+ * @c ${prefix}/lib where @b ${prefix} is library installation path.
  * 
  * If you want to use QRemoteSignal library in a project which is using CMake
  * as build system you can simply use find_package macro. After that two new
- * macro will be available: @b qrs_wrap_client and @b qrs_wrap_service.
+ * macroses will be available: @b qrs_wrap_client and @b qrs_wrap_service.
  * 
- * @li @b qrs_wrap_client(DEST_VAR SERVICES) macro add target which generates
+ * @li @b qrs_wrap_client(DEST_VAR SERVICES) macro adds target which generates
  * Client classes with @b qrsc for every file in the SERVICES list and then
  * invokes Qt4 @b moc utility on each produced C++ header file. List of all
  * generated C++ sources is added to the DEST_VAR output parameter.
- * @li @b qrs_wrap_service(DEST_VAR SERVICES) macro add target which generates
+ * @li @b qrs_wrap_service(DEST_VAR SERVICES) macro adds target which generates
  * Service classes with @b qrsc for every file in the SERVICES list and then
  * invokes Qt4 @b moc utility on each produced C++ header file. List of all
  * generated C++ sources is added to the DEST_VAR output parameter.
@@ -241,7 +241,7 @@
  * @b qremotesignal.prf. First of all you need to enshure that the directory
  * containig this file is searched by qmake for configuration features. The
  * simpliest way to do it is to add this directory path to the @b QMAKEFEATURES
- * envirunment variable. If scons was installed with @b prefix_qmake_feature=GLOBAL
+ * envirunment variable. If library was installed with @b prefix_qmake_feature=GLOBAL
  * option then feature file is added to the standart Qt4 features search
  * directory.
  * 

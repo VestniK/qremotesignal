@@ -19,9 +19,7 @@ env.Append(CPPFLAGS=Split('-include qremotesignal_pch.h'))
 
 Sources = ['baseconverters.cpp','servicesmanager.cpp',
            'jsonserializer.cpp','message.cpp',
-           'qdatastreamserializer.cpp']
-
-InternalsSources = ['devicemanager.cpp']
+           'qdatastreamserializer.cpp','devicemanager.cpp']
 
 Headers = ['QRemoteSignal','absservice.h','baseconverters.h',
            'servicesmanager.h','baseexception.h',
@@ -30,8 +28,7 @@ Headers = ['QRemoteSignal','absservice.h','baseconverters.h',
            'qrsexport.h','globalserializer.h',
            'qdatastreamserializer.h']
 
-InternalsLib = env.StaticLibrary('QrsInternals',InternalsSources);
-lib = env.SharedLibrary('QRemoteSignal',Sources, LIBS=[InternalsLib,'$LIBS'])
+lib = env.SharedLibrary('QRemoteSignal',Sources)
 
 # Ugly hack requiring more elegant fix
 env['IncludesDirForCmake'] = str(env['prefix_inc']).replace('\\','/')
@@ -59,4 +56,3 @@ env.InstallQMakeFeature(qmake_feature)
 env.InstallCMakeConfig(CMakeConfig)
 
 BaseEnv['QRemoteSignalLib'] = lib
-BaseEnv['QrsInternalsLib'] = InternalsLib

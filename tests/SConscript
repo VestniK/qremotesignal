@@ -16,7 +16,6 @@ if  not (ARGUMENTS.get('nocheck') or GetOption('clean') or GetOption('help') ) :
 
 env.Prepend(LIBPATH='#tests')
 env.Depends( '#tests', env.Install('.',env['QRemoteSignalLib']) )
-env.Depends( '#tests', env.Install('.',env['QrsInternalsLib']) )
 env.Prepend( LIBS='QRemoteSignal' )
 env.Append(LINKFLAGS='-Wl,-rpath=\\$$ORIGIN')
 
@@ -31,8 +30,7 @@ tests = []
 tests.append( env.Program('RemoteSignalTests',Service+Client+['remotesignaltests.cpp']) )
 tests.append( env.Program('ErrorTests',Service+['errortests.cpp']) )
 tests.append( env.Program('ConvertersTests',['converterstests.cpp']) )
-tests.append( env.Program('DeviceManagerTests',['devicemanagertests.cpp'],
-                          LIBS=['QrsInternals','$LIBS']) )
+tests.append( env.Program('DeviceManagerTests',['devicemanagertests.cpp']) )
 tests.append( env.Program('ServicesManagerTests',
                           Service+Client+['servicesmanagertests.cpp']) )
 
