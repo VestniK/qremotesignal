@@ -63,7 +63,7 @@ namespace qrs {
      * Then you need to create instance of @b SerializersTestSuit class passing
      * to its constructor instance of you serializer class and run tests using
      *  @b QTest::qExec function. You can also use @b addDeserializationErrorTestCase
-     * method of the @b SerializersTestSuit class to test hat your serializer
+     * method of the @b SerializersTestSuit class to test that your serializer
      * throws MessageParsingException on attempt to deserialize some specific
      * raw messages.
      *

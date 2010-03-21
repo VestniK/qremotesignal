@@ -47,7 +47,7 @@ AbsMessageSerializer *ServicesManager::mDefaultSerializer = 0;
  * This function is thread safe.
  * 
  * @note Changing default serializer with this function will not affect earlier
- * create instances.
+ * created instances of the ServicesManager class.
  */
 void ServicesManager::setDefaultSerializer(AbsMessageSerializer *serializer) {
     static QMutex mutex;
@@ -151,7 +151,7 @@ void ServicesManager::receive(const QByteArray& msg) {
       err.setType(Message::Error);
       err.setErrorType(e.mErrorType);
       err.setError( e.reason() );
-      emit d->mSerializer->serialize(err);
+      emit send( d->mSerializer->serialize(err) );
       emit clientError(this, err.errorType(), err.error());
       return;
    }
