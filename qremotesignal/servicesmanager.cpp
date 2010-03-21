@@ -11,8 +11,9 @@
 #include <QtCore/QSharedPointer>
 #include <QtCore/QMap>
 #include <QtCore/QList>
-#include <QtCore/QMutex>
-#include <QtCore/QMutexLocker>
+#include <QtCore/QReadWriteLock>
+#include <QtCore/QReadLocker>
+#include <QtCore/QWriteLocker>
 
 #include "qdatastreamserializer.h"
 #include "devicemanager.h"
@@ -39,6 +40,7 @@ namespace qrs {
 using namespace qrs;
 
 AbsMessageSerializer *ServicesManager::mDefaultSerializer = 0;
+QReadWriteLock defaultSerializerLocker;
 
 /**
  * This static method allows you to set serializer which will be used by all
@@ -50,8 +52,7 @@ AbsMessageSerializer *ServicesManager::mDefaultSerializer = 0;
  * created instances of the ServicesManager class.
  */
 void ServicesManager::setDefaultSerializer(AbsMessageSerializer *serializer) {
-    static QMutex mutex;
-    QMutexLocker locker(&mutex);
+    QWriteLocker locker(&defaultSerializerLocker);
     mDefaultSerializer = serializer;
 }
 
@@ -65,6 +66,7 @@ void ServicesManager::setDefaultSerializer(AbsMessageSerializer *serializer) {
  * @sa ServicesManager::setDefaultSerializer
  */
 AbsMessageSerializer *ServicesManager::defaultSerializer() {
+    QReadLocker locker(&defaultSerializerLocker);
     return mDefaultSerializer;
 }
 
@@ -81,8 +83,7 @@ AbsMessageSerializer *ServicesManager::defaultSerializer() {
 ServicesManager::ServicesManager(QObject *parent):
       QObject(parent),
       d(new internals::ServicesManagerPrivate) {
-   static QMutex mutex;
-   QMutexLocker locker(&mutex);
+   QReadLocker locker(&defaultSerializerLocker);
    if ( mDefaultSerializer == 0 ) {
        d->mSerializer = qDataStreamSerializer_4_5;
    } else {
