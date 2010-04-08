@@ -26,10 +26,18 @@ QDataStream &operator>>(QDataStream &stream, Message &msg) {
     qint8 type,errorType;
     QString error,service,method;
     QVariantMap params;
-    stream >> type >> errorType;
+    stream >> type;
+    if ( stream.status() != QDataStream::Ok ) return stream;
+    stream >> errorType;
+    if ( stream.status() != QDataStream::Ok ) return stream;
     stream >> error;
-    stream >> service >> method;
+    if ( stream.status() != QDataStream::Ok ) return stream;
+    stream >> service;
+    if ( stream.status() != QDataStream::Ok ) return stream;
+    stream >> method;
+    if ( stream.status() != QDataStream::Ok ) return stream;
     stream >> params;
+    if ( stream.status() != QDataStream::Ok ) return stream;
     msg.setType((Message::MsgType)type);
     msg.setErrorType((Message::ErrorType)errorType);
     msg.setError(error);
@@ -48,6 +56,19 @@ MessageAP QDataStreamSerializer::deserialize(const QByteArray& msg)
     if ( version() != 0 ) stream.setVersion( version() );
     Message *message = new Message;
     stream >> *message;
+    if ( stream.status() != QDataStream::Ok ) {
+        QString desc;
+        switch( stream.status() ) {
+            case QDataStream::ReadPastEnd :
+                desc = "Message incompleate";
+                break;
+            case QDataStream::ReadCorruptData :
+                desc = "Message corrupted";
+                break;
+        }
+        MessageParsingException err(desc,Message::ProtocolError);
+        throw(err);
+    }
     return MessageAP(message);
 }
 

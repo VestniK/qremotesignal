@@ -44,11 +44,10 @@ namespace qrs {
     * qrs::ServiceManager manager = new ServicesManager();
     * qrs::MyService service = new qrs::MyService(manager);
     * @endcode
-    * in this case ServicesManager takes ownership on the service and you don't
-    * have to warry about deleting service instance.
+    * in this case ServicesManager takes ownership on the service instance.
     *
-    * If this approach is not acceptable for your needs for some reasons you
-    * can register your service with registerService function.
+    * If this approach is not suits your needs for some reason you can register
+    * your service with ServicesManager::registerService function.
     *
     * There are two ways how to send and receive messages:
     * @li Using addDevice function to set device to be used to send/receive

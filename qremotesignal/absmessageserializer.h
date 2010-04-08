@@ -90,13 +90,13 @@ namespace qrs {
                 QObject(parent),
                 mVersion(version) {};
             virtual ~AbsMessageSerializer() {};
-            
+
             /**
              * @return version of the protocol used by this serializer
              * instance.
              */
             int version() const {return mVersion;}
-            
+
             /**
              * @brief Serealize Message
              *
