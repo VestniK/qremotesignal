@@ -32,7 +32,7 @@
  *
  * First of all we need to create some services describing server remote
  * interface. For our small server it will be enough to have only one service.
- * Lets create XML file with the name @b hello.xml with the following content:
+ * Lets create XML file with the name @b hello.xml and the following content:
  * @dontinclude hello/services/hello.xml
  * @line service
  * @skip slot
@@ -43,8 +43,8 @@
  * the server and one signal @b hello which allows our server to send greetings
  * string to our client.
  *
- * Now we can generate C++ classes which we can use in our application (see
- * @ref code_generation for details). We can do it with the following commands:
+ * Now we can generate C++ classes which can be used in our application (see
+ * @ref code_generation for details). To do this run the following commands:
  * @code
  * qrsc --service --header helloservice.h --source helloservice.cpp hello.xml
  * qrsc --client --header helloclient.h --source helloclient.cpp hello.xml
@@ -66,7 +66,7 @@
  * with the socket. This instance will be deleted if socket is disconnected.
  *
  * Main function and Server class contain no QRemoteSignal specific code it's
- * just usual QtNetwork library ussage. Here is the code:
+ * just normal QtNetwork library ussage. Here is the code:
  * @li @link hello/server/main.cpp server/main.cpp @endlink
  * @li @link hello/server/server.h server/server.h @endlink
  * @li @link hello/server/server.cpp server/server.cpp @endlink
@@ -83,8 +83,8 @@
  * memory management features to simplify memory management in you application.
  * Constructor generated for the @b HelloService class which takes pointer to a
  * qrs::ServicesManager class instance automatically registers newly created
- * @b HelloService instace in the qrs::ServicesManager instance passed to it
- * and set this manager instance to be its parent.
+ * @b HelloService instace in the qrs::ServicesManager given and set this
+ * manager instance to be its parent.
  *
  * Now we need to connect @b HelloService signals and slots to some signal and
  * slots in our application to provide meaningfull reaction on incomming

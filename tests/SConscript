@@ -1,3 +1,4 @@
+# -*- coding: utf-8 -*-
 from checkers import *
 
 Import('BaseEnv')
@@ -39,7 +40,7 @@ tests += SConscript('serializers/SConscript',exports='env')
 
 env['BUILDERS']['QTest'] = Builder(action=('$SOURCE -xml -o $TARGET'),
                                    src_suffix='',
-                                   suffix='.xml')
+                                   suffix='.report.xml')
 
 for test in tests:
    report = env.QTest(test)

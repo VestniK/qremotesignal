@@ -82,7 +82,7 @@ namespace qrs {
           * @return pointer to currently used serializer
           */
          AbsMessageSerializer *serializer();
-         
+
          static void setDefaultSerializer(AbsMessageSerializer *serializer);
          static AbsMessageSerializer *defaultSerializer();
 
@@ -90,6 +90,14 @@ namespace qrs {
          void addDevice(QIODevice* dev);
          /// @brief Returns number of the devices used to send/receive messages
          int devicesCount() const;
+         /// @brief Returns device used for cimunication by the index
+         QIODevice *deviceAt(int i);
+         /**
+          * @brief Removes device at given position from list of devices used
+          * for sending receiving messages.
+          */
+         void removeDevice(int i);
+         QIODevice *takeDeviceAt(int i);
       public slots:
          void receive(const QByteArray& msg);
       signals:
@@ -113,7 +121,7 @@ namespace qrs {
       private:
          Q_DISABLE_COPY(ServicesManager);
          internals::ServicesManagerPrivate *const d;
-         
+
          static AbsMessageSerializer *mDefaultSerializer;
       private slots:
          /// @brief Called if device added by addDevice method is deleted

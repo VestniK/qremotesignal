@@ -121,6 +121,38 @@ int ServicesManager::devicesCount() const {
 }
 
 /**
+ * @param i index of the device you want to get. It should be between 0 and
+ * devicesCount()
+ */
+QIODevice *ServicesManager::deviceAt(int i) {
+    return d->mDevManagers[i]->device();
+}
+
+/**
+ * This function will not delete device itself it will just make this instance
+ * of ServicesManager stop to use it for sending receiving messages. Device
+ * even will not be closed.
+ *
+ * @param i index of the device you want to remove. It should be between 0 and
+ * devicesCount()
+ */
+void ServicesManager::removeDevice(int i) {
+    d->mDevManagers.removeAt(i);
+}
+
+/**
+ * @brief Removes device at the given index and returns pointer to it.
+ *
+ * This function only removes device from the list of devices to send receive
+ * messages. Device is not deleted or closed.
+ * 
+ * @param i index of the device to remove.
+ */
+QIODevice *ServicesManager::takeDeviceAt(int i) {
+    return d->mDevManagers.takeAt(i)->device();
+}
+
+/**
  * @brief Process received raw message
  *
  * This slot can be connected to some signal of class produces raw messages. It

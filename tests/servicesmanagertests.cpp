@@ -42,10 +42,81 @@ class ServicesManagerTests:public QObject {
       }
 
       void testAddDevice() {
-         QBuffer dev;
-         QCOMPARE(mManager->devicesCount() , 0);
-         mManager->addDevice(&dev);
-         QCOMPARE(mManager->devicesCount() , 1);
+          QBuffer dev;
+          QCOMPARE(mManager->devicesCount() , 0);
+          mManager->addDevice(&dev);
+          QCOMPARE(mManager->devicesCount() , 1);
+      }
+
+      void testDeviceAt() {
+          QBuffer dev1;
+          QBuffer dev2;
+          QCOMPARE(mManager->devicesCount() , 0);
+          mManager->addDevice(&dev1);
+          mManager->addDevice(&dev2);
+          QCOMPARE(mManager->devicesCount() , 2);
+          QCOMPARE(mManager->deviceAt(0), &dev1);
+          QCOMPARE(mManager->deviceAt(1), &dev2);
+      }
+
+      void testRemoveDevice() {
+          QBuffer dev1;
+          QBuffer dev2;
+          dev1.open(QIODevice::ReadWrite);
+          dev2.open(QIODevice::ReadWrite);
+
+          QCOMPARE(mManager->devicesCount() , 0);
+          mManager->addDevice(&dev1);
+          mManager->addDevice(&dev2);
+          QCOMPARE(mManager->devicesCount() , 2);
+          mManager->removeDevice(0);
+          QCOMPARE(mManager->devicesCount() , 1);
+          // checking that device 1 is now not used for sending messages
+          QVERIFY( dev1.data().isEmpty() );
+          QVERIFY( dev2.data().isEmpty() );
+          mService->boolSignal(true);
+          QVERIFY( dev1.data().isEmpty() );
+          QVERIFY( !dev2.data().isEmpty() );
+
+          dev2.buffer().clear();
+          mManager->removeDevice(0);
+          QCOMPARE(mManager->devicesCount() , 0);
+          // checking that both devices are not used to send messages
+          QVERIFY( dev1.data().isEmpty() );
+          QVERIFY( dev2.data().isEmpty() );
+          mService->boolSignal(true);
+          QVERIFY( dev1.data().isEmpty() );
+          QVERIFY( dev2.data().isEmpty() );
+      }
+
+      void testTakeDeviceAt() {
+          QBuffer dev1;
+          QBuffer dev2;
+          dev1.open(QIODevice::ReadWrite);
+          dev2.open(QIODevice::ReadWrite);
+
+          QCOMPARE(mManager->devicesCount() , 0);
+          mManager->addDevice(&dev1);
+          mManager->addDevice(&dev2);
+          QCOMPARE(mManager->devicesCount() , 2);
+          QCOMPARE(mManager->takeDeviceAt(0), &dev1);
+          QCOMPARE(mManager->devicesCount() , 1);
+          // checking that device 1 is now not used for sending messages
+          QVERIFY( dev1.data().isEmpty() );
+          QVERIFY( dev2.data().isEmpty() );
+          mService->boolSignal(true);
+          QVERIFY( dev1.data().isEmpty() );
+          QVERIFY( !dev2.data().isEmpty() );
+
+          dev2.buffer().clear();
+          QCOMPARE(mManager->takeDeviceAt(0), &dev2 );
+          QCOMPARE(mManager->devicesCount() , 0);
+          // checking that both devices are not used to send messages
+          QVERIFY( dev1.data().isEmpty() );
+          QVERIFY( dev2.data().isEmpty() );
+          mService->boolSignal(true);
+          QVERIFY( dev1.data().isEmpty() );
+          QVERIFY( dev2.data().isEmpty() );
       }
 
       void testGetRegisteredService() {
