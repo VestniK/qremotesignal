@@ -1,6 +1,6 @@
 /**
- * @file xic.cpp
- * @brief Entry point for XML interface compiler
+ * @file qrsc.cpp
+ * @brief Entry point for QRemoteSignal interface compiler
  *
  * @author VestniK (Sergey N.Vidyuk) sir.vestnik@gmail.com
  * @date 29 Jul 2009
@@ -28,6 +28,12 @@ const QString UPDATE_OPTION = "update";
 int main(int argc, char *argv[]) {
    // Application Info
    QCoreApplication app(argc,argv);
+
+   QString locale = QLocale::system().name();
+   QTranslator translator;
+   translator.load(QString("qrsc_") + locale,TRANSLATIONS_DIR);
+   app.installTranslator(&translator);
+
    ArgvParser conf;
    app.setApplicationName(conf.tr("QRemoteSignal interface compiler"));
    app.setApplicationVersion(VERSION);

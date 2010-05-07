@@ -36,3 +36,12 @@ if env['GenerateMan'] :
    manual = env.Command('qrsc.1',BaseEnv['QRSC'],'help2man -N -o $TARGET $SOURCE')
    NoClean(manual)
    env.InstallMan('qrsc.1',1)
+
+#localization related part
+#TranslationsLocales = ['ru']
+
+#Translations = []
+#for locale in TranslationsLocales :
+#   translation = env.Ts('qrsc_%s.ts'%locale, Sources)
+#   env.NoClean(translation)
+#   Translations.append(translation)

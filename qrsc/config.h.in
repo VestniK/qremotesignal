@@ -1,1 +1,4 @@
 #define VERSION "%(VERSION)s"
+
+const QString TRANSLATIONS_DIR = "%(prefix_data)s/i18n";
+
