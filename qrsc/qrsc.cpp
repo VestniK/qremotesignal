@@ -7,9 +7,12 @@
  */
 #include <cstdio>
 
+#include <QtCore/QtGlobal>
+#include <QtCore/QDebug>
 #include <QtCore/QTextStream>
 #include <QtCore/QString>
 #include <QtCore/QCoreApplication>
+#include <QtCore/QTranslator>
 
 #include "interfacedocument.h"
 #include "interfacecompiler.h"
@@ -31,43 +34,44 @@ int main(int argc, char *argv[]) {
 
    QString locale = QLocale::system().name();
    QTranslator translator;
-   translator.load(QString("qrsc_") + locale,TRANSLATIONS_DIR);
+   QString i18nFile = QString("qrsc.%1").arg(locale);
+   translator.load(i18nFile,TRANSLATIONS_DIR);
    app.installTranslator(&translator);
 
    ArgvParser conf;
-   app.setApplicationName(conf.tr("QRemoteSignal interface compiler"));
+   app.setApplicationName(ArgvParser::tr("QRemoteSignal interface compiler"));
    app.setApplicationVersion(VERSION);
    QTextStream out(stdout,QIODevice::WriteOnly);
    QTextStream err(stderr,QIODevice::WriteOnly);
    // Command line options configuration
-   conf.setAppDescription(conf.tr(
+   conf.setAppDescription(ArgvParser::tr(
        "QRemoteSignal interface compiler. Creates client or service source "
        "files from interface XML description. Only one of the --%1 or --%2 "
        " flags should be specified but not both.").arg(SERVICE_FLAG).arg(CLIENT_FLAG)
    );
-   conf.addUsageDescription(conf.tr("--%1|--%2 [OPTIONS] INTERFACE")
+   conf.addUsageDescription(ArgvParser::tr("--%1|--%2 [OPTIONS] INTERFACE")
                                 .arg(SERVICE_FLAG)
                                 .arg(CLIENT_FLAG));
-   conf.addUsageDescription(conf.tr("--%1 SOURCE DEST")
+   conf.addUsageDescription(ArgvParser::tr("--%1 SOURCE DEST")
                                 .arg(UPDATE_OPTION));
-   conf.addFlag(HELP_FLAG,conf.tr("Print this help and exit."),'h');
-   conf.addFlag(VERSION_FLAG,conf.tr("Print version information and exit."),'v');
-   conf.addFlag(QT_VERSION_FLAG,conf.tr("Print Qt version information and exit."));
+   conf.addFlag(HELP_FLAG,ArgvParser::tr("Print this help and exit."),'h');
+   conf.addFlag(VERSION_FLAG,ArgvParser::tr("Print version information and exit."),'v');
+   conf.addFlag(QT_VERSION_FLAG,ArgvParser::tr("Print Qt version information and exit."));
 
-   conf.addFlag(SERVICE_FLAG,conf.tr("Create service class."),'s');
-   conf.addFlag(CLIENT_FLAG,conf.tr("Create client class."),'c');
+   conf.addFlag(SERVICE_FLAG,ArgvParser::tr("Create service class."),'s');
+   conf.addFlag(CLIENT_FLAG,ArgvParser::tr("Create client class."),'c');
    conf.addOption(UPDATE_OPTION,
-                  conf.tr("SOURCE DEST"),
-                  conf.tr("Update interface file of the format used by the "
+                  ArgvParser::tr("SOURCE DEST"),
+                  ArgvParser::tr("Update interface file of the format used by the "
                           "library version 0.6.0 and earlier to the current "
                           "version of the interface description file format."),
                   'u');
    conf.addOption(HEADER_OPTION,
-                  conf.tr("DEST_HEADER"),
-                  conf.tr("Specify output header file."));
+                  ArgvParser::tr("DEST_HEADER"),
+                  ArgvParser::tr("Specify output header file."));
    conf.addOption(SOURCE_OPTION,
-                  conf.tr("DEST_CPP"),
-                  conf.tr("Specify output C++ source file."));
+                  ArgvParser::tr("DEST_CPP"),
+                  ArgvParser::tr("Specify output C++ source file."));
    if ( ! conf.parse() ) {
       err << conf.errorMessage() << endl;
       out << conf.helpStr();
@@ -89,9 +93,9 @@ int main(int argc, char *argv[]) {
 
     if ( conf.arguments().isEmpty() ) {
         if ( conf.options()[UPDATE_OPTION].isEmpty() ) {
-            err << conf.tr("Error: Input file not specified!") << endl;
+            err << ArgvParser::tr("Error: Input file not specified!") << endl;
         } else {
-            err << conf.tr("Error: Destination file not specified!") << endl;
+            err << ArgvParser::tr("Error: Destination file not specified!") << endl;
         }
         out << conf.helpStr();
         return 1;
@@ -119,7 +123,7 @@ int main(int argc, char *argv[]) {
    QString header = conf.options()[HEADER_OPTION];
    QString source = conf.options()[SOURCE_OPTION];
    if ( conf.flags()[SERVICE_FLAG] && conf.flags()[CLIENT_FLAG] ) {
-      err << conf.tr("You should specify --%1 or --%2 flag but not both!")
+      err << ArgvParser::tr("You should specify --%1 or --%2 flag but not both!")
                  .arg(SERVICE_FLAG).arg(CLIENT_FLAG) << endl;
       return 1;
    }
@@ -131,11 +135,11 @@ int main(int argc, char *argv[]) {
          inputDoc.setServiceSource(source);
       }
       if ( !compiler.compileServiceHeader() ) {
-         err << app.tr("Failed to compile the interface!") << endl;
+         err << QCoreApplication::tr("Failed to compile the interface!") << endl;
          return 1;
       }
       if ( !compiler.compileServiceSource() ) {
-         err << app.tr("Failed to compile the interface!") << endl;
+         err << QCoreApplication::tr("Failed to compile the interface!") << endl;
          return 1;
       }
    } else if ( conf.flags()[CLIENT_FLAG] ) {
@@ -146,15 +150,15 @@ int main(int argc, char *argv[]) {
          inputDoc.setClientSource(source);
       }
       if ( !compiler.compileClientHeader() ) {
-         err << app.tr("Failed to compile the interface!") << endl;
+         err << QCoreApplication::tr("Failed to compile the interface!") << endl;
          return 1;
       }
       if ( !compiler.compileClientSource() ) {
-         err << app.tr("Failed to compile the interface!") << endl;
+         err << QCoreApplication::tr("Failed to compile the interface!") << endl;
          return 1;
       }
    } else {
-      err << app.tr("You should specify --%1 or --%2 flag!")
+      err << QCoreApplication::tr("You should specify --%1 or --%2 flag!")
                 .arg(SERVICE_FLAG)
                 .arg(CLIENT_FLAG) << endl;
       return 1;

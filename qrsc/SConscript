@@ -38,10 +38,11 @@ if env['GenerateMan'] :
    env.InstallMan('qrsc.1',1)
 
 #localization related part
-#TranslationsLocales = ['ru']
+TranslationsLocales = ['ru']
 
-#Translations = []
-#for locale in TranslationsLocales :
-#   translation = env.Ts('qrsc_%s.ts'%locale, Sources)
-#   env.NoClean(translation)
-#   Translations.append(translation)
+for locale in TranslationsLocales :
+   translation = env.Ts('qrsc.%s.ts'%locale, Sources)
+   env.NoClean(translation)
+   env.Precious(translation)
+   qm = env.Qm(translation)
+   env.InstallData('i18n',qm)
