@@ -112,7 +112,7 @@
     <message>
         <location filename="argvparser.cpp" line="89"/>
         <source>  or:  </source>
-        <translation type="unfinished">     или:     </translation>
+        <translation>     или:     </translation>
     </message>
     <message>
         <location filename="argvparser.cpp" line="98"/>
