@@ -1,7 +1,7 @@
 /**
  * @page services_concept Services conception
  *
- * Each signal or slot shared using QRemoteSignal library should belong to some
+ * Each signal or slot shared with QRemoteSignal library should belong to some
  * service. Service can have any number of signals and slots. Each service has
  * a name which should be unique.
  *
@@ -15,7 +15,7 @@
  * same name in one ServicesManager instance.
  *
  * When you calls a slot in a service class it generates Message with remote
- * call request and sends it using ServicesManager. And each time Services
+ * call request and sends it using ServicesManager. Each time Services
  * manager recieves a message with request for remote call adressed to your
  * service corresponding service class emits the signal specified in the
  * request.
