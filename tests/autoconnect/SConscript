@@ -1,0 +1,10 @@
+# -*- coding: utf-8 -*-
+Import('env')
+
+Sources = ['autoconnecttests.cpp']
+Sources += env.QRSService('autoconnect.xml')
+Sources += env.QRSClient('autoconnect.xml')
+
+customtypestests = env.Program('#tests/AutoconnectTests',Sources)
+
+Return('customtypestests')

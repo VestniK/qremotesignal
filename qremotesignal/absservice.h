@@ -84,6 +84,22 @@ namespace qrs {
           */
          const ServicesManager* manager() const {return mManager;}
 
+         /**
+          * This function tries to connect as much signals and slots of a
+          * service to slots and signals of the target object given as
+          * parameter as possible. It connects each signal to slot with exactly
+          * the same name and normalized signature.
+          * 
+          * @note This methods connects only signals and slots of a service
+          * class itself without taking into account parent classes. At the
+          * same time it searches through all signals and slots available in
+          * the target object including parent classes signals and slots.
+          * 
+          * @return true if all of the signals and slots of a service are
+          * connected to some signals and slots in the target objects.
+          */
+         bool autoconnect(QObject *target);
+
       private:
          ServicesManager *mManager;
    };

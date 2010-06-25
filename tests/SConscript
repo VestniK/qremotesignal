@@ -36,6 +36,9 @@ tests.append( env.Program('ServicesManagerTests',
                           Service+Client+['servicesmanagertests.cpp']) )
 
 tests.append( SConscript('customtypestest/SConscript',exports='env') )
+tests.append( SConscript('autoconnect/SConscript',exports='env') )
+# The next SConscript returns list of test programs so I'm using '+='
+# instead of append
 tests += SConscript('serializers/SConscript',exports='env')
 
 env['BUILDERS']['QTest'] = Builder(action=('$SOURCE -xml -o $TARGET'),

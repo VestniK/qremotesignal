@@ -1,3 +1,4 @@
+# -*- coding: utf-8 -*-
 import os
 
 Import('BaseEnv')
@@ -19,7 +20,8 @@ env.Append(CPPFLAGS=Split('-include qremotesignal_pch.h'))
 
 Sources = ['baseconverters.cpp','servicesmanager.cpp',
            'jsonserializer.cpp','message.cpp',
-           'qdatastreamserializer.cpp','devicemanager.cpp']
+           'qdatastreamserializer.cpp','devicemanager.cpp',
+           'absservice.cpp']
 
 Headers = ['QRemoteSignal','absservice.h','baseconverters.h',
            'servicesmanager.h','baseexception.h',

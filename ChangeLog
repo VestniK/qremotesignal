@@ -4,6 +4,7 @@ SVN Version
 	* Added ability to get/remove device from the list of devices used for
 	sending/receiving raw messages by ServicesManager class.
 	* Added Russian localization to the qrsc utility.
+	* Added qrs::AbsService::autoconnect function.
 
 2010-02-14 Version 1.0.0
 	* Added singleton factory for serializers. Explicit serializer

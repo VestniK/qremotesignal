@@ -1,0 +1,9 @@
+<service name="Autoconnect">
+    <signal name="emptySig"/>
+    <signal name="intSig">
+        <param name="num" type="quint16"/>
+    </signal>
+    <slot name="listSlot">
+        <param name="list" type="QList&lt;QString&gt;"/>
+    </slot>
+</service>
