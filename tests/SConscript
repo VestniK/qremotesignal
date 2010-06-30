@@ -19,6 +19,7 @@ env.Prepend(LIBPATH='#tests')
 env.Depends( '#tests', env.Install('.',env['QRemoteSignalLib']) )
 env.Prepend( LIBS='QRemoteSignal' )
 if env['PLATFORM'] == 'posix': env.Append(LINKFLAGS='-Wl,-rpath=\\$$ORIGIN')
+if env['PLATFORM'] == 'win32' or env['PLATFORM'] == 'cygwin': env.Prepend( LIBS=env['QrsInternalsLib'] )
 
 env['Gch'] = env.Gch('tests_pch.h')[0]
 env.NoClean(env['Gch'])

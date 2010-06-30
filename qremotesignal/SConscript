@@ -39,7 +39,7 @@ if env['PLATFORM'] == 'win32' or env['PLATFORM'] == 'cigwin':
 else:
    env['LibraryPathForCmake'] = "%s/libQRemoteSignal.so"%str(env['prefix_lib']).replace('\\','/')
 
-if env['PLATFORM'] == 'win32' or env['PLATFORM'] == 'cigwin':
+if env['PLATFORM'] == 'win32' or env['PLATFORM'] == 'cygwin':
    env['QrscPathForCmake'] = "%s/qrsc.exe"%str(env['prefix_bin']).replace('\\','/')
 else:
    env['QrscPathForCmake'] = "%s/qrsc"%str(env['prefix_bin']).replace('\\','/')
@@ -58,3 +58,9 @@ env.InstallQMakeFeature(qmake_feature)
 env.InstallCMakeConfig(CMakeConfig)
 
 BaseEnv['QRemoteSignalLib'] = lib
+
+# I need to build static library on windows since some unit tests require access to the library
+# internal functions and classes which are not exported when building windows dll.
+if env['PLATFORM'] == 'win32' or env['PLATFORM'] == 'cygwin':
+   InternalSources=['devicemanager.cpp']
+   BaseEnv['QrsInternalsLib'] = env.StaticLibrary('QrsInternals',InternalSources)
