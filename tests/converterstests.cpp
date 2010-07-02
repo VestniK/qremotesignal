@@ -9,6 +9,8 @@
 
 #include <limits>
 
+#include <QtCore/QtGlobal>
+
 #include <QtCore/QObject>
 #include <QtCore/QChar>
 #include <QtCore/QString>
@@ -266,29 +268,23 @@ class ConvertersTests: public QObject {
       void testInvalidConvertToInteger() {
          QFETCH(QVariant,arg);
 
-         char charRes;
-         QVERIFY( !qrs::getArgValue(arg,charRes) );
-         signed char scharRes;
-         QVERIFY( !qrs::getArgValue(arg,scharRes) );
-         unsigned char ucharRes;
-         QVERIFY( !qrs::getArgValue(arg,ucharRes) );
-         short shortRes;
-         QVERIFY( !qrs::getArgValue(arg,shortRes) );
-         unsigned short ushortRes;
-         QVERIFY( !qrs::getArgValue(arg,ushortRes) );
-         int intRes;
-         QVERIFY( !qrs::getArgValue(arg,intRes) );
-         unsigned unsignedRes;
-         QVERIFY( !qrs::getArgValue(arg,unsignedRes) );
-         long longRes;
-         QVERIFY( !qrs::getArgValue(arg,longRes) );
-         unsigned long ulongRes;
-         QVERIFY( !qrs::getArgValue(arg,ulongRes) );
-         long long longlongRes;
-         QVERIFY( !qrs::getArgValue(arg,longlongRes) );
-         unsigned long long ulonglongRes;
+         quint8 uint8;
+         QVERIFY( !qrs::getArgValue(arg,uint8) );
+         qint8 int8;
+         QVERIFY( !qrs::getArgValue(arg,int8) );
+         quint16 uint16;
+         QVERIFY( !qrs::getArgValue(arg,uint16) );
+         qint16 int16;
+         QVERIFY( !qrs::getArgValue(arg,int16) );
+         quint32 uint32;
+         QVERIFY( !qrs::getArgValue(arg,uint32) );
+         qint32 int32;
+         QVERIFY( !qrs::getArgValue(arg,int32) );
+         quint64 uint64;
          QEXPECT_FAIL("out of range","All ok this check should fail",Continue);
-         QVERIFY( !qrs::getArgValue(arg,ulonglongRes) );
+         QVERIFY( !qrs::getArgValue(arg,uint64) );
+         qint64 int64;
+         QVERIFY( !qrs::getArgValue(arg,int64) );
       }
 
       // bool
