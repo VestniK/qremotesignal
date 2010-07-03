@@ -1,3 +1,5 @@
+SVN Version
+
 2010-07-03 Version 1.1.0
 	* Fixed some threadsafty issues in the ServicesManager class.
 	* Fixed error message sending issue.
