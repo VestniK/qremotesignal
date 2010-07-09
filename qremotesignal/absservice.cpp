@@ -26,11 +26,22 @@ bool AbsService::autoconnect(QObject *target) {
             int pairIndx = targetMetaObject->indexOfSlot(nsignature);
             if (pairIndx == -1) {
                 res = false;
+                qWarning("qrs::AbsService::autoconnect: failed to find pair for the signal %s::%s",
+                         serviceMetaObject->className(),
+                         method.signature());
                 continue;
             }
             QMetaMethod pair = targetMetaObject->method(pairIndx);
 #if (QT_VERSION >= QT_VERSION_CHECK(4,8,0))
-            connect(this,method,target,pair);
+            if (!connect(this,method,target,pair)) {
+                res = false;
+                qWarning("qrs::AbsService::autoconnect: failed to connect %s::%s to %s::%s",
+                         serviceMetaObject->className(),
+                         method.signature(),
+                         targetMetaObject->className(),
+                         pair.signature());
+                continue;
+            }
 #else
             // Some kluges which relies on Qt4 SIGNAL and SLOT macro implementation
             QByteArray signal;
@@ -43,17 +54,36 @@ bool AbsService::autoconnect(QObject *target) {
             slot.append((char)(QSLOT_CODE + '0'));
             slot.append(pair.signature());
 
-            connect(this,signal.constData(), target,slot.constData());
+            if (!connect(this,signal.constData(), target,slot.constData())) {
+                res = false;
+                qWarning("qrs::AbsService::autoconnect: failed to connect %s::%s to %s::%s",
+                         serviceMetaObject->className(),
+                         method.signature(),
+                         targetMetaObject->className(),
+                        pair.signature());
+                continue;
+            }
 #endif
         } else if ( method.methodType() == QMetaMethod::Slot ) {
             int pairIndx = targetMetaObject->indexOfSignal(nsignature);
             if (pairIndx == -1) {
                 res = false;
+                qWarning("qrs::AbsService::autoconnect: failed to find pair for the slot %s::%s",
+                         serviceMetaObject->className(),
+                         method.signature());
                 continue;
             }
             QMetaMethod pair = targetMetaObject->method(pairIndx);
 #if (QT_VERSION >= QT_VERSION_CHECK(4,8,0))
-            connect(target,pair,this,method);
+            if (!connect(target,pair,this,method)){
+                res = false;
+                qWarning("qrs::AbsService::autoconnect: failed to connect %s::%s to %s::%s",
+                         targetMetaObject->className(),
+                         pair.signature(),
+                         serviceMetaObject->className(),
+                         method.signature());
+                continue;
+            }
 #else
             // Some kluges which relies on Qt4 SIGNAL and SLOT macro implementation
             QByteArray signal;
@@ -66,7 +96,15 @@ bool AbsService::autoconnect(QObject *target) {
             slot.append((char)(QSLOT_CODE + '0'));
             slot.append(method.signature());
 
-            connect(target,signal.constData(), this,slot.constData());
+            if (!connect(target,signal.constData(), this,slot.constData())) {
+                res = false;
+                qWarning("qrs::AbsService::autoconnect: failed to connect %s::%s to %s::%s",
+                         targetMetaObject->className(),
+                         pair.signature(),
+                         serviceMetaObject->className(),
+                         method.signature());
+                continue;
+            }
 #endif
         } else {
             // Nothing to do with other types of methods
