@@ -129,7 +129,7 @@ namespace qrs {
              */
             virtual MessageAP deserialize(const QByteArray& msg)
                 throw(MessageParsingException) = 0;
-            
+
         private:
             /**
              * @brief Serializer version.
