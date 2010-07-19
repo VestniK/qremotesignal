@@ -29,9 +29,9 @@ namespace qrs {
      * created by the deserialize function from raw messagege returned by the
      * serialize function should be equal to the initial instance.
      *
-     * When implementing this two function keep thread safety in mind. The best
-     * way is implement this function to be reentrant. In this case you can use
-     * one single global instance of your serializer in all threads.
+     * When implementing this two function keep thread safety in mind.In this
+     * case you can use one single global instance of your serializer in all
+     * threads.
      *
      * There is a simple template class which helps to create and manage single
      * global instance of serializer: qrs::GlobalSerializer. Serializers which
