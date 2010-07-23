@@ -4,4 +4,10 @@
    <slot name="sendCustomStruct">
       <param type="CustomStruct" name="val"/>
    </slot>
+   <slot name="sendList">
+      <param name="arg" type="QList&lt;CustomStruct&gt;"/>
+   </slot>
+   <slot name="sendMap">
+      <param name="arg" type="QMap&lt;QString,CustomStruct&gt;"/>
+   </slot>
 </service>

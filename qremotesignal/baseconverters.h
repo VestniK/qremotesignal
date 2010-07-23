@@ -74,63 +74,19 @@ namespace qrs {
    QRS_EXPORT QVariant createArg(const QString& val);
    QRS_EXPORT bool getArgValue(const QVariant& arg, QString& res);
 
-   // ----- QList -----
+   // Template convertors forward declaratin
    template<typename T>
-   QVariant createArg(const QList<T>& val) {
-      QVariantList res;
-      foreach(T t, val) {
-         res.append( createArg(t) );
-      }
-      return QVariant(res);
-   }
+   QVariant createArg(const QList<T>& val);
 
    template<typename T>
-   bool getArgValue(const QVariant& arg, QList<T>& res) {
-      if( !arg.canConvert<QVariantList>() ){
-         return false;
-      }
-      QVariantList argContent = arg.toList();
-      res.clear();
-      foreach(QVariant item, argContent) {
-         T t;
-         if ( ! getArgValue(item, t) ) {
-            return false;
-         }
-         res.append(t);
-      }
-      return true;
-   }
-
-   // ----- QMap -----
-   template<typename T>
-   QVariant createArg(const QMap<QString,T>& val) {
-      QVariantMap res;
-      typename QMap<QString,T>::const_iterator indx = val.begin();
-      while ( indx != val.end() ) {
-         res[indx.key()] = createArg(indx.value());
-         indx++;
-      }
-      return QVariant(res);
-   }
+   bool getArgValue(const QVariant& arg, QList<T>& res);
 
    template<typename T>
-   bool getArgValue(const QVariant& arg, QMap<QString,T>& res) {
-      if( !arg.canConvert<QVariantMap>() ){
-         return false;
-      }
-      QVariantMap argContent = arg.toMap();
-      res.clear();
-      QVariantMap::const_iterator indx = argContent.begin();
-      while ( indx != argContent.end() ) {
-         T t;
-         if ( !getArgValue(indx.value() , t) ) {
-            return false;
-         }
-         res[indx.key()] = t;
-         indx++;
-      }
-      return true;
-   }
+   QVariant createArg(const QMap<QString,T>& val);
+
+   template<typename T>
+   bool getArgValue(const QVariant& arg, QMap<QString,T>& res);
+
 }
 
 #endif

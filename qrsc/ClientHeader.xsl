@@ -19,9 +19,12 @@ run qrsc once again.
 #include &lt;QtCore/QObject&gt;
 #include &lt;QtCore/QString&gt;
 
-#include &lt;QRemoteSignal&gt;
+#include &lt;baseconverters.h&gt;
 <xsl:for-each select="//customTypes">
 #include "<xsl:value-of select="./@header"/>"</xsl:for-each>
+
+#include &lt;templateconverters.h&gt;
+#include &lt;QRemoteSignal&gt;
 
 namespace qrs {
 

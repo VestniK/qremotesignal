@@ -6,6 +6,7 @@
  * @date 17 Sep 2009
  */
 #include "baseconverters.h"
+#include "templateconverters.h"
 
 #include <limits>
 

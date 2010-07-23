@@ -15,6 +15,7 @@
 #include <QtTest/QtTest>
 
 #include "QRemoteSignal"
+#include "templateconverters.h"
 
 class SerializersTestSuit:public QObject{
    Q_OBJECT
