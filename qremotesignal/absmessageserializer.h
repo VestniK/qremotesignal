@@ -29,9 +29,17 @@ namespace qrs {
      * created by the deserialize function from raw messagege returned by the
      * serialize function should be equal to the initial instance.
      *
-     * When implementing this two function keep thread safety in mind.In this
+     * When implementing this two function keep thread safety in mind. In this
      * case you can use one single global instance of your serializer in all
-     * threads.
+     * threads. By default all ServicesMessages use the same serializer
+     * instance. If you have implemented serializer which is not thread safe
+     * and want to use it in multythreaded application you should follow some
+     * rules in order to have no thread-safety issues:
+     * @li Use different ServicesManager instances in different threads.
+     * @li Do not set non-thread-safe serializer as default with
+     * ServicesManager::setDefaultSerializer() function.
+     * @li Ensure that serializers from different threads use different
+     * instances of non-thread-safe serializer.
      *
      * There is a simple template class which helps to create and manage single
      * global instance of serializer: qrs::GlobalSerializer. Serializers which
