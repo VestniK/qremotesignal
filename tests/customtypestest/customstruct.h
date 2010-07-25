@@ -11,13 +11,21 @@
 #ifndef _CustomStruct_H
 #define _CustomStruct_H
 
-#include <QtCore>
+#include <QtCore/QtGlobal>
+#include <QtCore/QString>
+#include <QtCore/QList>
 
 struct CustomStruct {
-   int mInt;
+   qint32 mInt;
    QString mString;
 };
 
 Q_DECLARE_METATYPE(CustomStruct);
+
+struct ListStruct
+{
+    QString name;
+    QList<quint16> list;
+};
 
 #endif

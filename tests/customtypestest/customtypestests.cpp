@@ -30,6 +30,15 @@ class CustomTypesTests: public QObject {
       void receiveMap(const QMap<QString,CustomStruct> &val) {
           mLastReceivedMap = val;
       }
+
+      void receiveListStruct(const ListStruct &val) {
+          mLastListStructReceived.name = val.name;
+          mLastListStructReceived.list = val.list;
+      }
+
+      void receiveListStructList(const QList<ListStruct> &val) {
+          mLastListStructReceivedList = val;
+      }
    private slots:
       /// Prepare test environment
       void initTestCase() {
@@ -45,6 +54,8 @@ class CustomTypesTests: public QObject {
          qRegisterMetaType<CustomStruct>("CustomStruct");
          qRegisterMetaType< QList<CustomStruct> >("QList<CustomStruct>");
          qRegisterMetaType< QMap<QString,CustomStruct> >("QMap<QString,CustomStruct>");
+         qRegisterMetaType<ListStruct>("ListStruct");
+         qRegisterMetaType< QList<ListStruct> >("QList<ListStruct>");
       }
       /// Cleanup test environment
       void cleanupTestCase() {
@@ -126,6 +137,56 @@ class CustomTypesTests: public QObject {
           }
       }
 
+      void sendListStructTest() {
+           QSignalSpy spy(mService, SIGNAL(sendListStruct(ListStruct)));
+           connect(mService,SIGNAL(sendListStruct(ListStruct)),
+                   this,SLOT(receiveListStruct(ListStruct)));
+
+           ListStruct sent;
+           sent.name = "test";
+           sent.list.append(1);
+           sent.list.append(2);
+           sent.list.append(3);
+           mClient->sendListStruct(sent);
+
+           QCOMPARE( spy.count(), 1 );
+
+           QCOMPARE(mLastListStructReceived.name, sent.name);
+           QCOMPARE(mLastListStructReceived.list.size(), sent.list.size());
+           for (int i = 0; i < sent.list.size(); i++) {
+               QCOMPARE(mLastListStructReceived.list[i], sent.list[i]);
+           }
+      }
+
+      void sendListStructListTest() {
+          QSignalSpy spy(mService, SIGNAL(sendListStructList(QList<ListStruct>)));
+          connect(mService,SIGNAL(sendListStructList(QList<ListStruct>)),
+                  this,SLOT(receiveListStructList(QList<ListStruct>)));
+
+          QList<ListStruct> sent;
+          ListStruct val;
+          val.name = "test1";
+          val.list.append(1);
+          val.list.append(2);
+          sent.append(val);
+          val.name = "test2";
+          val.list.append(3);
+          val.list.append(4);
+          sent.append(val);
+          mClient->sendListStructList(sent);
+
+          QCOMPARE( spy.count(), 1 );
+
+          QCOMPARE(mLastListStructReceivedList.size(), sent.size());
+          for (int j = 0; j < sent.size(); j++) {
+              QCOMPARE(mLastListStructReceivedList[j].name, sent[j].name);
+              QCOMPARE(mLastListStructReceivedList[j].list.size(), sent[j].list.size());
+              for (int i = 0; i < sent[j].list.size(); i++) {
+                  QCOMPARE(mLastListStructReceivedList[j].list[i], sent[j].list[i]);
+              }
+          }
+      }
+
    private:
       qrs::ServicesManager *mServerManager,*mClientManager;
       qrs::CustomTypeService *mService;
@@ -134,6 +195,8 @@ class CustomTypesTests: public QObject {
       CustomStruct mLastReceived;
       QList<CustomStruct> mLastReceivedList;
       QMap<QString,CustomStruct> mLastReceivedMap;
+      ListStruct mLastListStructReceived;
+      QList<ListStruct> mLastListStructReceivedList;
 };
 
 #include "customtypestests.moc"

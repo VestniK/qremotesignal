@@ -9,6 +9,9 @@
 
 #include <QRemoteSignal>
 
+// The next header requirement shows that API backward compatibility is broken.
+#include <templateconverters.h>
+
 namespace qrs {
 
    QVariant createArg(const CustomStruct& val) {
@@ -34,6 +37,33 @@ namespace qrs {
          return false;
       }
       return true;
+   }
+
+   QVariant createArg(const ListStruct &val)
+   {
+       QVariantMap res;
+       res["name"] = QVariant(val.name);
+       res["list"] = createArg(val.list);
+       return QVariant(res);
+   }
+
+   bool getArgValue(const QVariant& arg, ListStruct& res)
+   {
+       QVariantMap argMap = arg.toMap();
+       if ( argMap.isEmpty() ) {
+           return false;
+       }
+       if ( argMap.contains("name") && argMap.contains("list") ) {
+           if ( !getArgValue( argMap["name"], res.name ) ) {
+               return false;
+           }
+           if ( !getArgValue( argMap["list"], res.list ) ) {
+               return false;
+           }
+       } else {
+           return false;
+       }
+       return true;
    }
 
 }
