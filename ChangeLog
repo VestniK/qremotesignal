@@ -3,6 +3,7 @@ SVN Version
 	order to simplify debugging.
 	* Added posibility to send/receive lists and maps of custom types.
 	This change brings some API backward compatibility issues.
+	* Added Russian man page for the qrsc utility.
 
 2010-07-03 Version 1.1.0
 	* Fixed some threadsafty issues in the ServicesManager class.
