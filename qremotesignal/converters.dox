@@ -1,6 +1,8 @@
 /**
  * @page converters Types that can be used as remote callable slots arguments
  *
+ * @section builtInConverters Supported types.
+ *
  * QRemoteSignal library allows you to use a lot of types as remote callable
  * signals or slots parameters. Currently this types are available out of box:
  * @li Any integer types
@@ -9,6 +11,8 @@
  * @li @b QString
  * @li @b QList<T> where T is any supported type
  * @li @b QMap<QString,T> where T is any supported type
+ *
+ * @section customCnverters Custom converters.
  *
  * Also the library provides you a simple way to add support of your custom
  * type. All you need to do is create two functions:
@@ -28,4 +32,19 @@
  * description file using
  * @code <customtypes header="filename.h"/> @endcode
  * element.
+ *
+ * If you are going to use JsonSerializer it's not enough to use Qt facilities
+ * of converting some type to QVariant and back. Resulting QVariant should be
+ * a tree of maps lists and simple primitive types. QRemoteSignal provides its
+ * own functions to convert arbitrary type to QVariant in order to be able to
+ * decompose complex C++ type into such tree. During implementation of
+ * convertors for custom C++ type one should use existing converters.
+ *
+ * @note Version 1.2.0 brakes API backward compatibility. If custom type
+ * contains list or map and you want to use template convertors bundled with
+ * this library you need to include additional header templateconverters.h
+ * explicitly. It's better to include it to the source file with converters
+ * implementation instead of header file with converter definitions. All custom
+ * types which convertors are defined after this file is included can't be used
+ * in template converters (converters for list and maps of other types).
  */

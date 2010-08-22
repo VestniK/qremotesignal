@@ -9,13 +9,15 @@
  * create it manualy since it should be creaed by @b qrsc utility from XML
  * file with remote interface description. See @ref qrsc for more detailes.
  *
- * Each service class instance should be registered in ServicesManager class
- * instance and then you can connect its signal and slots to your application
- * classes signal and slots. @note You can't register several services with the
- * same name in one ServicesManager instance.
+ * Each service class instance should be registered in qrs::ServicesManager
+ * class instance and then you can connect its signal and slots to your
+ * application classes signal and slots.
  *
- * When you calls a slot in a service class it generates Message with remote
- * call request and sends it using ServicesManager. Each time Services
+ * @note You can't register several services with the same name in one
+ * qrs::ServicesManager instance.
+ *
+ * When you calls a slot in a service class it generates message with remote
+ * call request and sends it using qrs::ServicesManager. Each time services
  * manager recieves a message with request for remote call adressed to your
  * service corresponding service class emits the signal specified in the
  * request.

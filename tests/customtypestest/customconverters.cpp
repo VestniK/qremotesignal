@@ -9,7 +9,8 @@
 
 #include <QRemoteSignal>
 
-// The next header requirement shows that API backward compatibility is broken.
+// The next header requirement shows that API backward compatibility is
+// broken in the version 1.2.0.
 #include <templateconverters.h>
 
 namespace qrs {

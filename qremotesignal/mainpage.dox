@@ -6,6 +6,9 @@
  * @li @ref qrsc
  * @li @ref converters
  *
+ * @note Version 1.2.0 brings one API bakward compatibility issue. Read section
+ * @ref customCnverters in the article @ref converters for more details.
+ *
  * @section changelog Changelog
  *
  * @verbinclude ChangeLog
