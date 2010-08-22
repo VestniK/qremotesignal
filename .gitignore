@@ -25,7 +25,7 @@ posix_build.conf
 /qrsc/qrsc_pch.h.gch
 /qrsc/qrsc
 /qrsc/config.h
-/qrsc/qrsc.1
+/qrsc/man
 
 
 /tests/*Tests

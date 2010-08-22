@@ -136,10 +136,13 @@ def install_data(env,dest_subdir,src,mode=res_mode):
    for obj in res: env.AddPostAction(obj , Chmod(str(obj),mode) )
    return res
 
-def install_man(env,src,section,mode=res_mode):
+def install_man(env,src,section,lang=None,mode=res_mode):
    if not 'install' in COMMAND_LINE_TARGETS: return None
    if env['PLATFORM'] == 'win32': return None
-   res = env.Install(os.path.join(env['prefix_man'],'man%s'%section),src)
+   real_man_prefix = env['prefix_man']
+   if lang != None :
+      real_man_prefix = os.path.join(real_man_prefix,str(lang))
+   res = env.Install(os.path.join(real_man_prefix,'man%s'%section),src)
    env.Alias('install',res)
    for obj in res: env.AddPostAction(obj , Chmod(str(obj),mode) )
    return res

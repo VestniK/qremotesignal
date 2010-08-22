@@ -33,9 +33,12 @@ BaseEnv['QRSC'] = env.Program('qrsc',Sources)[0]
 env.InstallProgram(BaseEnv['QRSC'])
 
 if env['GenerateMan'] :
-   manual = env.Command('qrsc.1',BaseEnv['QRSC'],'help2man -N -o $TARGET $SOURCE')
+   manual = env.Command('man/qrsc.1',BaseEnv['QRSC'],'help2man -N -o $TARGET $SOURCE')
    NoClean(manual)
-   env.InstallMan('qrsc.1',1)
+   env.InstallMan(manual,1)
+   manual_ru = env.Command('man/ru/qrsc.1',BaseEnv['QRSC'],'help2man -L ru_RU.UTF-8 -N -o $TARGET $SOURCE')
+   NoClean(manual_ru)
+   env.InstallMan(manual_ru,1,'ru')
 
 #localization related part
 TranslationsLocales = ['ru']

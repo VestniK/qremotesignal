@@ -11,7 +11,7 @@
     <message>
         <location filename="qrsc.cpp" line="47"/>
         <source>QRemoteSignal interface compiler. Creates client or service source files from interface XML description. Only one of the --%1 or --%2  flags should be specified but not both.</source>
-        <translation>Компилятор интерфейсов библиотеки QRemoteSignal. Генерирует исходные файлы сервиса и коиента на основе XML описания интерфейса. Только один из параметров --%1 или --%2 должен быть указан, но не оба.</translation>
+        <translation>Компилятор интерфейсов библиотеки QRemoteSignal. Генерирует исходные файлы сервиса и клиента на основе XML описания интерфейса. Один из параметров --%1 или --%2 должен быть указан, но не оба.</translation>
     </message>
     <message>
         <location filename="qrsc.cpp" line="52"/>
