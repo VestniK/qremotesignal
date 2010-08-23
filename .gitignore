@@ -13,7 +13,7 @@ qrc_*
 .sconsign.dblite
 Doxyfile
 Makefile
-/*.log
+*.log
 init.env
 posix_build.conf
 
