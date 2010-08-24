@@ -1,4 +1,4 @@
-SVN Version
+2010-08-23 Version 1.2.0
 	* Added warning messages to the qrs::AbsService::autoconnect() in
 	order to simplify debugging.
 	* Added posibility to send/receive lists and maps of custom types.
