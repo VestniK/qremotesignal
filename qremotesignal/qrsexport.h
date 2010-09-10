@@ -10,7 +10,7 @@
 
 #include <QtCore/QtGlobal>
 
-#ifdef BUILD_QRS_SHARED_LIB
+#ifdef QRS_SHARED
 // we are building shared library
 #define QRS_EXPORT Q_DECL_EXPORT
 #else

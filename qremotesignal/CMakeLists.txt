@@ -4,7 +4,7 @@ set(QT_DONT_USE_QTGUI True)
 include(${QT_USE_FILE})
 
 if(${BUILD_SHARED_LIBS} STREQUAL True)
-  add_definitions("-DBUILD_QRS_SHARED_LIB")
+  add_definitions("-DQRS_SHARED")
 endif(${BUILD_SHARED_LIBS} STREQUAL True)
 
 set(SRC
@@ -25,21 +25,29 @@ qt4_wrap_cpp(MOC_SRC ${MOC_HDRS})
 
 add_library(QRemoteSignal ${SRC} ${MOC_SRC})
 target_link_libraries(QRemoteSignal ${QT_LIBRARIES} ${QJSON_LIBRARY})
+set_target_properties(QRemoteSignal PROPERTIES
+  VERSION   "${QRS_MAJOR_VERSION}.${QRS_MINOR_VERSION}"
+  SOVERSION "${QRS_MAJOR_VERSION}"
+)
 
-#install(TARGETS QRemoteSignal)
-#install(FILES 
-#  QRemoteSignal
-#  absservice.h
-#  baseconverters.h
-#  servicesmanager.h
-#  baseexception.h
-#  message.h
-#  absmessageserializer.h
-#  jsonserializer.h
-#  serializationexceptions.h
-#  qrsexport.h
-#  globalserializer.h
-#  qdatastreamserializer.h
-#  templateconverters.h
-#DESTINATION "include/qremotesignal" COMPONENT Devel
-#)
+install(TARGETS QRemoteSignal
+  RUNTIME DESTINATION ${BIN_INSTALL_DIR} PERMISSIONS WORLD_EXECUTE
+  LIBRARY DESTINATION ${LIB_INSTALL_DIR} PERMISSIONS WORLD_EXECUTE
+  ARCHIVE DESTINATION ${LIB_INSTALL_DIR}
+)
+install(FILES 
+  QRemoteSignal
+  absservice.h
+  baseconverters.h
+  servicesmanager.h
+  baseexception.h
+  message.h
+  absmessageserializer.h
+  jsonserializer.h
+  serializationexceptions.h
+  qrsexport.h
+  globalserializer.h
+  qdatastreamserializer.h
+  templateconverters.h
+DESTINATION "${INCLUDE_INSTALL_DIR}/${PROJECT_NAME}" COMPONENT Devel
+)

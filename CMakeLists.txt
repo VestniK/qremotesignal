@@ -14,7 +14,12 @@ include_directories(${QJSON_INCLUDE_DIRS})
 
 set(CMAKE_RUNTIME_OUTPUT_DIRECTORY ${CMAKE_CURRENT_BINARY_DIR}/bin)
 
-set(BUILD_SHARED_LIBS True CACHE BOOL "Specify to build shared or static library in result.")
+# Configurable values
+set(BUILD_SHARED_LIBS True CACHE BOOL "Specify to build shared or static library.")
+set(LIB_SUFFIX "" CACHE STRING "Define the suffix of the library directory name (32/64)." )
+set(LIB_INSTALL_DIR "lib${LIB_SUFFIX}" CACHE PATH "Libraries installation directory.")
+set(BIN_INSTALL_DIR "bin" CACHE PATH "Binary executebles installation directory.")
+set(INCLUDE_INSTALL_DIR "include" CACHE PATH "Public header installation directory.")
 
 add_subdirectory(qremotesignal)
 add_subdirectory(qrsc)
