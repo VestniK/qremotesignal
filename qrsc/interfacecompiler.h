@@ -8,6 +8,8 @@
 #ifndef InterfaceCompiler_H
 #define InterfaceCompiler_H
 
+#include <QtCore/QFile>
+
 #include "interfacedocument.h"
 
 class InterfaceCompiler {

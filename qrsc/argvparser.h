@@ -9,6 +9,10 @@
 #define ArgvParser_H
 
 #include <QtCore/QObject>
+#include <QtCore/QString>
+#include <QtCore/QStringList>
+#include <QtCore/QMap>
+#include <QtCore/QList>
 
 /**
  * Parses command line and store configuration

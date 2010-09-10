@@ -8,6 +8,7 @@
 #include "argvparser.h"
 
 #include <QtCore/QCoreApplication>
+#include <QtCore/QFileInfo>
 #include <QtCore/QTextStream>
 
 ArgvParser::ArgvParser(QObject *parent):QObject(parent) {
