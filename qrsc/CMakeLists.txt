@@ -29,5 +29,5 @@ add_executable(qrsc ${SRC} ${MOC_SRC} ${QRC})
 target_link_libraries(qrsc ${QT_LIBRARIES})
 
 install(TARGETS qrsc
-  RUNTIME DESTINATION ${BIN_INSTALL_DIR} PERMISSIONS WORLD_EXECUTE
+  RUNTIME DESTINATION ${BIN_INSTALL_DIR}
 )

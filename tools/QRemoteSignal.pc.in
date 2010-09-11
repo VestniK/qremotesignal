@@ -1,10 +1,10 @@
-prefix=%(prefix)s
-libdir=%(prefix_lib)s
-includedir=%(prefix_inc)s
+prefix=@CMAKE_INSTALL_PREFIX@
+libdir=@ABS_LIB_DIR@
+includedir=@ABS_INCLUDE_DIR@
 
 Name: QRemoteSignal
 Description: Remote Qt4 signal/slot call library
-Version: %(VERSION)s
+Version: @VERSION_STRING@
 URL: qremotesignal.googlecode.com
 Requires: QtCore >= 4.5.0, QJson
 Libs: -L${libdir} -lQRemoteSignal

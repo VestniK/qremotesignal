@@ -1,9 +1,9 @@
 #################
 # Library paths #
 #################
-QRSC = %(prefix_bin)s/qrsc
-LIBS += -L%(prefix_lib)s -lQRemoteSignal
-INCLUDEPATH += %(prefix_inc)s
+QRSC = @ABS_QRSC_PATH@
+LIBS += -L@ABS_LIB_DIR@ -lQRemoteSignal
+INCLUDEPATH += @ABS_INCLUDE_DIR@
 
 ###########################
 # Client class generation #

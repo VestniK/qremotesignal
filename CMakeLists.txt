@@ -19,7 +19,8 @@ set(BUILD_SHARED_LIBS True CACHE BOOL "Specify to build shared or static library
 set(LIB_SUFFIX "" CACHE STRING "Define the suffix of the library directory name (32/64)." )
 set(LIB_INSTALL_DIR "lib${LIB_SUFFIX}" CACHE PATH "Libraries installation directory.")
 set(BIN_INSTALL_DIR "bin" CACHE PATH "Binary executebles installation directory.")
-set(INCLUDE_INSTALL_DIR "include" CACHE PATH "Public header installation directory.")
+set(INCLUDE_INSTALL_DIR "include/${PROJECT_NAME}" CACHE PATH "Public header installation directory.")
 
 add_subdirectory(qremotesignal)
 add_subdirectory(qrsc)
+add_subdirectory(tools)

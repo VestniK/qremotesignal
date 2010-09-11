@@ -3,9 +3,9 @@ cmake_minimum_required(VERSION 2.6.3)
 set(QT_DONT_USE_QTGUI True)
 include(${QT_USE_FILE})
 
-if(${BUILD_SHARED_LIBS} STREQUAL True)
+if(${BUILD_SHARED_LIBS})
   add_definitions("-DQRS_SHARED")
-endif(${BUILD_SHARED_LIBS} STREQUAL True)
+endif(${BUILD_SHARED_LIBS})
 
 set(SRC
   baseconverters.cpp
@@ -31,8 +31,8 @@ set_target_properties(QRemoteSignal PROPERTIES
 )
 
 install(TARGETS QRemoteSignal
-  RUNTIME DESTINATION ${BIN_INSTALL_DIR} PERMISSIONS WORLD_EXECUTE
-  LIBRARY DESTINATION ${LIB_INSTALL_DIR} PERMISSIONS WORLD_EXECUTE
+  RUNTIME DESTINATION ${BIN_INSTALL_DIR}
+  LIBRARY DESTINATION ${LIB_INSTALL_DIR}
   ARCHIVE DESTINATION ${LIB_INSTALL_DIR}
 )
 install(FILES 
@@ -49,5 +49,5 @@ install(FILES
   globalserializer.h
   qdatastreamserializer.h
   templateconverters.h
-DESTINATION "${INCLUDE_INSTALL_DIR}/${PROJECT_NAME}" COMPONENT Devel
+DESTINATION "${INCLUDE_INSTALL_DIR}" COMPONENT Devel
 )
