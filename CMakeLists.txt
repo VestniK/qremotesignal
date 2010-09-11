@@ -3,7 +3,7 @@ project(QRemoteSignal)
 set(QRS_MAJOR_VERSION 1)
 set(QRS_MINOR_VERSION 2)
 set(QRS_PATCH_VERSION 0)
-set(QRS_TWEAK_VERSION ".svn")
+set(QRS_TWEAK_VERSION ".git")
 
 set(QRS_VERSION_STRING "${QRS_MAJOR_VERSION}.${QRS_MINOR_VERSION}.${QRS_PATCH_VERSION}${QRS_TWEAK_VERSION}")
 
@@ -24,3 +24,4 @@ set(INCLUDE_INSTALL_DIR "include/${PROJECT_NAME}" CACHE PATH "Public header inst
 add_subdirectory(qremotesignal)
 add_subdirectory(qrsc)
 add_subdirectory(tools)
+add_subdirectory(doc)

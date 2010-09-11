@@ -3,9 +3,9 @@ cmake_minimum_required(VERSION 2.6.3)
 set(QT_DONT_USE_QTGUI True)
 include(${QT_USE_FILE})
 
-if(${BUILD_SHARED_LIBS})
+if(BUILD_SHARED_LIBS)
   add_definitions("-DQRS_SHARED")
-endif(${BUILD_SHARED_LIBS})
+endif(BUILD_SHARED_LIBS)
 
 set(SRC
   baseconverters.cpp

@@ -20,14 +20,21 @@ set(MOC_HDRS
 set(QRC
   templates.qrc
 )
+set(TS
+  qrsc.ru.ts
+)
 
 qt4_wrap_cpp(MOC_SRC ${MOC_HDRS})
 qt4_add_resources(QRC_SRC ${QRC})
+qt4_add_translation(QM ${TS})
 configure_file(config.h.in config.h ESCAPE_QUOTES)
 
-add_executable(qrsc ${SRC} ${MOC_SRC} ${QRC})
+add_executable(qrsc ${SRC} ${MOC_SRC} ${QRC} ${QM})
 target_link_libraries(qrsc ${QT_LIBRARIES})
 
 install(TARGETS qrsc
   RUNTIME DESTINATION ${BIN_INSTALL_DIR}
+)
+install(FILES ${QM}
+  DESTINATION "share/i18n"
 )

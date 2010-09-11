@@ -10,7 +10,6 @@ moc_*
 .sconf_temp
 qrc_*
 *.qm
-/doc
 .sconsign.dblite
 Doxyfile
 Makefile

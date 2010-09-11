@@ -25,20 +25,20 @@ DOXYFILE_ENCODING      = UTF-8
 # The PROJECT_NAME tag is a single word (or a sequence of words surrounded
 # by quotes) that should identify the project.
 
-PROJECT_NAME           = QRemoteSignal
+PROJECT_NAME           = @PROJECT_NAME@
 
 # The PROJECT_NUMBER tag can be used to enter a project or revision number.
 # This could be handy for archiving the generated documentation or
 # if some version control system is used.
 
-PROJECT_NUMBER         = %(VERSION)s
+PROJECT_NUMBER         = @QRS_VERSION_STRING@
 
 # The OUTPUT_DIRECTORY tag is used to specify the (relative or absolute)
 # base path where the generated documentation will be put.
 # If a relative path is entered, it will be relative to the location
 # where doxygen was started. If left blank the current directory will be used.
 
-OUTPUT_DIRECTORY       = doc
+OUTPUT_DIRECTORY       = @CMAKE_BINARY_DIR@/doc
 
 # If the CREATE_SUBDIRS tag is set to YES, then doxygen will create
 # 4096 sub-directories (in 2 levels) under the output directory of each output
@@ -568,7 +568,7 @@ WARN_LOGFILE           =
 # directories like "/usr/src/myproject". Separate the files or directories
 # with spaces.
 
-INPUT                  = qremotesignal
+INPUT                  = @CMAKE_SOURCE_DIR@/qremotesignal
 
 # This tag can be used to specify the character encoding of the source files
 # that doxygen parses. Internally doxygen uses the UTF-8 encoding, which is
@@ -630,9 +630,9 @@ EXCLUDE_SYMBOLS        = qrs::internals::*
 # directories that contain example code fragments that are included (see
 # the \include command).
 
-EXAMPLE_PATH           = examples \
-                         tests \
-                         .
+EXAMPLE_PATH           = @CMAKE_SOURCE_DIR@/examples \
+                         @CMAKE_SOURCE_DIR@/tests \
+                         @CMAKE_SOURCE_DIR@
 
 # If the value of the EXAMPLE_PATH tag contains directories, you can use the
 # EXAMPLE_PATTERNS tag to specify one or more wildcard pattern (like *.cpp
