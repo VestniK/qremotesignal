@@ -21,7 +21,7 @@ set(QRC
   templates.qrc
 )
 set(TS
-  qrsc.ru.ts
+  qrsc-ru.ts
 )
 
 qt4_wrap_cpp(MOC_SRC ${MOC_HDRS})
