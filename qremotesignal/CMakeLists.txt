@@ -2,6 +2,7 @@ cmake_minimum_required(VERSION 2.6.3)
 
 set(QT_DONT_USE_QTGUI True)
 include(${QT_USE_FILE})
+link_directories(${QJSON_LIBRARY_DIRS})
 
 if(BUILD_SHARED_LIBS)
   add_definitions("-DQRS_SHARED")
@@ -24,7 +25,7 @@ set(MOC_HDRS
 qt4_wrap_cpp(MOC_SRC ${MOC_HDRS})
 
 add_library(QRemoteSignal ${SRC} ${MOC_SRC})
-target_link_libraries(QRemoteSignal ${QT_LIBRARIES} ${QJSON_LIBRARY})
+target_link_libraries(QRemoteSignal ${QT_LIBRARIES} ${QJSON_LIBRARIES})
 set_target_properties(QRemoteSignal PROPERTIES
   VERSION   "${QRS_MAJOR_VERSION}.${QRS_MINOR_VERSION}"
   SOVERSION "${QRS_MAJOR_VERSION}"

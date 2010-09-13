@@ -21,8 +21,13 @@ set(LIB_SUFFIX "" CACHE STRING "Define the suffix of the library directory name 
 set(LIB_INSTALL_DIR "lib${LIB_SUFFIX}" CACHE PATH "Libraries installation directory.")
 set(BIN_INSTALL_DIR "bin" CACHE PATH "Binary executebles installation directory.")
 set(INCLUDE_INSTALL_DIR "include/${PROJECT_NAME}" CACHE PATH "Public header installation directory.")
+set(QRS_TEST False CACHE BOOL "Specifies if tests should be compiled and executed or not")
 
 add_subdirectory(qremotesignal)
 add_subdirectory(qrsc)
 add_subdirectory(tools)
 add_subdirectory(doc)
+if(QRS_TEST)
+  enable_testing()
+  add_subdirectory(tests)
+endif(QRS_TEST)
