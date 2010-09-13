@@ -27,9 +27,9 @@ else(${INSTALL_QMAKE_FEATURE_TO_QTDIR})
   set(QMAKE_FEATURE_INSTALL_DIR "share/qt4/mkspecs/features")
 endif(${INSTALL_QMAKE_FEATURE_TO_QTDIR})
 
-configure_file(QRemoteSignalConfig.cmake.in QRemoteSignalConfig.cmake @ONLY)
-configure_file(QRemoteSignal.pc.in QRemoteSignal.pc @ONLY)
-configure_file(qremotesignal.prf.in qremotesignal.prf @ONLY)
+configure_file(QRemoteSignalConfig.cmake.in ${CMAKE_CURRENT_BINARY_DIR}/QRemoteSignalConfig.cmake @ONLY)
+configure_file(QRemoteSignal.pc.in ${CMAKE_CURRENT_BINARY_DIR}/QRemoteSignal.pc @ONLY)
+configure_file(qremotesignal.prf.in ${CMAKE_CURRENT_BINARY_DIR}/qremotesignal.prf @ONLY)
 
 install(FILES ${CMAKE_CURRENT_BINARY_DIR}/QRemoteSignalConfig.cmake
   DESTINATION "${LIB_INSTALL_DIR}/cmake/${PROJECT_NAME}"
