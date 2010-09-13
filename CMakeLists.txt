@@ -16,7 +16,7 @@ set(CMAKE_RUNTIME_OUTPUT_DIRECTORY ${CMAKE_CURRENT_BINARY_DIR}/bin)
 
 # Configurable values
 set(BUILD_SHARED_LIBS True CACHE BOOL "Specify to build shared or static library.")
-set(QRS_DOCS False CACHE BOOL "Set to true if documentation should be generated (API-docs and man page).")
+set(QRS_DOCS True CACHE BOOL "Set to true if documentation should be generated (API-docs and man page).")
 set(QRS_TEST False CACHE BOOL "Specifies if tests should be compiled and executed or not")
 set(LIB_SUFFIX "" CACHE STRING "Define the suffix of the library directory name (32/64)." )
 set(LIB_INSTALL_DIR "lib${LIB_SUFFIX}" CACHE PATH "Libraries installation directory.")

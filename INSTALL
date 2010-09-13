@@ -10,48 +10,40 @@ To build QRemoteSignal you need to have:
 
  * Build
 
-To build QRemoteSignal library, qrsc tool and unit tests run:
-$ scons
+On Unix-like systems go to the sources directory and run:
 
-NOTE: On windows you need to set correct path to Qt4 to QTDIR environment
-variable and you need to use QJson argument to specify path to your QJson
-installation:
-$ scons QJson="C:\Program Files\qjson"
-NOTE: On windows build may fail with strange dialog box on attempt to run
-library tests. Try to rebuild library with additional linker flag
-"--enable-auto-import":
-$ scons -c
-$ scons LINKFLAGS="-Wl,--enable-auto-import"
+$ mkdir build
+$ cd build
+$ cmake ..
+$ make
 
-You need to specify path to QJson only once at first scons run since this
-argument is cached
+NOTE: If the following error occurred when running cmake:
+  Could not find module FindQJSON.cmake or a configuration file for package
+  QJSON.
 
-NOTE: If you have several Qt4 installations on POSIX system you should set
-correct order of paths in PKG_CONFIG_PATH and LD_LIBRARY_PATH environment
-varaibles. Usually you need to run the following commands:
-$ export PKG_CONFIG_PATH=${QTDIR}/lib/pkg-config:${PKG_CONFIG_PATH}
-$ export LD_LIBRARY_PATH=${QTDIR}/lib:${LD_LIBRARY_PATH}
+  Adjust CMAKE_MODULE_PATH to find FindQJSON.cmake or set QJSON_DIR to the
+  directory containing a CMake configuration file for QJSON.  The file will
+  have one of the following names:
+
+you need to run cmake again with the flag -DCMAKE_MODULE_PATH="path to FindQJSON.cmake"
+for example on Ubuntu 10.04 with the qjson library from repository the following command
+required:
+$ cmake -DCMAKE_MODULE_PATH="/usr/share/apps/cmake/modules" ..
+
+On windows you can use cmake-gui to configure project
 
  * Install
 
-To install run:
-$ scons prefix=<installation path> install
+After you've build the library run:
 
-This will build qrsc and library and then install it to the location specified
-by "prefix" value. If "prefix" argument is not specified library will be
-installed to "/usr/local" on POSIX systems and to
-"C:\Program Files\qremotesignal" on Windows.
+$ make install
 
-You don't need to specify prefix every time since it's value cached. Specify it
-when installing first time or if you want to change installation path.
+to install it.
 
- * Uninstall
+ * For developers
 
-To uninstall QRemoteSignal use the following command:
-$ scons install -c
+By default library will be built  without unit tests compilation and will run
+doxygen each time you run make. The following configuration parameters are
+recomended to build this library for work on its development:
 
- * Additional parameters
-
-There are several build arguments which you can use to customize QRemoteSignal
-build and installation process. Use `scons --help` for detales. All of those
-parameters are cached you don't need to specify them evry time.
+$ cmake -DCMAKE_BUILD_TYPE=Debug -DQRS_DOCS=False -DQRT_TEST=True ..
