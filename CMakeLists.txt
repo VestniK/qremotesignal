@@ -1,4 +1,4 @@
-cmake_minimum_required(VERSION 2.6.3)
+cmake_minimum_required(VERSION 2.8.0)
 project(QRemoteSignal)
 set(QRS_MAJOR_VERSION 1)
 set(QRS_MINOR_VERSION 2)
@@ -9,8 +9,6 @@ set(QRS_VERSION_STRING "${QRS_MAJOR_VERSION}.${QRS_MINOR_VERSION}.${QRS_PATCH_VE
 
 find_package(Qt4 4.5.0 REQUIRED)
 find_package(QJSON 0.6.3 REQUIRED)
-
-include_directories(${QJSON_INCLUDE_DIRS})
 
 set(CMAKE_RUNTIME_OUTPUT_DIRECTORY ${CMAKE_CURRENT_BINARY_DIR}/bin)
 

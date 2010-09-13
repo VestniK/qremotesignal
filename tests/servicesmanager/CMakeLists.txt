@@ -6,7 +6,9 @@ set(testSRC
   servicesmanagertests.cpp
 )
 
-qt4_generate_moc(servicesmanagertests.cpp servicesmanagertests.moc)
+qt4_generate_moc(servicesmanagertests.cpp
+  "${CMAKE_CURRENT_BINARY_DIR}/servicesmanagertests.moc"
+)
 qrs_wrap_service(SERVICE_SRC ${EXAMPLE_SERVICE})
 qrs_wrap_client(CLIENT_SRC ${EXAMPLE_SERVICE})
 

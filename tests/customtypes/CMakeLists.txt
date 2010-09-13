@@ -8,7 +8,9 @@ set(testSRC
   customconverters.cpp
 )
 
-qt4_generate_moc(customtypestests.cpp customtypestests.moc)
+qt4_generate_moc(customtypestests.cpp
+  "${CMAKE_CURRENT_BINARY_DIR}/customtypestests.moc"
+)
 qrs_wrap_service(SERVICE_SRC customtype.xml)
 qrs_wrap_client(CLIENT_SRC customtype.xml)
 

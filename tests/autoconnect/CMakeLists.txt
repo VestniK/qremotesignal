@@ -6,7 +6,9 @@ set(testSRC
   autoconnecttests.cpp
 )
 
-qt4_generate_moc(autoconnecttests.cpp autoconnecttests.moc)
+qt4_generate_moc(autoconnecttests.cpp
+  "${CMAKE_CURRENT_BINARY_DIR}/autoconnecttests.moc"
+)
 qrs_wrap_service(SERVICE_SRC autoconnect.xml)
 qrs_wrap_client(CLIENT_SRC autoconnect.xml)
 

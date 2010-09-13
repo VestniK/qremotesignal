@@ -2,6 +2,10 @@ cmake_minimum_required(VERSION 2.6.3)
 
 set(QT_DONT_USE_QTGUI True)
 include(${QT_USE_FILE})
+
+include_directories(${QJSON_INCLUDE_DIR})
+# needed to be able to include QJson headers like qjson/header.h
+include_directories("${QJSON_INCLUDE_DIR}/..")
 link_directories(${QJSON_LIBRARY_DIRS})
 
 if(BUILD_SHARED_LIBS)

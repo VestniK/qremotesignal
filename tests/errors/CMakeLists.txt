@@ -6,7 +6,9 @@ set(testSRC
   errortests.cpp
 )
 
-qt4_generate_moc(errortests.cpp errortests.moc)
+qt4_generate_moc(errortests.cpp
+  "${CMAKE_CURRENT_BINARY_DIR}/errortests.moc"
+)
 qrs_wrap_service(SERVICE_SRC ${EXAMPLE_SERVICE})
 
 add_executable(TestErrors ${testSRC} ${SERVICE_SRC} errortests.moc)

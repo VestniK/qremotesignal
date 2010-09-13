@@ -1,4 +1,4 @@
-cmake_minimum_required(VERSION 2.6.3)
+cmake_minimum_required(VERSION 2.8.0)
 
 set(QT_DONT_USE_QTGUI True)
 set(QT_USE_QTXMLPATTERNS True)
