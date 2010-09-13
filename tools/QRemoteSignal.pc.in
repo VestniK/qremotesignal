@@ -3,9 +3,9 @@ libdir=@ABS_LIB_DIR@
 includedir=@ABS_INCLUDE_DIR@
 
 Name: QRemoteSignal
-Description: Remote Qt4 signal/slot call library
-Version: @VERSION_STRING@
-URL: qremotesignal.googlecode.com
+Description: Remote signal/slot call library for Qt4
+Version: @QRS_VERSION_STRING@
+URL: http://qremotesignal.googlecode.com
 Requires: QtCore >= 4.5.0, QJson
 Libs: -L${libdir} -lQRemoteSignal
 Libs.private: -lqjson

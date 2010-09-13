@@ -29,7 +29,7 @@ qt4_add_resources(QRC_SRC ${QRC})
 qt4_add_translation(QM ${TS})
 configure_file(config.h.in config.h ESCAPE_QUOTES)
 
-add_executable(qrsc ${SRC} ${MOC_SRC} ${QRC} ${QM})
+add_executable(qrsc ${SRC} ${MOC_SRC} ${QRC_SRC} ${QM})
 target_link_libraries(qrsc ${QT_LIBRARIES})
 
 install(TARGETS qrsc

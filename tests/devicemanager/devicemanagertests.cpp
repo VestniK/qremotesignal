@@ -8,7 +8,7 @@
 #include <QtCore/QObject>
 #include <QtCore/QBuffer>
 #include <QtCore/QByteArray>
-#include <QtTest/QTest>
+#include <QtTest/QtTest>
 
 #include <QtCore/QtDebug>
 

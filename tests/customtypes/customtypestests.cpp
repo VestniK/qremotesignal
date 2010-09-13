@@ -6,7 +6,7 @@
  * @date 16 Sep 2009
  */
 #include <QtCore/QObject>
-#include <QtTest/QTest>
+#include <QtTest/QtTest>
 
 #include "QRemoteSignal"
 

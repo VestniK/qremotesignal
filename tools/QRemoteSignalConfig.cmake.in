@@ -1,5 +1,5 @@
 set(QRemoteSignal_INCLUDE_DIR "@ABS_INCLUDE_DIR@")
-set(QRemoteSignal_LIBRARY "@ABS_LIB_DIR@")
+set(QRemoteSignal_LIBRARY "@ABS_LIB_DIR@/@LIB_NAME@")
 set(QRemoteSignal_QRSC_EXECUTABLE "@ABS_QRSC_PATH@")
 
 macro(qrs_wrap_service output)
