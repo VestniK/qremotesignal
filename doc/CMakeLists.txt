@@ -20,7 +20,15 @@ if(EXISTS ${HELP2MAN} AND QRS_DOCS)
     COMMAND ${HELP2MAN} -N -o qrsc.1 ${CMAKE_RUNTIME_OUTPUT_DIRECTORY}/qrsc
     DEPENDS qrsc
   )
+  add_custom_target(qrsc.1.ru ALL
+    COMMAND ${HELP2MAN} -L ru_RU.UTF-8 -N -o qrsc.1.ru ${CMAKE_RUNTIME_OUTPUT_DIRECTORY}/qrsc
+    DEPENDS qrsc
+  )
   install(FILES ${CMAKE_CURRENT_BINARY_DIR}/qrsc.1
     DESTINATION "share/man/man1"
+  )
+  install(FILES ${CMAKE_CURRENT_BINARY_DIR}/qrsc.1.ru
+    DESTINATION "share/man/ru/man1"
+    RENAME qrsc.1
   )
 endif(EXISTS ${HELP2MAN} AND QRS_DOCS)
