@@ -28,6 +28,7 @@ qt4_wrap_cpp(MOC_SRC ${MOC_HDRS})
 qt4_add_resources(QRC_SRC ${QRC})
 qt4_add_translation(QM ${TS})
 configure_file(config.h.in config.h ESCAPE_QUOTES)
+file(COPY ${QM} DESTINATION ${CMAKE_BINARY_DIR}/share/i18n)
 
 add_executable(qrsc ${SRC} ${MOC_SRC} ${QRC_SRC} ${QM})
 target_link_libraries(qrsc ${QT_LIBRARIES})
