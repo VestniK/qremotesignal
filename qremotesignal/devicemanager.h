@@ -36,7 +36,7 @@ namespace internals {
           * Constructs device manager handling no device. Use setDevice to set
           * device to read and write messages.
           */
-         explicit DeviceManager(QObject *parent = 0): QObject(parent) {mDevice = 0;};
+         explicit DeviceManager(QObject *parent = 0);
          DeviceManager(QIODevice *device, QObject *parent);
          ~DeviceManager() {};
 
@@ -45,6 +45,15 @@ namespace internals {
          /// Returns QIODevice used for IO operations.
          QIODevice* device() {return mDevice;};
          void setDevice(QIODevice* device);
+
+         /**
+          * @sa mMaxMessageSize
+          */
+         void setMaxMessageSize(int val) {mMaxMessageSize = val;}
+         /**
+          * @sa mMaxMessageSize
+          */
+         int maxMessageSize() const {return mMaxMessageSize;}
       public slots:
          void send(const QByteArray& msg);
       signals:
@@ -61,6 +70,11 @@ namespace internals {
           * @li Device object is closed for reading
           */
          void deviceUnavailable();
+         /**
+          * This signal is emitted when size of the message received is greater
+          * then value specified by the mMaxMessageSize property.
+          */
+         void messageTooBig();
       private slots:
          void onNewData();
       private:
@@ -68,6 +82,14 @@ namespace internals {
          QPointer<QIODevice> mDevice;
          QDataStream mStream;
          QByteArray mBuffer;
+         /**
+          * Maximu for the size of received message. If reported size of the
+          * received message is greater than this value message will not be
+          * read.
+          *
+          * Default value -1 means no message size limitation.
+          */
+         int mMaxMessageSize;
    };
 
 } // namespace internals

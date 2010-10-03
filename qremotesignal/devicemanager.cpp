@@ -10,6 +10,13 @@
 using namespace qrs;
 using namespace qrs::internals;
 
+DeviceManager::DeviceManager(QObject *parent = 0):
+        QObject(parent)
+{
+    mMaxMessageSize = -1;
+    mDevice = 0;
+}
+
 /**
  * @brief Constructs new device manager using given device for IO operations
  * @param device QIODevice to be used for input and output
@@ -20,9 +27,12 @@ using namespace qrs::internals;
  *
  * @sa setDevice
  */
-DeviceManager::DeviceManager(QIODevice *device, QObject *parent = 0):QObject(parent) {
-   mDevice = 0;
-   this->setDevice(device);
+DeviceManager::DeviceManager(QIODevice *device, QObject *parent = 0):
+        QObject(parent)
+{
+    mMaxMessageSize = -1;
+    mDevice = 0;
+    this->setDevice(device);
 }
 
 /**
@@ -38,34 +48,35 @@ DeviceManager::DeviceManager(QIODevice *device, QObject *parent = 0):QObject(par
  *
  * @sa deviceUnavailable
  */
-void DeviceManager::setDevice(QIODevice* device) {
-   if ( mDevice != 0 ) {
-      disconnect(mDevice,SIGNAL(readyRead()),
-                 this,SLOT(onNewData()));
-      disconnect(mDevice,SIGNAL(readChannelFinished()),
-                 this,SIGNAL(deviceUnavailable()));
-      disconnect(mDevice,SIGNAL(destroyed( QObject* )),
-                 this,SIGNAL(deviceUnavailable()));
-   }
-   mDevice = device;
-   mStream.setDevice(mDevice);
-   mStream.setByteOrder(QDataStream::BigEndian);
-   if ( mDevice == 0 ) {
-      emit deviceUnavailable();
-      return;
-   }
-   if ( !device->isOpen() || !device->isReadable() || !device->isWritable() ) {
-      emit deviceUnavailable();
-   }
-   connect(mDevice,SIGNAL(readyRead()),
-           this,SLOT(onNewData()));
-   connect(mDevice,SIGNAL(readChannelFinished()),
-           this,SIGNAL(deviceUnavailable()));
-   connect(mDevice,SIGNAL(destroyed( QObject* )),
-           this,SIGNAL(deviceUnavailable()));
-   if ( mDevice->bytesAvailable() != 0 ) {
-      onNewData();
-   }
+void DeviceManager::setDevice(QIODevice* device)
+{
+    if (mDevice != 0) {
+        disconnect(mDevice,SIGNAL(readyRead()),
+                   this,SLOT(onNewData()));
+        disconnect(mDevice,SIGNAL(readChannelFinished()),
+                   this,SIGNAL(deviceUnavailable()));
+        disconnect(mDevice,SIGNAL(destroyed( QObject* )),
+                   this,SIGNAL(deviceUnavailable()));
+    }
+    mDevice = device;
+    mStream.setDevice(mDevice);
+    mStream.setByteOrder(QDataStream::BigEndian);
+    if (mDevice == 0) {
+        emit deviceUnavailable();
+        return;
+    }
+    if (!device->isOpen() || !device->isReadable() || !device->isWritable()) {
+       emit deviceUnavailable();
+    }
+    connect(mDevice,SIGNAL(readyRead()),
+            this,SLOT(onNewData()));
+    connect(mDevice,SIGNAL(readChannelFinished()),
+            this,SIGNAL(deviceUnavailable()));
+    connect(mDevice,SIGNAL(destroyed( QObject* )),
+            this,SIGNAL(deviceUnavailable()));
+    if (mDevice->bytesAvailable() != 0) {
+        onNewData();
+    }
 }
 
 /**
@@ -78,43 +89,45 @@ void DeviceManager::setDevice(QIODevice* device) {
  * @sa setDevice
  * @sa deviceUnavailable
  */
-void DeviceManager::send(const QByteArray& msg) {
-   if ( mDevice == 0 ) {
-      emit deviceUnavailable();
-      return;
-   }
-   if ( !mDevice->isWritable() ) {
-      emit deviceUnavailable();
-      return;
-   }
-   if ( msg.isNull() ) {
-      return;
-   }
-   mStream << msg;
+void DeviceManager::send(const QByteArray& msg)
+{
+    if (mDevice == 0) {
+        emit deviceUnavailable();
+        return;
+    }
+    if (!mDevice->isWritable()) {
+        emit deviceUnavailable();
+        return;
+    }
+    if (msg.isNull()) {
+        return;
+    }
+    mStream << msg;
 }
 
-void DeviceManager::onNewData() {
-   if ( mDevice == 0 ) {
-      emit deviceUnavailable();
-      return;
-   }
-   if ( !mDevice->isReadable() ) {
-      emit deviceUnavailable();
-      return;
-   }
-   mBuffer += mDevice->readAll();
-   QDataStream buffReader(mBuffer);
-   int pos = 0;
-   while( !buffReader.atEnd() ) {
-      QByteArray msg;
-      buffReader >> msg;
-      if ( buffReader.status() != QDataStream::Ok ) {
-         break;
-      }
-      pos = buffReader.device()->pos();
-      emit received(msg);
-   }
-   if ( pos != 0 ) {
-      mBuffer = mBuffer.mid(pos);
-   }
+void DeviceManager::onNewData()
+{
+    if (mDevice == 0) {
+        emit deviceUnavailable();
+        return;
+    }
+    if (!mDevice->isReadable()) {
+        emit deviceUnavailable();
+        return;
+    }
+    mBuffer += mDevice->readAll();
+    QDataStream buffReader(mBuffer);
+    int pos = 0;
+    while( !buffReader.atEnd() ) {
+        QByteArray msg;
+        buffReader >> msg;
+        if (buffReader.status() != QDataStream::Ok) {
+            break;
+        }
+        pos = buffReader.device()->pos();
+        emit received(msg);
+    }
+    if (pos != 0) {
+        mBuffer = mBuffer.mid(pos);
+    }
 }
