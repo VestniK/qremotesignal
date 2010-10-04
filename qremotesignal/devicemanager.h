@@ -50,11 +50,11 @@ namespace internals {
          /**
           * @sa mMaxMessageSize
           */
-         void setMaxMessageSize(int val) {mMaxMessageSize = val;}
+         void setMaxMessageSize(quint32 val) {mMaxMessageSize = val;}
          /**
           * @sa mMaxMessageSize
           */
-         int maxMessageSize() const {return mMaxMessageSize;}
+         quint32 maxMessageSize() const {return mMaxMessageSize;}
       public slots:
          void send(const QByteArray& msg);
       signals:
@@ -90,9 +90,9 @@ namespace internals {
           * received message is greater than this value message will not be
           * read.
           *
-          * Default value -1 means no message size limitation.
+          * Default value 0 means no message size limitation.
           */
-         int mMaxMessageSize;
+         quint32 mMaxMessageSize;
    };
 
 } // namespace internals

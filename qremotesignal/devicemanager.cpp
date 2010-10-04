@@ -13,7 +13,8 @@ using namespace qrs::internals;
 DeviceManager::DeviceManager(QObject *parent):
         QObject(parent)
 {
-    mMaxMessageSize = -1;
+    mMaxMessageSize = 0;
+    mExpectedMessageSize = 0;
     mDevice = 0;
 }
 
@@ -30,7 +31,8 @@ DeviceManager::DeviceManager(QObject *parent):
 DeviceManager::DeviceManager(QIODevice *device, QObject *parent = 0):
         QObject(parent)
 {
-    mMaxMessageSize = -1;
+    mMaxMessageSize = 0;
+    mExpectedMessageSize = 0;
     mDevice = 0;
     this->setDevice(device);
 }
@@ -59,6 +61,8 @@ void DeviceManager::setDevice(QIODevice* device)
                    this,SIGNAL(deviceUnavailable()));
     }
     mDevice = device;
+    mExpectedMessageSize = 0;
+    mBuffer.clear();
     mStream.setDevice(mDevice);
     mStream.setByteOrder(QDataStream::BigEndian);
     if (mDevice == 0) {
@@ -118,12 +122,23 @@ void DeviceManager::onNewData()
 
     QDataStream reader(mDevice);
     while (reader.device()->bytesAvailable() > 0) {
-        if (mBuffer.isEmpty()) {
+        if (mBuffer.isEmpty() && mExpectedMessageSize == 0) {
+            // Not enough data waiting for the next portion.
             if (reader.device()->bytesAvailable() < sizeof(quint32)) return;
             reader >> mExpectedMessageSize;
-            if (mExpectedMessageSize == quint32(0xFFFFFFFF)) continue;
+            // Zero sized message see Qt documentation for details
+            if (mExpectedMessageSize == quint32(0xFFFFFFFF)) {
+                mExpectedMessageSize = 0;
+                continue;
+            }
             mReceivedPartSize = 0;
-            mBuffer.reserve(mReceivedPartSize+1);
+            mBuffer.reserve(mExpectedMessageSize+1);
+        }
+
+        // If message is too big
+        if (mMaxMessageSize > 0 && mExpectedMessageSize > mMaxMessageSize) {
+            emit messageTooBig();
+            return;
         }
 
         int bytesRead = reader.readRawData(
@@ -139,6 +154,7 @@ void DeviceManager::onNewData()
         if (mReceivedPartSize == mExpectedMessageSize) {
             emit received(mBuffer);
             mBuffer.clear();
+            mExpectedMessageSize = 0;
         }
     }
 }
