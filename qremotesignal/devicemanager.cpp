@@ -10,7 +10,7 @@
 using namespace qrs;
 using namespace qrs::internals;
 
-DeviceManager::DeviceManager(QObject *parent = 0):
+DeviceManager::DeviceManager(QObject *parent):
         QObject(parent)
 {
     mMaxMessageSize = -1;
@@ -115,19 +115,30 @@ void DeviceManager::onNewData()
         emit deviceUnavailable();
         return;
     }
-    mBuffer += mDevice->readAll();
-    QDataStream buffReader(mBuffer);
-    int pos = 0;
-    while( !buffReader.atEnd() ) {
-        QByteArray msg;
-        buffReader >> msg;
-        if (buffReader.status() != QDataStream::Ok) {
-            break;
+
+    QDataStream reader(mDevice);
+    while (reader.device()->bytesAvailable() > 0) {
+        if (mBuffer.isEmpty()) {
+            if (reader.device()->bytesAvailable() < sizeof(quint32)) return;
+            reader >> mExpectedMessageSize;
+            if (mExpectedMessageSize == quint32(0xFFFFFFFF)) continue;
+            mReceivedPartSize = 0;
+            mBuffer.reserve(mReceivedPartSize+1);
         }
-        pos = buffReader.device()->pos();
-        emit received(msg);
-    }
-    if (pos != 0) {
-        mBuffer = mBuffer.mid(pos);
+
+        int bytesRead = reader.readRawData(
+                mBuffer.data() + mReceivedPartSize,
+                mExpectedMessageSize - mReceivedPartSize);
+        if (bytesRead > 0) {
+            mReceivedPartSize += bytesRead;
+            mBuffer.resize(mReceivedPartSize);
+        } else {
+            /// @todo Do some IO error processing here
+        }
+
+        if (mReceivedPartSize == mExpectedMessageSize) {
+            emit received(mBuffer);
+            mBuffer.clear();
+        }
     }
 }

@@ -8,6 +8,7 @@
 #ifndef _DeviceManager_H
 #define _DeviceManager_H
 
+#include <QtCore/QtGlobal>
 #include <QtCore/QObject>
 #include <QtCore/QIODevice>
 #include <QtCore/QByteArray>
@@ -82,6 +83,8 @@ namespace internals {
          QPointer<QIODevice> mDevice;
          QDataStream mStream;
          QByteArray mBuffer;
+         quint32 mExpectedMessageSize;
+         quint32 mReceivedPartSize;
          /**
           * Maximu for the size of received message. If reported size of the
           * received message is greater than this value message will not be
