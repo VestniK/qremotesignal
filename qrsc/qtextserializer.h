@@ -8,8 +8,15 @@
 #ifndef QTextSerializer_H
 #define QTextSerializer_H
 
-#include <QtCore>
-#include <QtXmlPatterns>
+#include <QtCore/QTextCodec>
+#include <QtCore/QIODevice>
+#include <QtCore/QString>
+#include <QtCore/QStringRef>
+#include <QtCore/QVariant>
+
+#include <QtXmlPatterns/QAbstractXmlReceiver>
+#include <QtXmlPatterns/QXmlQuery>
+#include <QtXmlPatterns/QXmlName>
 
 class QTextSerializer : public QAbstractXmlReceiver {
    public:
