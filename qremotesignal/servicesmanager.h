@@ -79,7 +79,7 @@ namespace qrs {
 
          void setSerializer(AbsMessageSerializer* val);
          /**
-          * @return pointer to currently used serializer
+          * @return pointer to the currently used serializer
           */
          AbsMessageSerializer *serializer();
 
