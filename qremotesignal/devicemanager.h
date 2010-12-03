@@ -76,7 +76,7 @@ signals:
      * This signal is emitted when size of the message received is greater
      * then value specified by the mMaxMessageSize property.
      */
-    void messageTooBig();
+    void messageTooBig(DeviceManager *);
 private slots:
     void onNewData();
 private:

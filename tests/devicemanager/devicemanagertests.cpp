@@ -19,6 +19,7 @@ class DeviceManagerTests: public QObject
 {
 Q_OBJECT
 private slots:
+    void initTestCase();
     void init();
     void cleanup();
 
@@ -47,6 +48,11 @@ private:
         QTest::qWait(1);
     }
 };
+
+void DeviceManagerTests::initTestCase()
+{
+    qRegisterMetaType<qrs::internals::DeviceManager *>("DeviceManager *");
+}
 
 void DeviceManagerTests::init()
 {
@@ -226,7 +232,7 @@ void DeviceManagerTests::testSetDevice()
 
 void DeviceManagerTests::testMesageTooBig()
 {
-    QSignalSpy spy(&mDevManager2, SIGNAL(messageTooBig()));
+    QSignalSpy spy(&mDevManager2, SIGNAL(messageTooBig(DeviceManager *)));
     mDevManager2.setMaxMessageSize(5);
 
     // First test that small enough message doesn't triggers

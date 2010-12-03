@@ -1,5 +1,6 @@
 SVN Version
 	* Build system changed to cmake
+	* Added ability to set limit on the maximum size of received message.
 
 2010-08-23 Version 1.2.0
 	* Added warning messages to the qrs::AbsService::autoconnect() in

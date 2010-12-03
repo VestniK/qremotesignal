@@ -132,13 +132,14 @@ void DeviceManager::onNewData()
                 continue;
             }
             mReceivedPartSize = 0;
-            mBuffer.reserve(mExpectedMessageSize+1);
-        }
 
-        // If message is too big
-        if (mMaxMessageSize > 0 && mExpectedMessageSize > mMaxMessageSize) {
-            emit messageTooBig();
-            return;
+            // If message is too big
+            if (mMaxMessageSize > 0 && mExpectedMessageSize > mMaxMessageSize) {
+                emit messageTooBig(this);
+                return;
+            }
+
+            mBuffer.reserve(mExpectedMessageSize+1);
         }
 
         int bytesRead = reader.readRawData(

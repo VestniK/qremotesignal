@@ -23,6 +23,7 @@ namespace qrs {
    // Forward declarations
    namespace internals {
       class ServicesManagerPrivate;
+      class DeviceManager;
    };
    class AbsMessageSerializer;
    class AbsService;
@@ -61,6 +62,7 @@ namespace qrs {
     */
    class QRS_EXPORT ServicesManager : public QObject {
       Q_OBJECT
+      Q_DISABLE_COPY(ServicesManager);
       public:
          explicit ServicesManager(QObject *parent = 0);
          virtual ~ServicesManager();
@@ -98,6 +100,11 @@ namespace qrs {
           */
          void removeDevice(int i);
          QIODevice *takeDeviceAt(int i);
+
+         /// @brief %Message size limit for devices added with addDevice method
+         quint32 messageSizeLimit() const;
+         /// @brief %Message size limit for devices added with addDevice method
+         void setMessageSizeLimit(quint32 val);
       public slots:
          void receive(const QByteArray& msg);
       signals:
@@ -118,14 +125,27 @@ namespace qrs {
          void clientError(qrs::ServicesManager *sender,
                           qrs::Message::ErrorType error,
                           QString description);
+         /**
+          * This signal is sent if one of the devices added with the
+          * addDevice(QIODevice *) method is bigger then allowed message size
+          * limit. The message causing this error is not read. At the moment
+          * this signal emitted the device is already closed.
+          *
+          * One of the possible reactions on this segnal is to call
+          * deleterLater() method of the device.
+          *
+          * @param device device which received message causing this error.
+          */
+         void messageTooBig(QIODevice *device);
       private:
-         Q_DISABLE_COPY(ServicesManager);
          internals::ServicesManagerPrivate *const d;
 
          static AbsMessageSerializer *mDefaultSerializer;
       private slots:
          /// @brief Called if device added by addDevice method is deleted
          void onDeviceDeleted(QObject* dev);
+         /// @brief Called if device added by the addDevice method received too big message
+         void onMessageTooBig(internals::DeviceManager *source);
    };
 
 }
