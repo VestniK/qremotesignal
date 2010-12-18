@@ -16,11 +16,11 @@
 #include "qrsexport.h"
 
 namespace qrs {
-    
+
     namespace internals {
         class MessagePrivate;
     }
-    
+
     /**
     * @brief Message representation
     *
@@ -40,7 +40,7 @@ namespace qrs {
         public:
             Message();
             virtual ~Message();
-            
+
             enum MsgType {RemoteCall = 0,Error = -1};
             enum ErrorType {
                 /// if received error code is not described here or not received
@@ -62,13 +62,13 @@ namespace qrs {
                 */
                 IncorrectMethod = 4,
             };
-            
+
             MsgType type() const {return mType;};
             void setType(MsgType val) {mType = val;};
-            
+
             ErrorType errorType() const {return mErrorType;};
             void setErrorType(ErrorType val) {mErrorType = val;};
-            
+
             /**
             * @brief Returns error description
             */
@@ -79,7 +79,7 @@ namespace qrs {
             * @param val human readable error description
             */
             void setError(const QString& val) {mError = val;};
-            
+
             /**
             * @brief Set name of the destination service
             *
@@ -96,7 +96,7 @@ namespace qrs {
             * @sa service
             */
             const QString& service() const {return mService;};
-            
+
             /**
             * @brief Sets method name
             * @param val new method name
@@ -109,11 +109,11 @@ namespace qrs {
             * @sa method
             */
             const QString& method() const {return mMethod;}
-            
+
             const QVariantMap& params() const {return mParams;};
             QVariantMap& params() {return mParams;};
             void setParams(const QVariantMap& val) {mParams = val;};
-            
+
         private:
             /**
             * @brief service name
@@ -143,20 +143,20 @@ namespace qrs {
             * @brief Map of method parameters.
             */
             QVariantMap mParams;
-            
+
             MsgType mType;
             ErrorType mErrorType;
-            
+
             /**
             * @brief Error description.
             *
             * Contains description of the received error message
             */
             QString mError;
-            
+
             internals::MessagePrivate *const d;
     };
-    
+
     typedef std::auto_ptr<Message> MessageAP;
 }
 
