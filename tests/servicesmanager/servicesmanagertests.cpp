@@ -14,6 +14,8 @@
 #include "exampleservice.h"
 #include "exampleclient.h"
 
+Q_DECLARE_METATYPE(QIODevice *);
+
 class ServicesManagerTests:public QObject {
 Q_OBJECT
 private slots:
@@ -30,6 +32,9 @@ private slots:
         client->voidMethod();
         mRawMsg = dev.data();
         delete mManager;
+
+        // Register aditionaly needed types
+        qRegisterMetaType<QIODevice *>("QIODevice *");
     }
 
     void init() {
@@ -151,6 +156,25 @@ private slots:
         QCOMPARE(spy.count() , 0);
         sendMsgToDev(&dev, mRawMsg );
         QCOMPARE(spy.count() , 1);
+    }
+
+    void testMessageSizeLimit() {
+        QBuffer dev1;
+        QBuffer dev2;
+        QSignalSpy spy(mManager, SIGNAL(messageTooBig(QIODevice *)));
+
+        dev1.open(QIODevice::ReadWrite);
+        dev2.open(QIODevice::ReadWrite);
+        mManager->setMessageSizeLimit(mRawMsg.size()/2);
+        QVERIFY(mManager->messageSizeLimit() > 0);
+        mManager->addDevice(&dev1);
+        mManager->addDevice(&dev2);
+
+        // Receiving message from dev
+        QCOMPARE(spy.count() , 0);
+        sendMsgToDev(&dev1, mRawMsg );
+        QCOMPARE(spy.count() , 1);
+        QCOMPARE(spy.first().first().value<QIODevice *>(), &dev1);
     }
 
     void testUsingManyDevices() {

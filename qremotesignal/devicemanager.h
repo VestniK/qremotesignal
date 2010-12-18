@@ -76,7 +76,7 @@ signals:
      * This signal is emitted when size of the message received is greater
      * then value specified by the mMaxMessageSize property.
      */
-    void messageTooBig(DeviceManager *);
+    void messageTooBig(qrs::internals::DeviceManager *);
 private slots:
     void onNewData();
 private:

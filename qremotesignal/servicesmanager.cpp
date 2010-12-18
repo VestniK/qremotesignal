@@ -339,14 +339,16 @@ void ServicesManager::addDevice(QIODevice *dev)
     }
     QSharedPointer<internals::DeviceManager> dm(new internals::DeviceManager());
     dm->setMaxMessageSize(d->mMessageSizeLimit);
-    connect(dm.data(),SIGNAL(received(QByteArray)),
-            this,SLOT(receive(const QByteArray&)));
-    connect(this,SIGNAL(send(QByteArray)),
-            dm.data(),SLOT(send(const QByteArray&)));
+    connect( dm.data(), SIGNAL(received(QByteArray)),
+             this, SLOT(receive(const QByteArray&)) );
+    connect( this, SIGNAL(send(QByteArray)),
+             dm.data(), SLOT(send(const QByteArray&)) );
+    connect( dm.data(), SIGNAL(messageTooBig(qrs::internals::DeviceManager *)),
+             this, SLOT(onMessageTooBig(qrs::internals::DeviceManager *)) );
     dm->setDevice(dev);
     d->mDevManagers.append(dm);
-    connect(dev,SIGNAL(destroyed( QObject* )),
-            this,SLOT(onDeviceDeleted(QObject*)));
+    connect( dev, SIGNAL(destroyed( QObject* )),
+             this, SLOT(onDeviceDeleted(QObject*)) );
 }
 
 /**

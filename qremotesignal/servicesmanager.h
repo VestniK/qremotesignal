@@ -145,7 +145,7 @@ namespace qrs {
          /// @brief Called if device added by addDevice method is deleted
          void onDeviceDeleted(QObject* dev);
          /// @brief Called if device added by the addDevice method received too big message
-         void onMessageTooBig(internals::DeviceManager *source);
+         void onMessageTooBig(qrs::internals::DeviceManager *source);
    };
 
 }

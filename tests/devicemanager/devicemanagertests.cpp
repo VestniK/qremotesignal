@@ -232,7 +232,7 @@ void DeviceManagerTests::testSetDevice()
 
 void DeviceManagerTests::testMesageTooBig()
 {
-    QSignalSpy spy(&mDevManager2, SIGNAL(messageTooBig(DeviceManager *)));
+    QSignalSpy spy(&mDevManager2, SIGNAL(messageTooBig(qrs::internals::DeviceManager *)));
     mDevManager2.setMaxMessageSize(5);
 
     // First test that small enough message doesn't triggers
