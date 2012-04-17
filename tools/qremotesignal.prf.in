@@ -8,53 +8,41 @@ INCLUDEPATH += @ABS_INCLUDE_DIR@
 ###########################
 # Client class generation #
 ###########################
-qrsc_client.output = ${QMAKE_FILE_BASE}client
-qrsc_client.commands = $${QRSC} --client --header ${QMAKE_FILE_BASE}client.h --source ${QMAKE_FILE_BASE}client.cpp ${QMAKE_FILE_NAME}
-qrsc_client.input = QRS_CLIENT_INTERFACES
-qrsc_client.variable_out = QRS_CLIENT_RES
-qrsc_client.CONFIG = no_link
+qrsc_client_hdr.output = ${QMAKE_FILE_BASE}client.h
+qrsc_client_hdr.commands =  $${QRSC} --client --header ${QMAKE_FILE_BASE}client.h --source ${QMAKE_FILE_BASE}client.cpp ${QMAKE_FILE_NAME} 
+qrsc_client_hdr.input = QRS_CLIENT_INTERFACES
+qrsc_client_hdr.variable_out = HEADERS
 
-qrsc_client_header.output = ${QMAKE_FILE_NAME}.h
-qrsc_client_header.commands = @echo ${QMAKE_FILE_NAME}.h
-qrsc_client_header.input = QRS_CLIENT_RES
-qrsc_client_header.variable_out = HEADERS
-
-qrsc_client_src.output = ${QMAKE_FILE_NAME}.cpp
-qrsc_client_src.commands = @echo ${QMAKE_FILE_NAME}.cpp
-qrsc_client_src.input = QRS_CLIENT_RES
+qrsc_client_src.output = ${QMAKE_FILE_BASE}client.cpp
+qrsc_client_src.commands = @echo ${QMAKE_FILE_BASE}client.cpp
+qrsc_client_src.input = QRS_CLIENT_INTERFACES
 qrsc_client_src.variable_out = SOURCES
 
-qrsc_client_moc.output = moc_${QMAKE_FILE_NAME}.cpp
-qrsc_client_moc.commands = moc -o moc_${QMAKE_FILE_NAME}.cpp ${QMAKE_FILE_NAME}.h
-qrsc_client_moc.depends += ${QMAKE_FILE_NAME}.h
-qrsc_client_moc.input = QRS_CLIENT_RES
+qrsc_client_moc.output = moc_${QMAKE_FILE_BASE}client.cpp
+qrsc_client_moc.commands = moc -o moc_${QMAKE_FILE_BASE}client.cpp ${QMAKE_FILE_BASE}client.h
+qrsc_client_moc.depends += ${QMAKE_FILE_BASE}client.h
+qrsc_client_moc.input = QRS_CLIENT_INTERFACES
 qrsc_client_moc.variable_out = SOURCES
 
-QMAKE_EXTRA_COMPILERS += qrsc_client qrsc_client_header qrsc_client_src qrsc_client_moc
+QMAKE_EXTRA_COMPILERS += qrsc_client_hdr qrsc_client_src qrsc_client_moc
 
 ############################
 # Service class generation #
 ############################
-qrsc_service.output = ${QMAKE_FILE_BASE}service
-qrsc_service.commands = $${QRSC} --service --header ${QMAKE_FILE_BASE}service.h --source ${QMAKE_FILE_BASE}service.cpp ${QMAKE_FILE_NAME}
-qrsc_service.input = QRS_SERVICE_INTERFACES
-qrsc_service.variable_out = QRS_SERVICE_RES
-qrsc_service.CONFIG = no_link
+qrsc_service_hdr.output = ${QMAKE_FILE_BASE}service.h
+qrsc_service_hdr.commands = $${QRSC} --service --header ${QMAKE_FILE_BASE}service.h --source ${QMAKE_FILE_BASE}service.cpp ${QMAKE_FILE_NAME}
+qrsc_service_hdr.input = QRS_SERVICE_INTERFACES
+qrsc_service_hdr.variable_out = HEADERS
 
-qrsc_service_header.output = ${QMAKE_FILE_NAME}.h
-qrsc_service_header.commands = @echo ${QMAKE_FILE_NAME}.h
-qrsc_service_header.input = QRS_SERVICE_RES
-qrsc_service_header.variable_out = HEADERS
-
-qrsc_service_src.output = ${QMAKE_FILE_NAME}.cpp
-qrsc_service_src.commands = @echo ${QMAKE_FILE_NAME}.cpp
-qrsc_service_src.input = QRS_SERVICE_RES
+qrsc_service_src.output = ${QMAKE_FILE_BASE}service.cpp
+qrsc_service_src.commands = @echo ${QMAKE_FILE_BASE}service.cpp
+qrsc_service_src.input = QRS_SERVICE_INTERFACES
 qrsc_service_src.variable_out = SOURCES
 
-qrsc_service_moc.output = moc_${QMAKE_FILE_NAME}.cpp
-qrsc_service_moc.commands = moc -o moc_${QMAKE_FILE_NAME}.cpp ${QMAKE_FILE_NAME}.h
-qrsc_service_moc.depends += ${QMAKE_FILE_NAME}.h
-qrsc_service_moc.input = QRS_SERVICE_RES
+qrsc_service_moc.output = moc_${QMAKE_FILE_BASE}service.cpp
+qrsc_service_moc.commands = moc -o moc_${QMAKE_FILE_BASE}service.cpp ${QMAKE_FILE_BASE}service.h
+qrsc_service_moc.depends += ${QMAKE_FILE_BASE}service.h
+qrsc_service_moc.input = QRS_SERVICE_INTERFACES
 qrsc_service_moc.variable_out = SOURCES
 
-QMAKE_EXTRA_COMPILERS += qrsc_service qrsc_service_header qrsc_service_src qrsc_service_moc
+QMAKE_EXTRA_COMPILERS += qrsc_service_hdr qrsc_service_src qrsc_service_moc
