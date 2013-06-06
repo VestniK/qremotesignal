@@ -1,6 +1,7 @@
-Development Version
+2012-10-20 Version 1.3.0
 	* Build system changed to cmake
 	* Added ability to limit maximum size of the received message.
+	* Fixed instant service/client regeneration when using qmake (BUG 41)
 
 2010-08-23 Version 1.2.0
 	* Added warning messages to the qrs::AbsService::autoconnect() in
