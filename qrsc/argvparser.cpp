@@ -73,21 +73,21 @@ bool ArgvParser::parse() {
        }
        if ( mOptions.contains(name) ) {
            if ( i >= args.size() ) {
-               (*mErr) << tr("Option %1 require a value").arg(arg);
-               (*mOut) << helpStr();
+               (*mErr) << tr("Option %1 require a value").arg(arg) << endl;
+               printHelp();
                return false;
            }
            if ( args[i].startsWith('-') ) {
-               (*mErr) << tr("Option %1 require a value").arg(arg);
-               (*mOut) << helpStr();
+               (*mErr) << tr("Option %1 require a value").arg(arg) << endl;
+               printHelp();
                return false;
            }
            mOptions[name] = args[i];
            i++;
            continue;
        }
-       (*mErr) << tr("Unknown option: %1").arg(arg);
-       (*mOut) << helpStr();
+       (*mErr) << tr("Unknown option: %1").arg(arg) << endl;
+       printHelp();
        return false;
     }
     return true;
@@ -96,23 +96,22 @@ bool ArgvParser::parse() {
 bool ArgvParser::handleHelp()
 {
     if (mFlags[HELP_FLAG]) {
-        (*mOut) << helpStr();
+        printHelp();
         return true;
     }
     if (mFlags[QT_VERSION_FLAG]) {
-        (*mOut) << qtVersionStr();
+        printQtVersion();
         return true;
     }
     if (mFlags[VERSION_FLAG]) {
-        (*mOut) << versionStr();
+        printVersion();
         return true;
     }
     return false;
 }
 
-QString ArgvParser::helpStr() const {
-    QString res;
-    QTextStream out(&res,QIODevice::WriteOnly);
+void ArgvParser::printHelp() const {
+    QTextStream &out = *mOut;
     for (int i = 0; i < mUsageDescriptions.count(); i++) {
         if ( i == 0 ) {
             out << tr("Usage: ");
@@ -137,23 +136,18 @@ QString ArgvParser::helpStr() const {
         out << mDescriptions[name] << endl;
     }
     out << endl;
-    return res;
 }
 
-QString ArgvParser::qtVersionStr() const {
-    QString res;
-    QTextStream out(&res,QIODevice::WriteOnly);
+void ArgvParser::printQtVersion() const {
+    QTextStream &out = *mOut;
     out << tr("Compiled with Qt: %1").arg(QT_VERSION_STR) << endl;
     out << tr("Running with Qt version: %1").arg(qVersion()) << endl;
-    return res;
 }
 
-QString ArgvParser::versionStr() const {
-    QString res;
-    QTextStream out(&res,QIODevice::WriteOnly);
+void ArgvParser::printVersion() const {
+    QTextStream &out = *mOut;
     out << mExecutableName << " ("
         << qApp->applicationName()
         << ") " << qApp->applicationVersion()
         << endl;
-    return res;
 }

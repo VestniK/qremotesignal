@@ -93,7 +93,7 @@ int main(int argc, char *argv[])
             err << ArgvParser::tr("Error: Input file not specified!") << endl;
         else
             err << ArgvParser::tr("Error: Destination file not specified!") << endl;
-        out << conf.helpStr();
+        conf.printHelp();
         return 1;
     }
 
@@ -120,7 +120,7 @@ int main(int argc, char *argv[])
     QString source = conf.options()[SOURCE_OPTION];
     if (conf.flags()[SERVICE_FLAG] && conf.flags()[CLIENT_FLAG]) {
         err << ArgvParser::tr("You should specify --%1 or --%2 flag but not both!")
-        .arg(SERVICE_FLAG).arg(CLIENT_FLAG) << endl;
+            .arg(SERVICE_FLAG).arg(CLIENT_FLAG) << endl;
         return 1;
     }
     if (conf.flags()[SERVICE_FLAG]) {

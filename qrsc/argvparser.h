@@ -44,9 +44,7 @@ class ArgvParser {
         bool parse();
         bool handleHelp();
 
-        QString helpStr() const;
-        QString qtVersionStr() const;
-        QString versionStr() const;
+        void printHelp() const;
 
         const QMap<QString,bool> &flags() const {return mFlags;}
         const QMap<QString,QString> &options() const {return mOptions;}
@@ -59,6 +57,9 @@ class ArgvParser {
     private:
         Q_DISABLE_COPY(ArgvParser);
 
+        void printQtVersion() const;
+        void printVersion() const;
+
         QMap<QString,bool> mFlags;
         QMap<QString,QString> mOptions;
         QStringList mArguments;
@@ -69,8 +70,8 @@ class ArgvParser {
         QMap<QChar,QString> mShortNames;
         QMap<QString,QString> mDescriptions;
         QList<QString> mUsageDescriptions;
-        QTextStream *mOut;
-        QTextStream *mErr;
+        mutable QTextStream *mOut;
+        mutable QTextStream *mErr;
 };
 
 #endif
