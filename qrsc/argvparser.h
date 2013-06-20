@@ -66,8 +66,6 @@ class ArgvParser {
         QString mExecutableName;
         QString mAppDescription;
 
-        QString mError;
-
         QMap<QChar,QString> mShortNames;
         QMap<QString,QString> mDescriptions;
         QList<QString> mUsageDescriptions;
