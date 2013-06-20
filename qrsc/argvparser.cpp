@@ -11,8 +11,10 @@
 #include <QtCore/QFileInfo>
 #include <QtCore/QTextStream>
 
-ArgvParser::ArgvParser(QObject *parent):QObject(parent) {
-    mError = "";
+ArgvParser::ArgvParser(const ArgvConf &conf, QObject *parent):QObject(parent) {
+    qApp->setApplicationName(tr(conf.name));
+    qApp->setApplicationVersion(conf.version);
+    mAppDescription = tr(conf.description);
 }
 
 void ArgvParser::addFlag(const QString& name,

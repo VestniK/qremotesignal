@@ -28,6 +28,17 @@ const QString HEADER_OPTION = "header";
 const QString SOURCE_OPTION = "source";
 const QString UPDATE_OPTION = "update";
 
+ArgvConf qrscArgConf = {
+   QT_TRANSLATE_NOOP("ArgvParser", "QRemoteSignal interface compiler"),
+   VERSION,
+   QT_TRANSLATE_NOOP(
+      "ArgvParser",
+      "QRemoteSignal interface compiler. Creates client or service source "
+      "files from interface XML description. Only one of the --service or "
+      "--client flags should be specified but not both."
+    )
+};
+
 int main(int argc, char *argv[]) {
    // Application Info
    QCoreApplication app(argc,argv);
@@ -40,17 +51,10 @@ int main(int argc, char *argv[]) {
    }
    app.installTranslator(&translator);
 
-   ArgvParser conf;
-   app.setApplicationName(ArgvParser::tr("QRemoteSignal interface compiler"));
-   app.setApplicationVersion(VERSION);
+   ArgvParser conf(qrscArgConf);
    QTextStream out(stdout,QIODevice::WriteOnly);
    QTextStream err(stderr,QIODevice::WriteOnly);
    // Command line options configuration
-   conf.setAppDescription(ArgvParser::tr(
-       "QRemoteSignal interface compiler. Creates client or service source "
-       "files from interface XML description. Only one of the --%1 or --%2 "
-       " flags should be specified but not both.").arg(SERVICE_FLAG).arg(CLIENT_FLAG)
-   );
    conf.addUsageDescription(ArgvParser::tr("--%1|--%2 [OPTIONS] INTERFACE")
                                 .arg(SERVICE_FLAG)
                                 .arg(CLIENT_FLAG));

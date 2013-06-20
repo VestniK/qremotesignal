@@ -14,6 +14,12 @@
 #include <QtCore/QMap>
 #include <QtCore/QList>
 
+struct ArgvConf {
+    const char *name;
+    const char *version;
+    const char *description;
+};
+
 /**
  * Parses command line and store configuration
  * Require QCoreApplication or QApplication object to be initialized
@@ -21,7 +27,7 @@
 class ArgvParser: public QObject {
     Q_OBJECT
     public:
-        explicit ArgvParser(QObject *parent = 0);
+        explicit ArgvParser(const ArgvConf &conf, QObject *parent = 0);
         virtual ~ArgvParser() {}
 
         void addFlag(const QString &name,
@@ -47,7 +53,6 @@ class ArgvParser: public QObject {
         const QString &executableName() const {return mExecutableName;}
         const QString &appDescription() const {return mAppDescription;}
 
-        void setAppDescription(const QString &val) {mAppDescription = val;}
         void addUsageDescription(const QString &val) {mUsageDescriptions.append(val);};
     private:
         Q_DISABLE_COPY(ArgvParser);
