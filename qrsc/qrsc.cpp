@@ -19,9 +19,6 @@
 #include "argvparser.h"
 #include "config.h"
 
-const QString HELP_FLAG = "help";
-const QString VERSION_FLAG = "version";
-const QString QT_VERSION_FLAG = "qt-version";
 const QString SERVICE_FLAG = "service";
 const QString CLIENT_FLAG = "client";
 const QString HEADER_OPTION = "header";
@@ -51,18 +48,15 @@ int main(int argc, char *argv[]) {
    }
    app.installTranslator(&translator);
 
-   ArgvParser conf(qrscArgConf);
    QTextStream out(stdout,QIODevice::WriteOnly);
    QTextStream err(stderr,QIODevice::WriteOnly);
+   ArgvParser conf(qrscArgConf, &out, &err);
    // Command line options configuration
    conf.addUsageDescription(ArgvParser::tr("--%1|--%2 [OPTIONS] INTERFACE")
                                 .arg(SERVICE_FLAG)
                                 .arg(CLIENT_FLAG));
    conf.addUsageDescription(ArgvParser::tr("--%1 SOURCE DEST")
                                 .arg(UPDATE_OPTION));
-   conf.addFlag(HELP_FLAG,ArgvParser::tr("Print this help and exit."),'h');
-   conf.addFlag(VERSION_FLAG,ArgvParser::tr("Print version information and exit."),'v');
-   conf.addFlag(QT_VERSION_FLAG,ArgvParser::tr("Print Qt version information and exit."));
 
    conf.addFlag(SERVICE_FLAG,ArgvParser::tr("Create service class."),'s');
    conf.addFlag(CLIENT_FLAG,ArgvParser::tr("Create client class."),'c');
@@ -78,24 +72,11 @@ int main(int argc, char *argv[]) {
    conf.addOption(SOURCE_OPTION,
                   ArgvParser::tr("DEST_CPP"),
                   ArgvParser::tr("Specify output C++ source file."));
-   if ( ! conf.parse() ) {
-      err << conf.errorMessage() << endl;
-      out << conf.helpStr();
-      return 1;
-   }
-   // Print info if requested
-   if ( conf.flags()[HELP_FLAG] ) {
-      out << conf.helpStr();
-      return 0;
-   }
-   if ( conf.flags()[QT_VERSION_FLAG] ) {
-      out << conf.qtVersionStr();
-      return 0;
-   }
-   if ( conf.flags()[VERSION_FLAG] ) {
-      out << conf.versionStr();
-      return 0;
-   }
+    if (!conf.parse())
+        return 1;
+    // Print info if requested
+    if (conf.handleHelp())
+        return 0;
 
     if ( conf.arguments().isEmpty() ) {
         if ( conf.options()[UPDATE_OPTION].isEmpty() ) {

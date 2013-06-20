@@ -20,6 +20,8 @@ struct ArgvConf {
     const char *description;
 };
 
+class QTextStream;
+
 /**
  * Parses command line and store configuration
  * Require QCoreApplication or QApplication object to be initialized
@@ -27,7 +29,7 @@ struct ArgvConf {
 class ArgvParser {
     Q_DECLARE_TR_FUNCTIONS(ArgvParser)
     public:
-        explicit ArgvParser(const ArgvConf &conf);
+        ArgvParser(const ArgvConf &conf, QTextStream *out, QTextStream *err);
         virtual ~ArgvParser() {}
 
         void addFlag(const QString &name,
@@ -40,7 +42,7 @@ class ArgvParser {
                        const QString &defaultVal = QString());
 
         bool parse();
-        const QString &errorMessage() {return mError;}
+        bool handleHelp();
 
         QString helpStr() const;
         QString qtVersionStr() const;
@@ -69,6 +71,8 @@ class ArgvParser {
         QMap<QChar,QString> mShortNames;
         QMap<QString,QString> mDescriptions;
         QList<QString> mUsageDescriptions;
+        QTextStream *mOut;
+        QTextStream *mErr;
 };
 
 #endif

@@ -10,10 +10,19 @@
 #include <QtCore/QFileInfo>
 #include <QtCore/QTextStream>
 
-ArgvParser::ArgvParser(const ArgvConf &conf) {
+const QString HELP_FLAG = "help";
+const QString VERSION_FLAG = "version";
+const QString QT_VERSION_FLAG = "qt-version";
+
+ArgvParser::ArgvParser(const ArgvConf &conf, QTextStream *out, QTextStream *err):
+    mOut(out), mErr(err)
+{
     qApp->setApplicationName(tr(conf.name));
     qApp->setApplicationVersion(conf.version);
     mAppDescription = tr(conf.description);
+    addFlag(HELP_FLAG, tr("Print this help and exit."),'h');
+    addFlag(VERSION_FLAG, tr("Print version information and exit."),'v');
+    addFlag(QT_VERSION_FLAG, tr("Print Qt version information and exit."));
 }
 
 void ArgvParser::addFlag(const QString& name,
@@ -64,21 +73,41 @@ bool ArgvParser::parse() {
        }
        if ( mOptions.contains(name) ) {
            if ( i >= args.size() ) {
-               mError = tr("Option %1 require a value").arg(arg);
+               (*mErr) << tr("Option %1 require a value").arg(arg);
+               (*mOut) << helpStr();
                return false;
            }
            if ( args[i].startsWith('-') ) {
-               mError = tr("Option %1 require a value").arg(arg);
+               (*mErr) << tr("Option %1 require a value").arg(arg);
+               (*mOut) << helpStr();
                return false;
            }
            mOptions[name] = args[i];
            i++;
            continue;
        }
-       mError = tr("Unknown option: %1").arg(arg);
+       (*mErr) << tr("Unknown option: %1").arg(arg);
+       (*mOut) << helpStr();
        return false;
     }
     return true;
+}
+
+bool ArgvParser::handleHelp()
+{
+    if (mFlags[HELP_FLAG]) {
+        (*mOut) << helpStr();
+        return true;
+    }
+    if (mFlags[QT_VERSION_FLAG]) {
+        (*mOut) << qtVersionStr();
+        return true;
+    }
+    if (mFlags[VERSION_FLAG]) {
+        (*mOut) << versionStr();
+        return true;
+    }
+    return false;
 }
 
 QString ArgvParser::helpStr() const {
