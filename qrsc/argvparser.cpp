@@ -7,11 +7,10 @@
  */
 #include "argvparser.h"
 
-#include <QtCore/QCoreApplication>
 #include <QtCore/QFileInfo>
 #include <QtCore/QTextStream>
 
-ArgvParser::ArgvParser(const ArgvConf &conf, QObject *parent):QObject(parent) {
+ArgvParser::ArgvParser(const ArgvConf &conf) {
     qApp->setApplicationName(tr(conf.name));
     qApp->setApplicationVersion(conf.version);
     mAppDescription = tr(conf.description);

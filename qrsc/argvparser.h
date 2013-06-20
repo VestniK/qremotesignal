@@ -8,7 +8,7 @@
 #ifndef ArgvParser_H
 #define ArgvParser_H
 
-#include <QtCore/QObject>
+#include <QtCore/QCoreApplication>
 #include <QtCore/QString>
 #include <QtCore/QStringList>
 #include <QtCore/QMap>
@@ -24,10 +24,10 @@ struct ArgvConf {
  * Parses command line and store configuration
  * Require QCoreApplication or QApplication object to be initialized
  */
-class ArgvParser: public QObject {
-    Q_OBJECT
+class ArgvParser {
+    Q_DECLARE_TR_FUNCTIONS(ArgvParser)
     public:
-        explicit ArgvParser(const ArgvConf &conf, QObject *parent = 0);
+        explicit ArgvParser(const ArgvConf &conf);
         virtual ~ArgvParser() {}
 
         void addFlag(const QString &name,
