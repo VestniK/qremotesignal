@@ -10,9 +10,11 @@
 #include <QtCore/QFileInfo>
 #include <QtCore/QTextStream>
 
-const QString HELP_FLAG = "help";
-const QString VERSION_FLAG = "version";
-const QString QT_VERSION_FLAG = "qt-version";
+namespace cmd {
+const QString help = "help";
+const QString version = "version";
+const QString qt_version = "qt-version";
+}
 
 ArgvParser::ArgvParser(const ArgvConf &conf, QTextStream *out, QTextStream *err):
     mOut(out), mErr(err)
@@ -20,9 +22,9 @@ ArgvParser::ArgvParser(const ArgvConf &conf, QTextStream *out, QTextStream *err)
     qApp->setApplicationName(tr(conf.name));
     qApp->setApplicationVersion(conf.version);
     mAppDescription = tr(conf.description);
-    addFlag(HELP_FLAG, tr("Print this help and exit."),'h');
-    addFlag(VERSION_FLAG, tr("Print version information and exit."),'v');
-    addFlag(QT_VERSION_FLAG, tr("Print Qt version information and exit."));
+    addFlag(cmd::help, tr("Print this help and exit."),cmd::help[0]);
+    addFlag(cmd::version, tr("Print version information and exit."),cmd::version[0]);
+    addFlag(cmd::qt_version, tr("Print Qt version information and exit."));
 }
 
 void ArgvParser::addFlag(const QString& name,
@@ -95,15 +97,15 @@ bool ArgvParser::parse() {
 
 bool ArgvParser::handleHelp()
 {
-    if (mFlags[HELP_FLAG]) {
+    if (mFlags[cmd::help]) {
         printHelp();
         return true;
     }
-    if (mFlags[QT_VERSION_FLAG]) {
+    if (mFlags[cmd::qt_version]) {
         printQtVersion();
         return true;
     }
-    if (mFlags[VERSION_FLAG]) {
+    if (mFlags[cmd::version]) {
         printVersion();
         return true;
     }

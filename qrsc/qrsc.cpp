@@ -19,11 +19,13 @@
 #include "argvparser.h"
 #include "config.h"
 
-const QString SERVICE_FLAG = "service";
-const QString CLIENT_FLAG = "client";
-const QString HEADER_OPTION = "header";
-const QString SOURCE_OPTION = "source";
-const QString UPDATE_OPTION = "update";
+namespace cmd {
+const QString service = "service";
+const QString cleint = "client";
+const QString header = "header";
+const QString source = "source";
+const QString update = "update";
+}
 
 ArgvConf qrscArgConf = {
     QT_TRANSLATE_NOOP("ArgvParser", "QRemoteSignal interface compiler"),
@@ -53,32 +55,32 @@ int main(int argc, char *argv[])
     ArgvParser conf(qrscArgConf, &out, &err);
     // Command line options configuration
     conf.addUsageDescription(ArgvParser::tr("--%1|--%2 [OPTIONS] INTERFACE")
-        .arg(SERVICE_FLAG)
-        .arg(CLIENT_FLAG)
+        .arg(cmd::service)
+        .arg(cmd::cleint)
     );
     conf.addUsageDescription(ArgvParser::tr("--%1 SOURCE DEST")
-        .arg(UPDATE_OPTION)
+        .arg(cmd::update)
     );
 
-    conf.addFlag(SERVICE_FLAG,ArgvParser::tr("Create service class."),'s');
-    conf.addFlag(CLIENT_FLAG,ArgvParser::tr("Create client class."),'c');
+    conf.addFlag(cmd::service,ArgvParser::tr("Create service class."),cmd::service[0]);
+    conf.addFlag(cmd::cleint,ArgvParser::tr("Create client class."),cmd::cleint[0]);
     conf.addOption(
-        UPDATE_OPTION,
+        cmd::update,
         ArgvParser::tr("SOURCE DEST"),
         ArgvParser::tr(
             "Update interface file of the format used by the "
             "library version 0.6.0 and earlier to the current "
             "version of the interface description file format."
         ),
-        'u'
+        cmd::update[0]
     );
     conf.addOption(
-        HEADER_OPTION,
+        cmd::header,
         ArgvParser::tr("DEST_HEADER"),
         ArgvParser::tr("Specify output header file.")
     );
     conf.addOption(
-        SOURCE_OPTION,
+        cmd::source,
         ArgvParser::tr("DEST_CPP"),
         ArgvParser::tr("Specify output C++ source file.")
     );
@@ -89,7 +91,7 @@ int main(int argc, char *argv[])
         return 0;
 
     if (conf.arguments().isEmpty()) {
-        if ( conf.options()[UPDATE_OPTION].isEmpty() )
+        if ( conf.options()[cmd::update].isEmpty() )
             err << ArgvParser::tr("Error: Input file not specified!") << endl;
         else
             err << ArgvParser::tr("Error: Destination file not specified!") << endl;
@@ -98,8 +100,8 @@ int main(int argc, char *argv[])
     }
 
     // Update document
-    if (!conf.options()[UPDATE_OPTION].isEmpty()) {
-        InterfaceDocument inputDoc(conf.options()[UPDATE_OPTION]);
+    if (!conf.options()[cmd::update].isEmpty()) {
+        InterfaceDocument inputDoc(conf.options()[cmd::update]);
         QFile out(conf.arguments().first());
         out.open(QIODevice::WriteOnly | QIODevice::Text);
         inputDoc.getIODevice()->seek(0);
@@ -116,14 +118,14 @@ int main(int argc, char *argv[])
     InterfaceCompiler compiler(&inputDoc);
 
     /// @todo move output files to the compiler class.
-    QString header = conf.options()[HEADER_OPTION];
-    QString source = conf.options()[SOURCE_OPTION];
-    if (conf.flags()[SERVICE_FLAG] && conf.flags()[CLIENT_FLAG]) {
+    QString header = conf.options()[cmd::header];
+    QString source = conf.options()[cmd::source];
+    if (conf.flags()[cmd::service] && conf.flags()[cmd::cleint]) {
         err << ArgvParser::tr("You should specify --%1 or --%2 flag but not both!")
-            .arg(SERVICE_FLAG).arg(CLIENT_FLAG) << endl;
+            .arg(cmd::service).arg(cmd::cleint) << endl;
         return 1;
     }
-    if (conf.flags()[SERVICE_FLAG]) {
+    if (conf.flags()[cmd::service]) {
         if (!header.isEmpty())
             inputDoc.setServiceHeader(header);
         if (!source.isEmpty())
@@ -136,7 +138,7 @@ int main(int argc, char *argv[])
             err << QCoreApplication::tr("Failed to compile the interface!") << endl;
             return 1;
         }
-    } else if (conf.flags()[CLIENT_FLAG]) {
+    } else if (conf.flags()[cmd::cleint]) {
         if (!header.isEmpty()) {
             inputDoc.setClientHeader(header);
         }
@@ -153,8 +155,8 @@ int main(int argc, char *argv[])
         }
     } else {
         err << QCoreApplication::tr("You should specify --%1 or --%2 flag!")
-            .arg(SERVICE_FLAG)
-            .arg(CLIENT_FLAG) << endl;
+            .arg(cmd::service)
+            .arg(cmd::cleint) << endl;
         return 1;
     }
 
