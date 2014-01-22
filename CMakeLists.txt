@@ -4,10 +4,42 @@ set(QRS_MAJOR_VERSION 1)
 set(QRS_MINOR_VERSION 3)
 set(QRS_PATCH_VERSION 0)
 set(QRS_TWEAK_VERSION "")
+# set(CXX_FLAGS "-fPIC")
+# set(CPP_FLAGS "-fPIC")
+# set(C_FLAGS "-fPIC")
+
 
 set(QRS_VERSION_STRING "${QRS_MAJOR_VERSION}.${QRS_MINOR_VERSION}.${QRS_PATCH_VERSION}${QRS_TWEAK_VERSION}")
 
-find_package(Qt4 4.5.0 REQUIRED)
+#find_package(Qt4 4.5.0 REQUIRED)
+#find_package(Q54 5.2.0 REQUIRED)
+option(QT4_BUILD "Force building with Qt4 even if Qt5 is found")
+IF (NOT QT4_BUILD)
+  FIND_PACKAGE( Qt5Core QUIET )
+ENDIF()
+
+IF (Qt5Core_FOUND)
+  MESSAGE ("Qt5 found")
+
+  INCLUDE_DIRECTORIES(${Qt5Core_INCLUDE_DIRS})
+  ADD_DEFINITIONS(${Qt5Core_DEFINITIONS})
+
+  # Tell CMake to run moc when necessary:
+  set(CMAKE_AUTOMOC ON)
+
+  # As moc files are generated in the binary dir, tell CMake
+  # to always look for includes there:
+  set(CMAKE_INCLUDE_CURRENT_DIR ON)
+ELSE()
+  MESSAGE ("Qt5 not found, searching for Qt4")
+  # Find Qt4
+  FIND_PACKAGE( Qt4 REQUIRED )
+
+  # Include the cmake file needed to use qt4
+  INCLUDE( ${QT_USE_FILE} )
+
+ENDIF()
+
 find_package(QJSON 0.6.3 REQUIRED)
 
 set(CMAKE_RUNTIME_OUTPUT_DIRECTORY ${CMAKE_CURRENT_BINARY_DIR}/bin)
