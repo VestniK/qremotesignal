@@ -1,10 +1,10 @@
 cmake_minimum_required(VERSION 2.6.3)
 
-IF (NOT WIN32)
-  SET( QT_DONT_USE_QTGUI TRUE )
+set(QT_DONT_USE_QTGUI True)
+
+IF (NOT Qt5Core_FOUND)
+include(${QT_USE_FILE})
 ENDIF()
-#	set(QT_DONT_USE_QTGUI True)
-#include(${QT_USE_FILE})
 
 include_directories(${QJSON_INCLUDE_DIR})
 # needed to be able to include QJson headers like qjson/header.h
@@ -36,9 +36,12 @@ ENDIF()
 add_library(QRemoteSignal ${SRC} ${MOC_SRC})
 IF (Qt5Core_FOUND)
 qt5_use_modules(QRemoteSignal Core)
+target_link_libraries(QRemoteSignal ${QJSON_LIBRARIES})
 ELSE()
 target_link_libraries(QRemoteSignal ${QT_LIBRARIES} ${QJSON_LIBRARIES})
 ENDIF()
+
+set_target_properties(QRemoteSignal PROPERTIES LINK_SEARCH_END_STATIC 1)
 
 set_target_properties(QRemoteSignal PROPERTIES
   VERSION   "${QRS_MAJOR_VERSION}.${QRS_MINOR_VERSION}"

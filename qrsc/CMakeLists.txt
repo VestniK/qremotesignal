@@ -5,7 +5,9 @@ cmake_minimum_required(VERSION 2.8.0)
 #set(QT_USE_QTXMLPATTERNS True)
   SET( QT_USE_QTXMLPATTERNS TRUE )
 
-#include(${QT_USE_FILE})
+IF (NOT Qt5Core_FOUND)
+include(${QT_USE_FILE})
+ENDIF()
 
 include_directories(${CMAKE_CURRENT_BINARY_DIR})
 

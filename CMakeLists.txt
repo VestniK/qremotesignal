@@ -4,18 +4,14 @@ set(QRS_MAJOR_VERSION 1)
 set(QRS_MINOR_VERSION 3)
 set(QRS_PATCH_VERSION 0)
 set(QRS_TWEAK_VERSION "")
-# set(CXX_FLAGS "-fPIC")
-# set(CPP_FLAGS "-fPIC")
-# set(C_FLAGS "-fPIC")
-
 
 set(QRS_VERSION_STRING "${QRS_MAJOR_VERSION}.${QRS_MINOR_VERSION}.${QRS_PATCH_VERSION}${QRS_TWEAK_VERSION}")
 
-#find_package(Qt4 4.5.0 REQUIRED)
-#find_package(Q54 5.2.0 REQUIRED)
 option(QT4_BUILD "Force building with Qt4 even if Qt5 is found")
 IF (NOT QT4_BUILD)
   FIND_PACKAGE( Qt5Core QUIET )
+ELSE()
+	find_package(Qt4 4.5.0 REQUIRED)
 ENDIF()
 
 IF (Qt5Core_FOUND)
@@ -45,7 +41,9 @@ find_package(QJSON 0.6.3 REQUIRED)
 set(CMAKE_RUNTIME_OUTPUT_DIRECTORY ${CMAKE_CURRENT_BINARY_DIR}/bin)
 
 # Configurable values
-set(BUILD_SHARED_LIBS True CACHE BOOL "Specify to build shared or static library.")
+set(BUILD_SHARED_LIBS OFF)
+set(CMAKE_EXE_LINKER_FLAGS "-static-libgcc -static-libstdc++ -static")
+#set(BUILD_SHARED_LIBS True CACHE BOOL "Specify to build shared or static library.")
 set(QRS_DOCS True CACHE BOOL "Set to true if documentation should be generated (API-docs and man page).")
 set(QRS_TEST False CACHE BOOL "Specifies if tests should be compiled and executed or not")
 set(LIB_SUFFIX "" CACHE STRING "Define the suffix of the library directory name (32/64)." )
