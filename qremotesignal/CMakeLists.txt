@@ -41,8 +41,6 @@ ELSE()
 target_link_libraries(QRemoteSignal ${QT_LIBRARIES} ${QJSON_LIBRARIES})
 ENDIF()
 
-set_target_properties(QRemoteSignal PROPERTIES LINK_SEARCH_END_STATIC 1)
-
 set_target_properties(QRemoteSignal PROPERTIES
   VERSION   "${QRS_MAJOR_VERSION}.${QRS_MINOR_VERSION}"
   SOVERSION "${QRS_MAJOR_VERSION}"

@@ -41,9 +41,7 @@ find_package(QJSON 0.6.3 REQUIRED)
 set(CMAKE_RUNTIME_OUTPUT_DIRECTORY ${CMAKE_CURRENT_BINARY_DIR}/bin)
 
 # Configurable values
-set(BUILD_SHARED_LIBS OFF)
-set(CMAKE_EXE_LINKER_FLAGS "-static-libgcc -static-libstdc++ -static")
-#set(BUILD_SHARED_LIBS True CACHE BOOL "Specify to build shared or static library.")
+set(BUILD_SHARED_LIBS True CACHE BOOL "Specify to build shared or static library.")
 set(QRS_DOCS True CACHE BOOL "Set to true if documentation should be generated (API-docs and man page).")
 set(QRS_TEST False CACHE BOOL "Specifies if tests should be compiled and executed or not")
 set(LIB_SUFFIX "" CACHE STRING "Define the suffix of the library directory name (32/64)." )
