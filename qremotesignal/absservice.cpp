@@ -11,6 +11,12 @@
 #include <QtCore/QMetaMethod>
 #include <QtCore/QByteArray>
 
+#if (QT_VERSION >= QT_VERSION_CHECK(5,2,0))
+#    define QT_METHOD_SIGNATURE(method) method.methodSignature().constData()
+#else
+#    define QT_METHOD_SIGNATURE(method) method.signature()
+#endif
+
 using namespace qrs;
 
 bool AbsService::autoconnect(QObject *target) {
@@ -23,25 +29,16 @@ bool AbsService::autoconnect(QObject *target) {
     {
         QMetaMethod method = serviceMetaObject->method(i);
 
-#if (QT_VERSION >= QT_VERSION_CHECK(5,2,0))
-        QByteArray nsignature = QMetaObject::normalizedSignature(method.methodSignature());
-#else
-        QByteArray nsignature = QMetaObject::normalizedSignature(method.signature());
-#endif
+        QByteArray nsignature = QMetaObject::normalizedSignature(QT_METHOD_SIGNATURE(method));
 
-        if ( method.methodType() == QMetaMethod::Signal ) 
+        if ( method.methodType() == QMetaMethod::Signal )
         {
             int pairIndx = targetMetaObject->indexOfSlot(nsignature);
             if (pairIndx == -1) 
             {
                 res = false;
-/*                qWarning("qrs::AbsService::autoconnect: failed to find pair for the signal %s::%s",
-                         serviceMetaObject->className(),
-#if (QT_VERSION >= QT_VERSION_CHECK(5,2,0))
-                         method.methodSignature() );
-#else
-                         method.signature() );
-#endif*/
+                qWarning("qrs::AbsService::autoconnect: failed to find pair for the signal %s::%s",
+                         serviceMetaObject->className(), QT_METHOD_SIGNATURE(method));
                 continue;
             }
             QMetaMethod pair = targetMetaObject->method(pairIndx);
@@ -49,19 +46,9 @@ bool AbsService::autoconnect(QObject *target) {
             if (!connect(this,method,target,pair)) 
             {
                 res = false;
-/*                qWarning("qrs::AbsService::autoconnect: failed to connect %s::%s to %s::%s",
-                         serviceMetaObject->className(),	
-#if (QT_VERSION >= QT_VERSION_CHECK(5,2,0))
-                         method.methodSignature(),
-#else
-                         method.signature(),
-#endif
-                         targetMetaObject->className(),
-#if (QT_VERSION >= QT_VERSION_CHECK(5,2,0))
-                         pair.methodSignature());
-#else
-                         pair.signature());
-#endif*/                        
+                qWarning("qrs::AbsService::autoconnect: failed to connect %s::%s to %s::%s",
+                         serviceMetaObject->className(), QT_METHOD_SIGNATURE(method),
+                         targetMetaObject->className(), QT_METHOD_SIGNATURE(pair));
                 continue;
             }
 #else
@@ -78,15 +65,9 @@ bool AbsService::autoconnect(QObject *target) {
 
             if (!connect(this,signal.constData(), target,slot.constData())) {
                 res = false;
-/*                qWarning("qrs::AbsService::autoconnect: failed to connect %s::%s to %s::%s",
-                         serviceMetaObject->className(),
-#if (QT_VERSION >= QT_VERSION_CHECK(5,2,0))
-                         method.methodSignature(),
-#else
-                         method.signature(),
-#endif*/
-                         targetMetaObject->className(),
-                        pair.signature());
+                qWarning("qrs::AbsService::autoconnect: failed to connect %s::%s to %s::%s",
+                         serviceMetaObject->className(), QT_METHOD_SIGNATURE(method),
+                         targetMetaObject->className(), QT_METHOD_SIGNATURE(pair));
                 continue;
             }
 #endif
@@ -94,33 +75,17 @@ bool AbsService::autoconnect(QObject *target) {
             int pairIndx = targetMetaObject->indexOfSignal(nsignature);
             if (pairIndx == -1) {
                 res = false;
-/*                qWarning("qrs::AbsService::autoconnect: failed to find pair for the slot %s::%s",
-                         serviceMetaObject->className(),
-#if (QT_VERSION >= QT_VERSION_CHECK(5,2,0))
-                         method.methodSignature());
-#else
-                         method.signature());
-#endif*/
+                qWarning("qrs::AbsService::autoconnect: failed to find pair for the slot %s::%s",
+                         serviceMetaObject->className(), QT_METHOD_SIGNATURE(method));
                 continue;
             }
             QMetaMethod pair = targetMetaObject->method(pairIndx);
 #if (QT_VERSION >= QT_VERSION_CHECK(4,8,0))
             if (!connect(target,pair,this,method)){
                 res = false;
-/*                qWarning("qrs::AbsService::autoconnect: failed to connect %s::%s to %s::%s",
-                         targetMetaObject->className(),
-#if (QT_VERSION >= QT_VERSION_CHECK(5,2,0))
-                         pair.methodSignature(),
-#else
-                         pair.signature(),
-#endif                        
-                         serviceMetaObject->className(),
-#if (QT_VERSION >= QT_VERSION_CHECK(5,2,0))
-                         method.methodSignature());
-#else
-                         method.signature());
-#endif*/
-
+                qWarning("qrs::AbsService::autoconnect: failed to connect %s::%s to %s::%s",
+                         targetMetaObject->className(), QT_METHOD_SIGNATURE(pair),
+                         serviceMetaObject->className(), QT_METHOD_SIGNATURE(method));
                 continue;
             }
 #else
@@ -137,15 +102,9 @@ bool AbsService::autoconnect(QObject *target) {
 
             if (!connect(target,signal.constData(), this,slot.constData())) {
                 res = false;
-/*                qWarning("qrs::AbsService::autoconnect: failed to connect %s::%s to %s::%s",
-                         targetMetaObject->className(),
-                         pair.signature(),
-                         serviceMetaObject->className(),
-#if (QT_VERSION >= QT_VERSION_CHECK(5,2,0))
-                         method.methodSignature());
-#else
-                         method.signature());
-#endif*/
+                qWarning("qrs::AbsService::autoconnect: failed to connect %s::%s to %s::%s",
+                         targetMetaObject->className(), QT_METHOD_SIGNATURE(pair),
+                         serviceMetaObject->className(), QT_METHOD_SIGNATURE(method));
                 continue;
             }
 #endif

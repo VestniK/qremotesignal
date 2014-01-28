@@ -1,10 +1,9 @@
 cmake_minimum_required(VERSION 2.6.3)
 
 set(QT_DONT_USE_QTGUI True)
-
-IF (NOT Qt5Core_FOUND)
-include(${QT_USE_FILE})
-ENDIF()
+if(QT4_BUILD)
+  include(${QT_USE_FILE})
+endif(QT4_BUILD)
 
 include_directories(${QJSON_INCLUDE_DIR})
 # needed to be able to include QJson headers like qjson/header.h
@@ -29,17 +28,17 @@ set(MOC_HDRS
   servicesmanager.h
 )
 
-IF (NOT Qt5Core_FOUND)
-qt4_wrap_cpp(MOC_SRC ${MOC_HDRS})
-ENDIF()
+if(QT4_BUILD)
+  qt4_wrap_cpp(MOC_SRC ${MOC_HDRS})
+endif(QT4_BUILD)
 
 add_library(QRemoteSignal ${SRC} ${MOC_SRC})
-IF (Qt5Core_FOUND)
-qt5_use_modules(QRemoteSignal Core)
-target_link_libraries(QRemoteSignal ${QJSON_LIBRARIES})
-ELSE()
-target_link_libraries(QRemoteSignal ${QT_LIBRARIES} ${QJSON_LIBRARIES})
-ENDIF()
+if(NOT QT4_BUILD)
+  qt5_use_modules(QRemoteSignal Core)
+  target_link_libraries(QRemoteSignal ${QJSON_LIBRARIES})
+else(NOT QT4_BUILD)
+  target_link_libraries(QRemoteSignal ${QT_LIBRARIES} ${QJSON_LIBRARIES})
+endif(NOT QT4_BUILD)
 
 set_target_properties(QRemoteSignal PROPERTIES
   VERSION   "${QRS_MAJOR_VERSION}.${QRS_MINOR_VERSION}"
