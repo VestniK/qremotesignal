@@ -1,16 +1,18 @@
 /**
- * @file jsonserializer.cpp
- * @brief JsonSerializer implementation
+ * @file qjsonserializer.cpp
+ * @brief JsonSerializer implementation based on QJson library
  *
- * Qt5 based JSON serializer implementation.
+ * This implementation is used with Qt4 build of the library since there are no
+ * JSON support in Qt4 itself.
  *
  * @author VestniK (Sergey N.Vidyuk) sir.vestnik@gmail.com
- * @date 29 Jan 2014
+ * @date 5 Sep 2009
  */
-#include <QJsonDocument>
-#include <QJsonParseError>
-
 #include "jsonserializer.h"
+
+// QJson
+#include <qjson/parser.h>
+#include <qjson/serializer.h>
 
 // Json mesage types
 const QString ERROR_TYPE = "Error";
@@ -28,6 +30,7 @@ using namespace qrs;
 
 QByteArray JsonSerializer::serialize ( const Message& msg )
       throw(UnsupportedTypeException) {
+   QJson::Serializer serializer;
    QVariantMap message;
    message.insert(SERVICE_KEY,msg.service());
    message.insert(METHOD_KEY,msg.method());
@@ -43,22 +46,21 @@ QByteArray JsonSerializer::serialize ( const Message& msg )
    } else {
       /// @todo what to do if message type is incorrect?
    }
-   QJsonDocument jsonMsg = QJsonDocument::fromVariant(QVariant(jsonObject));
-   return jsonMsg.toJson(QJsonDocument::Compact);
+   return serializer.serialize( QVariant(jsonObject) );
 }
 
 MessageAP JsonSerializer::deserialize ( const QByteArray& msg )
       throw(MessageParsingException) {
-   QJsonParseError parseError;
+   QJson::Parser parser;
+   bool ok;
    // trying to parse incoming message
-   QJsonDocument jsonMsg = QJsonDocument::fromJson(msg, &parseError);
-   if ( jsonMsg.isNull() ) {
-      QString desc = "JSON error at position %1: %2";
-      desc = desc.arg(parseError.offset).arg(parseError.errorString());
+   QVariantMap result = parser.parse (msg, &ok).toMap();
+   if ( !ok ) {
+      QString desc = "JSON error. line %1: %2";
+      desc = desc.arg(parser.errorLine()).arg(parser.errorString());
       MessageParsingException err(desc,Message::ProtocolError);
       throw( err );
    }
-   QVariantMap result = jsonMsg.toVariant().toMap();
    if ( result.isEmpty() ) {
       QString desc = "Empty JSON message";
       MessageParsingException err(desc,Message::ProtocolError);

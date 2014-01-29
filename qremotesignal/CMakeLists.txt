@@ -17,12 +17,19 @@ endif(BUILD_SHARED_LIBS)
 set(SRC
   baseconverters.cpp
   servicesmanager.cpp
-  jsonserializer.cpp
   message.cpp
   qdatastreamserializer.cpp
   devicemanager.cpp
   absservice.cpp
 )
+
+if(QT4_BUILD)
+  # use QJson implemantation of JSON serializer in case of Qt4
+  list(APPEND SRC qjsonserializer.cpp)
+else(QT4_BUILD)
+  list(APPEND SRC jsonserializer.cpp)
+endif(QT4_BUILD)
+
 set(MOC_HDRS
   devicemanager.h
   servicesmanager.h
@@ -35,7 +42,6 @@ endif(QT4_BUILD)
 add_library(QRemoteSignal ${SRC} ${MOC_SRC})
 if(NOT QT4_BUILD)
   qt5_use_modules(QRemoteSignal Core)
-  target_link_libraries(QRemoteSignal ${QJSON_LIBRARIES})
 else(NOT QT4_BUILD)
   target_link_libraries(QRemoteSignal ${QT_LIBRARIES} ${QJSON_LIBRARIES})
 endif(NOT QT4_BUILD)

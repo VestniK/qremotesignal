@@ -32,10 +32,9 @@ if(Qt5Core_FOUND)
 else(Qt5Core_FOUND)
   message(STATUS "Qt5 not found, searching for Qt4")
   find_package(Qt4 4.5.0 REQUIRED)
+  find_package(QJSON 0.6.3 REQUIRED)
   set(QT4_BUILD True)
 endif(Qt5Core_FOUND)
-# Rest of the dependencies
-find_package(QJSON 0.6.3 REQUIRED)
 
 set(CMAKE_RUNTIME_OUTPUT_DIRECTORY ${CMAKE_CURRENT_BINARY_DIR}/bin)
 # As moc files are generated in the binary dir, tell CMake
