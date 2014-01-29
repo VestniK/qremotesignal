@@ -7,8 +7,6 @@ set(QRS_TWEAK_VERSION "")
 
 set(QRS_VERSION_STRING "${QRS_MAJOR_VERSION}.${QRS_MINOR_VERSION}.${QRS_PATCH_VERSION}${QRS_TWEAK_VERSION}")
 
-ELSE()
-	find_package(Qt4 4.5.0 REQUIRED)
 # Configurable values
 set(QT4_BUILD False CACHE BOOL "Force building with Qt4 even if Qt5 is found")
 set(BUILD_SHARED_LIBS True CACHE BOOL "Specify to build shared or static library.")
