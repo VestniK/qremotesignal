@@ -37,7 +37,7 @@ set(EXAMPLE_SERVICE "${CMAKE_CURRENT_SOURCE_DIR}/example.xml")
 
 # Iterating through the test subdirectories
 add_subdirectory(converters)
-# add_subdirectory(autoconnect)
+add_subdirectory(autoconnect)
 # add_subdirectory(customtypes)
 # add_subdirectory(devicemanager)
 # add_subdirectory(errors)

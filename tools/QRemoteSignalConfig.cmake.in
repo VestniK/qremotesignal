@@ -13,7 +13,7 @@ macro(qrs_wrap_service output)
       COMMAND ${QRemoteSignal_QRSC_EXECUTABLE} --service --header ${_service_header} --source ${_service_source} ${_service}
       DEPENDS ${_service}
     )
-    qt4_wrap_cpp(_service_moc ${_service_header})
+    qt5_wrap_cpp(_service_moc ${_service_header})
     set_source_files_properties(${_service_header} PROPERTIES GENERATED 1)
     set_source_files_properties(${_service_source} PROPERTIES GENERATED 1)
     set(${output} ${${output}} ${_service_source})
@@ -32,7 +32,7 @@ macro(qrs_wrap_client output)
       COMMAND ${QRemoteSignal_QRSC_EXECUTABLE} --client --header ${_client_header} --source ${_client_source} ${_service}
       DEPENDS ${_service}
     )
-    qt4_wrap_cpp(_client_moc ${_client_header})
+    qt5_wrap_cpp(_client_moc ${_client_header})
     set_source_files_properties(${_client_header} PROPERTIES GENERATED 1)
     set_source_files_properties(${_client_source} PROPERTIES GENERATED 1)
     set(${output} ${${output}} ${_client_source})
