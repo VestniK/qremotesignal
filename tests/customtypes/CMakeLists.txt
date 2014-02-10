@@ -1,20 +1,17 @@
-cmake_minimum_required(VERSION 2.6.3)
+cmake_minimum_required(VERSION 2.8.0)
 
 include_directories(.)
-include_directories(${CMAKE_CURRENT_BINARY_DIR})
 
 set(testSRC
   customtypestests.cpp
   customconverters.cpp
 )
 
-qt4_generate_moc(customtypestests.cpp
-  "${CMAKE_CURRENT_BINARY_DIR}/customtypestests.moc"
-)
 qrs_wrap_service(SERVICE_SRC customtype.xml)
 qrs_wrap_client(CLIENT_SRC customtype.xml)
 
-add_executable(TestCustomTypes ${testSRC} ${SERVICE_SRC} ${CLIENT_SRC} customtypestests.moc)
-target_link_libraries(TestCustomTypes QRemoteSignal ${QT_LIBRARIES} ${QJSON_LIBRARIES})
+add_executable(TestCustomTypes ${testSRC} ${SERVICE_SRC} ${CLIENT_SRC})
+qt5_use_modules(TestCustomTypes Core Test)
+target_link_libraries(TestCustomTypes QRemoteSignal)
 
 qrs_qtest(TestCustomTypes)

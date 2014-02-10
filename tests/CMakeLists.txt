@@ -1,4 +1,4 @@
-cmake_minimum_required(VERSION 2.6.3)
+cmake_minimum_required(VERSION 2.8.0)
 
 # Defining simplified add test macro
 set(QRS_QTEST_REPORTS_DIR "${CMAKE_BINARY_DIR}/reports")
@@ -32,9 +32,9 @@ set(EXAMPLE_SERVICE "${CMAKE_CURRENT_SOURCE_DIR}/example.xml")
 # Iterating through the test subdirectories
 add_subdirectory(converters)
 add_subdirectory(autoconnect)
-# add_subdirectory(customtypes)
-# add_subdirectory(devicemanager)
-# add_subdirectory(errors)
-# add_subdirectory(remotesignals)
-# add_subdirectory(serializers)
+add_subdirectory(customtypes)
+add_subdirectory(devicemanager)
+add_subdirectory(errors)
+add_subdirectory(remotesignals)
+add_subdirectory(serializers)
 # add_subdirectory(servicesmanager)
