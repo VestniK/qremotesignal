@@ -11,7 +11,7 @@ macro(qrs_wrap_service output)
     add_custom_command(
       OUTPUT ${_service_header} ${_service_source}
       COMMAND ${QRemoteSignal_QRSC_EXECUTABLE} --service --header ${_service_header} --source ${_service_source} ${_service}
-      DEPENDS ${_service}
+      DEPENDS ${_service} ${QRemoteSignal_QRSC_EXECUTABLE}
     )
     qt5_wrap_cpp(_service_moc ${_service_header})
     set_source_files_properties(${_service_header} PROPERTIES GENERATED 1)
@@ -30,7 +30,7 @@ macro(qrs_wrap_client output)
     add_custom_command(
       OUTPUT ${_client_header} ${_client_source}
       COMMAND ${QRemoteSignal_QRSC_EXECUTABLE} --client --header ${_client_header} --source ${_client_source} ${_service}
-      DEPENDS ${_service}
+      DEPENDS ${_service} ${QRemoteSignal_QRSC_EXECUTABLE}
     )
     qt5_wrap_cpp(_client_moc ${_client_header})
     set_source_files_properties(${_client_header} PROPERTIES GENERATED 1)

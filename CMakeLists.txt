@@ -1,7 +1,7 @@
 cmake_minimum_required(VERSION 2.8.0)
 project(QRemoteSignal)
-set(QRS_MAJOR_VERSION 1)
-set(QRS_MINOR_VERSION 3)
+set(QRS_MAJOR_VERSION 2)
+set(QRS_MINOR_VERSION 0)
 set(QRS_PATCH_VERSION 0)
 set(QRS_TWEAK_VERSION "")
 
@@ -15,7 +15,7 @@ set(QRS_TEST False CACHE BOOL "Specifies if tests should be compiled and execute
 set(LIB_SUFFIX "" CACHE STRING "Define the suffix of the library directory name (32/64)." )
 set(LIB_INSTALL_DIR "lib${LIB_SUFFIX}" CACHE PATH "Libraries installation directory.")
 set(BIN_INSTALL_DIR "bin" CACHE PATH "Binary executebles installation directory.")
-set(INCLUDE_INSTALL_DIR "include/${PROJECT_NAME}" CACHE PATH "Public header installation directory.")
+set(INCLUDE_INSTALL_DIR "include/${PROJECT_NAME}${QRS_MAJOR_VERSION}" CACHE PATH "Public header installation directory.")
 
 # Check for Qt
 if(NOT QT4_BUILD)

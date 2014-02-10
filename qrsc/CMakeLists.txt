@@ -23,7 +23,7 @@ set(QRC
   templates.qrc
 )
 set(TS
-  qrsc-ru.ts
+  qrsc${QRS_MAJOR_VERSION}-ru.ts
 )
 
 if(QT4_BUILD)
@@ -47,6 +47,9 @@ endif(NOT QT4_BUILD)
 add_custom_command(TARGET qrsc POST_BUILD
   COMMAND ${CMAKE_COMMAND} -E make_directory ${CMAKE_BINARY_DIR}/share/i18n
   COMMAND ${CMAKE_COMMAND} -E copy ${QM} ${CMAKE_BINARY_DIR}/share/i18n/
+)
+set_target_properties(qrsc PROPERTIES
+  OUTPUT_NAME qrsc${QRS_MAJOR_VERSION}
 )
 
 install(TARGETS qrsc

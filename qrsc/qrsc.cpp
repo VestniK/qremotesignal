@@ -45,7 +45,7 @@ int main(int argc, char *argv[])
 
     QString locale = QLocale::system().name();
     QTranslator translator;
-    QString i18nFile = QString("qrsc-%1").arg(locale);
+    QString i18nFile = QString("qrsc%1-%2").arg(VERSION_MAJOR_NUMBER).arg(locale);
     if (!translator.load(i18nFile,TRANSLATIONS_DIR))
         translator.load(i18nFile,app.applicationDirPath()+"/../share/i18n");
     app.installTranslator(&translator);
