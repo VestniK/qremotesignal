@@ -25,12 +25,6 @@ configure_file("${CMAKE_SOURCE_DIR}/tools/QRemoteSignalConfig.cmake.in"
 include("${CMAKE_CURRENT_BINARY_DIR}/QRemoteSignalConfig.cmake")
 
 # Setting up libraries
-set(QT_DONT_USE_QTGUI True)
-set(QT_USE_QTTEST True)
-if (QT4_BUILD)
-  include(${QT_USE_FILE})
-  link_directories(${QJSON_LIBRARY_DIRS})
-endif(QT4_BUILD)
 include_directories(${QRemoteSignal_INCLUDE_DIR})
 
 set(EXAMPLE_SERVICE "${CMAKE_CURRENT_SOURCE_DIR}/example.xml")
