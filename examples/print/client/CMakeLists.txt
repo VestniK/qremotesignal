@@ -7,7 +7,6 @@ set(services
 
 qrs_wrap_client(clients_SRC ${services})
 
-include_directories(${CMAKE_CURRENT_BINARY_DIR})
-
 add_executable(printClient ${client_SRC} ${clients_SRC})
-target_link_libraries(printClient ${QT_LIBRARIES} ${QRemoteSignal_LIBRARY})
+qt5_use_modules(printClient Core Network)
+target_link_libraries(printClient ${QRemoteSignal_LIBRARY})
