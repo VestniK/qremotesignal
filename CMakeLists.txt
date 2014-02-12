@@ -17,10 +17,13 @@ set(BIN_INSTALL_DIR "bin" CACHE PATH "Binary executebles installation directory.
 set(INCLUDE_INSTALL_DIR "include/${PROJECT_NAME}${QRS_MAJOR_VERSION}" CACHE PATH "Public header installation directory.")
 set(CMAKE_RUNTIME_OUTPUT_DIRECTORY ${CMAKE_CURRENT_BINARY_DIR}/bin)
 
-# Check for Qt
+# Check for libs
 find_package(Qt5Core REQUIRED)
+# Actual version of QJSON is current master compiled with Qt5 which is higher than 0.8.1 but there were no releases
+# wich can be compiled with Qt5 so depend on lates release here.
+find_package(QJSON 0.8.1 REQUIRED)
 
-include_directories(${Qt5Core_INCLUDE_DIRS})
+include_directories(${Qt5Core_INCLUDE_DIRS} ${QJSON_INCLUDE_DIR})
 add_definitions(${Qt5Core_DEFINITIONS})
 # Tell CMake to run moc when necessary:
 set(CMAKE_AUTOMOC ON)
