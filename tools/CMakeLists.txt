@@ -36,9 +36,9 @@ else(NOT IS_ABSOLUTE ${BIN_INSTALL_DIR})
 endif(NOT IS_ABSOLUTE ${BIN_INSTALL_DIR})
 
 if(INSTALL_QMAKE_FEATURE_TO_QTDIR)
-  set(QMAKE_FEATURE_INSTALL_DIR "${QT_MKSPECS_DIR}/features")
+  set(QMAKE_FEATURE_INSTALL_DIR "${QT_MKSPECS_DIR}/features") #TODO: test and fix
 else(INSTALL_QMAKE_FEATURE_TO_QTDIR)
-  set(QMAKE_FEATURE_INSTALL_DIR "share/qt4/mkspecs/features")
+  set(QMAKE_FEATURE_INSTALL_DIR "share/qt5/mkspecs/features")
 endif(INSTALL_QMAKE_FEATURE_TO_QTDIR)
 
 configure_file(QRemoteSignalConfig.cmake.in ${CMAKE_CURRENT_BINARY_DIR}/QRemoteSignal${QRS_MAJOR_VERSION}Config.cmake @ONLY)
