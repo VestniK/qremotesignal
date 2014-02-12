@@ -41,12 +41,12 @@ else(INSTALL_QMAKE_FEATURE_TO_QTDIR)
   set(QMAKE_FEATURE_INSTALL_DIR "share/qt4/mkspecs/features")
 endif(INSTALL_QMAKE_FEATURE_TO_QTDIR)
 
-configure_file(QRemoteSignalConfig.cmake.in ${CMAKE_CURRENT_BINARY_DIR}/QRemoteSignalConfig${QRS_MAJOR_VERSION}.cmake @ONLY)
+configure_file(QRemoteSignalConfig.cmake.in ${CMAKE_CURRENT_BINARY_DIR}/QRemoteSignal${QRS_MAJOR_VERSION}Config.cmake @ONLY)
 configure_file(QRemoteSignal.pc.in ${CMAKE_CURRENT_BINARY_DIR}/QRemoteSignal${QRS_MAJOR_VERSION}.pc @ONLY)
 configure_file(qremotesignal.prf.in ${CMAKE_CURRENT_BINARY_DIR}/qremotesignal${QRS_MAJOR_VERSION}.prf @ONLY)
 
-install(FILES ${CMAKE_CURRENT_BINARY_DIR}/QRemoteSignalConfig${QRS_MAJOR_VERSION}.cmake
-  DESTINATION "${LIB_INSTALL_DIR}/cmake/${PROJECT_NAME}"
+install(FILES ${CMAKE_CURRENT_BINARY_DIR}/QRemoteSignal${QRS_MAJOR_VERSION}Config.cmake
+  DESTINATION "${LIB_INSTALL_DIR}/cmake/${PROJECT_NAME}${QRS_MAJOR_VERSION}"
   COMPONENT Devel
 )
 install(FILES ${CMAKE_CURRENT_BINARY_DIR}/QRemoteSignal${QRS_MAJOR_VERSION}.pc
