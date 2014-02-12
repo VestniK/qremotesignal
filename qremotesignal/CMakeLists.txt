@@ -20,6 +20,7 @@ target_link_libraries(QRemoteSignal ${QJSON_LIBRARIES})
 set_target_properties(QRemoteSignal PROPERTIES
   VERSION   "${QRS_MAJOR_VERSION}.${QRS_MINOR_VERSION}"
   SOVERSION "${QRS_MAJOR_VERSION}"
+  OUTPUT_NAME QRemoteSignal${QRS_MAJOR_VERSION}
 )
 
 install(TARGETS QRemoteSignal

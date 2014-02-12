@@ -2,7 +2,7 @@
 # Library paths #
 #################
 QRSC = @ABS_QRSC_PATH@
-LIBS += -L@ABS_LIB_DIR@ -lQRemoteSignal
+LIBS += -L@ABS_LIB_DIR@ -lQRemoteSignal@QRS_MAJOR_VERSION@
 INCLUDEPATH += @ABS_INCLUDE_DIR@
 
 ###########################

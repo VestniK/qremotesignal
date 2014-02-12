@@ -7,6 +7,6 @@ Description: Remote signal/slot call library for Qt4
 Version: @QRS_VERSION_STRING@
 URL: http://qremotesignal.googlecode.com
 Requires: QtCore >= 4.5.0, QJson
-Libs: -L${libdir} -lQRemoteSignal
+Libs: -L${libdir} -lQRemoteSignal@QRS_MAJOR_VERSION@
 Libs.private: -lqjson
 Cflags: -I${prefix}/include -I${includedir}
