@@ -6,4 +6,4 @@ HEADERS=server.h
 QRS_SERVICE_INTERFACES = '../services/print.xml'
 
 QT = core network
-CONFIG += console qremotesignal
+CONFIG += console qremotesignal2

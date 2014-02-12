@@ -8,4 +8,4 @@ QRS_CLIENT_INTERFACES = ../services/hello.xml
 QT -= gui
 QT += network
 
-CONFIG += console qremotesignal
+CONFIG += console qremotesignal2
