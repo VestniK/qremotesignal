@@ -1,5 +1,3 @@
-cmake_minimum_required(VERSION 2.8.0)
-
 include_directories(.)
 
 set(testSRC
@@ -11,7 +9,6 @@ qrs_wrap_service(SERVICE_SRC customtype.xml)
 qrs_wrap_client(CLIENT_SRC customtype.xml)
 
 add_executable(TestCustomTypes ${testSRC} ${SERVICE_SRC} ${CLIENT_SRC})
-qt5_use_modules(TestCustomTypes Core Test)
-target_link_libraries(TestCustomTypes QRemoteSignal)
+target_link_libraries(TestCustomTypes QRemoteSignal Qt5::Core Qt5::Test)
 
 qrs_qtest(TestCustomTypes)

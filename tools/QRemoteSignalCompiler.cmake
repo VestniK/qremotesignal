@@ -1,7 +1,3 @@
-set(QRemoteSignal_INCLUDE_DIR "@ABS_INCLUDE_DIR@")
-set(QRemoteSignal_LIBRARY "@ABS_LIB_DIR@/@LIB_NAME@")
-set(QRemoteSignal_QRSC_EXECUTABLE "@ABS_QRSC_PATH@")
-
 macro(qrs_wrap_service output)
   foreach(it ${ARGN})
     get_filename_component(_basename ${it} NAME_WE)
@@ -10,8 +6,8 @@ macro(qrs_wrap_service output)
     set(_service_source ${CMAKE_CURRENT_BINARY_DIR}/${_basename}service.cpp)
     add_custom_command(
       OUTPUT ${_service_header} ${_service_source}
-      COMMAND ${QRemoteSignal_QRSC_EXECUTABLE} --service --header ${_service_header} --source ${_service_source} ${_service}
-      DEPENDS ${_service} ${QRemoteSignal_QRSC_EXECUTABLE}
+      COMMAND ${QRS_CMAKE_PACKAGE}::qrsc --service --header ${_service_header} --source ${_service_source} ${_service}
+      DEPENDS ${_service} ${QRS_CMAKE_PACKAGE}::qrsc
     )
     qt5_wrap_cpp(_service_moc ${_service_header})
     set_source_files_properties(${_service_header} PROPERTIES GENERATED 1)
@@ -29,8 +25,8 @@ macro(qrs_wrap_client output)
     set(_client_source ${CMAKE_CURRENT_BINARY_DIR}/${_basename}client.cpp)
     add_custom_command(
       OUTPUT ${_client_header} ${_client_source}
-      COMMAND ${QRemoteSignal_QRSC_EXECUTABLE} --client --header ${_client_header} --source ${_client_source} ${_service}
-      DEPENDS ${_service} ${QRemoteSignal_QRSC_EXECUTABLE}
+      COMMAND ${QRS_CMAKE_PACKAGE}::qrsc --client --header ${_client_header} --source ${_client_source} ${_service}
+      DEPENDS ${_service} ${QRS_CMAKE_PACKAGE}::qrsc
     )
     qt5_wrap_cpp(_client_moc ${_client_header})
     set_source_files_properties(${_client_header} PROPERTIES GENERATED 1)

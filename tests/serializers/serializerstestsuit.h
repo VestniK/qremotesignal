@@ -80,8 +80,8 @@ class SerializersTestSuit:public QObject{
       void testQMapSerialization_data();
       void testQMapSerialization();
 
-      void testDeserializationError_data();
-      void testDeserializationError();
+//       void testDeserializationError_data();
+//       void testDeserializationError();
    private:
       Q_DISABLE_COPY(SerializersTestSuit);
 

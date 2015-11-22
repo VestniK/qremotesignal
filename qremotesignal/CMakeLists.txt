@@ -1,5 +1,3 @@
-cmake_minimum_required(VERSION 2.8.0)
-
 if(BUILD_SHARED_LIBS)
   add_definitions("-DQRS_SHARED")
 endif(BUILD_SHARED_LIBS)
@@ -11,24 +9,24 @@ set(SRC
   qdatastreamserializer.cpp
   devicemanager.cpp
   absservice.cpp
-  jsonserializer.cpp
+#   jsonserializer.cpp
 )
 
 add_library(QRemoteSignal ${SRC})
-qt5_use_modules(QRemoteSignal Core)
-target_link_libraries(QRemoteSignal ${QJSON_LIBRARIES})
+target_link_libraries(QRemoteSignal Qt5::Core)
 set_target_properties(QRemoteSignal PROPERTIES
   VERSION   "${QRS_MAJOR_VERSION}.${QRS_MINOR_VERSION}"
   SOVERSION "${QRS_MAJOR_VERSION}"
   OUTPUT_NAME QRemoteSignal${QRS_MAJOR_VERSION}
 )
 
-install(TARGETS QRemoteSignal
+install(TARGETS QRemoteSignal EXPORT ${QRS_CMAKE_PACKAGE}
   RUNTIME DESTINATION ${BIN_INSTALL_DIR}
   LIBRARY DESTINATION ${LIB_INSTALL_DIR}
   ARCHIVE DESTINATION ${LIB_INSTALL_DIR}
+  INCLUDES DESTINATION "${INCLUDE_INSTALL_DIR}"
 )
-install(FILES 
+install(FILES
   QRemoteSignal
   absservice.h
   baseconverters.h
@@ -36,7 +34,6 @@ install(FILES
   baseexception.h
   message.h
   absmessageserializer.h
-  jsonserializer.h
   serializationexceptions.h
   qrsexport.h
   globalserializer.h

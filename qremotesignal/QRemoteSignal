@@ -8,7 +8,7 @@
 
 #include "globalserializer.h"
 #include "absmessageserializer.h"
-#include "jsonserializer.h"
+// #include "jsonserializer.h"
 #include "qdatastreamserializer.h"
 
 #include "servicesmanager.h"

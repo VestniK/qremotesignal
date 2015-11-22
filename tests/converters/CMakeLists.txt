@@ -1,11 +1,8 @@
-cmake_minimum_required(VERSION 2.8.0)
-
 set(testSRC
   converterstests.cpp
 )
 
 add_executable(TestConverters ${testSRC})
-qt5_use_modules(TestConverters Core Test)
-target_link_libraries(TestConverters QRemoteSignal)
+target_link_libraries(TestConverters QRemoteSignal Qt5::Core Qt5::Test)
 
 qrs_qtest(TestConverters)

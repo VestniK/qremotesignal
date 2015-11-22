@@ -1,5 +1,3 @@
-cmake_minimum_required(VERSION 2.6.3)
-
 find_package(Doxygen)
 find_program(HELP2MAN "help2man")
 

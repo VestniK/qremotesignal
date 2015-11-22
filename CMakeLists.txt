@@ -1,30 +1,28 @@
-cmake_minimum_required(VERSION 2.8.0)
-project(QRemoteSignal)
+cmake_minimum_required(VERSION 3.0.0)
+project(QRemoteSignal2)
 set(QRS_MAJOR_VERSION 2)
 set(QRS_MINOR_VERSION 0)
 set(QRS_PATCH_VERSION 0)
 set(QRS_TWEAK_VERSION "")
+set(QRS_CMAKE_PACKAGE ${PROJECT_NAME})
 
 set(QRS_VERSION_STRING "${QRS_MAJOR_VERSION}.${QRS_MINOR_VERSION}.${QRS_PATCH_VERSION}${QRS_TWEAK_VERSION}")
+set(CMAKE_RUNTIME_OUTPUT_DIRECTORY ${CMAKE_CURRENT_BINARY_DIR}/bin)
+set(CMAKE_ARCHIVE_OUTPUT_DIRECTORY ${CMAKE_CURRENT_BINARY_DIR}/lib)
+set(CMAKE_LIBRARY_OUTPUT_DIRECTORY ${CMAKE_CURRENT_BINARY_DIR}/lib)
 
 # Configurable values
 set(BUILD_SHARED_LIBS True CACHE BOOL "Specify to build shared or static library.")
 set(QRS_DOCS True CACHE BOOL "Set to true if documentation should be generated (API-docs and man page).")
-set(QRS_TEST False CACHE BOOL "Specifies if tests should be compiled and executed or not")
+set(QRS_TEST True CACHE BOOL "Specifies if tests should be compiled and executed or not")
 set(LIB_SUFFIX "" CACHE STRING "Define the suffix of the library directory name (32/64)." )
 set(LIB_INSTALL_DIR "lib${LIB_SUFFIX}" CACHE PATH "Libraries installation directory.")
 set(BIN_INSTALL_DIR "bin" CACHE PATH "Binary executebles installation directory.")
-set(INCLUDE_INSTALL_DIR "include/${PROJECT_NAME}${QRS_MAJOR_VERSION}" CACHE PATH "Public header installation directory.")
-set(CMAKE_RUNTIME_OUTPUT_DIRECTORY ${CMAKE_CURRENT_BINARY_DIR}/bin)
+set(INCLUDE_INSTALL_DIR "include/${PROJECT_NAME}" CACHE PATH "Public header installation directory.")
 
 # Check for libs
 find_package(Qt5Core REQUIRED)
-# Actual version of QJSON is current master compiled with Qt5 which is higher than 0.8.1 but there were no releases
-# wich can be compiled with Qt5 so depend on lates release here.
-find_package(QJSON 0.8.1 REQUIRED)
 
-include_directories(${Qt5Core_INCLUDE_DIRS} ${QJSON_INCLUDE_DIR})
-add_definitions(${Qt5Core_DEFINITIONS})
 # Tell CMake to run moc when necessary:
 set(CMAKE_AUTOMOC ON)
 # As moc files are generated in the binary dir, tell CMake
@@ -39,3 +37,5 @@ if(QRS_TEST)
   enable_testing()
   add_subdirectory(tests)
 endif(QRS_TEST)
+
+install(EXPORT ${QRS_CMAKE_PACKAGE} NAMESPACE ${QRS_CMAKE_PACKAGE}:: DESTINATION ${LIB_INSTALL_DIR}/cmake/${QRS_CMAKE_PACKAGE})

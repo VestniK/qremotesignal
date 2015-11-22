@@ -1,0 +1,3 @@
+include("${CMAKE_CURRENT_LIST_DIR}/@QRS_CMAKE_PACKAGE@.cmake")
+set(QRS_CMAKE_PACKAGE @QRS_CMAKE_PACKAGE@)
+include("${CMAKE_CURRENT_LIST_DIR}/QRemoteSignalCompiler.cmake")
