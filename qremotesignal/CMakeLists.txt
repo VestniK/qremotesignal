@@ -14,6 +14,7 @@ set(SRC
 
 add_library(QRemoteSignal ${SRC})
 target_link_libraries(QRemoteSignal Qt5::Core)
+target_include_directories(QRemoteSignal PUBLIC $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}>)
 set_target_properties(QRemoteSignal PROPERTIES
   VERSION   "${QRS_MAJOR_VERSION}.${QRS_MINOR_VERSION}"
   SOVERSION "${QRS_MAJOR_VERSION}"
