@@ -5,7 +5,7 @@
  * @author VestniK (Sergey N.Vidyuk) sir.vestnik@gmail.com
  * @date 5 Sep 2009
  */
-#include "jsonserializer.h"
+#include "qjsonserializer.h"
 
 // QJson
 #include <qjson/parser.h>
