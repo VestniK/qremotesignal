@@ -124,7 +124,7 @@ void DeviceManager::onNewData()
     while (reader.device()->bytesAvailable() > 0) {
         if (mBuffer.isEmpty() && mExpectedMessageSize == 0) {
             // Not enough data waiting for the next portion.
-            if (reader.device()->bytesAvailable() < sizeof(quint32)) return;
+            if (reader.device()->bytesAvailable() < static_cast<qint64>(sizeof(quint32))) return;
             reader >> mExpectedMessageSize;
             // Zero sized message see Qt documentation for details
             if (mExpectedMessageSize == quint32(0xFFFFFFFF)) {

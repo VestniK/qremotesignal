@@ -157,7 +157,7 @@ namespace qrs {
             internals::MessagePrivate *const d;
     };
 
-    typedef std::auto_ptr<Message> MessageAP;
+    typedef std::unique_ptr<Message> MessageAP;
 }
 
 #endif

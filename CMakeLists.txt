@@ -19,6 +19,8 @@ set(LIB_INSTALL_DIR "lib${LIB_SUFFIX}" CACHE PATH "Libraries installation direct
 set(BIN_INSTALL_DIR "bin" CACHE PATH "Binary executebles installation directory.")
 set(INCLUDE_INSTALL_DIR "include/${PROJECT_NAME}" CACHE PATH "Public header installation directory.")
 
+add_definitions(-Wall -Werror -std=c++11)
+
 # Check for libs
 find_package(Qt5Core REQUIRED)
 

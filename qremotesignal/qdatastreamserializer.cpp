@@ -65,6 +65,7 @@ MessageAP QDataStreamSerializer::deserialize(const QByteArray& msg)
             case QDataStream::ReadCorruptData :
                 desc = "Message corrupted";
                 break;
+            default: break;
         }
         MessageParsingException err(desc,Message::ProtocolError);
         throw(err);
