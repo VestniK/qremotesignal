@@ -2,6 +2,24 @@ if(BUILD_SHARED_LIBS)
   add_definitions("-DQRS_SHARED")
 endif(BUILD_SHARED_LIBS)
 
+if (QJSON_SERIALIZER)
+  find_package(QJSON-qt5 QUIET)
+  if (NOT QJSON-qt5_FOUND)
+    include(ExternalProject)
+    ExternalProject_Add(QJson
+      PREFIX ${CMAKE_CURRENT_BINARY_DIR}/QJson
+      GIT_REPOSITORY git@github.com:flavio/qjson.git
+      GIT_TAG master
+      SOURCE_DIR ${CMAKE_CURRENT_BINARY_DIR}/QJson/repo
+      BINARY_DIR ${CMAKE_CURRENT_BINARY_DIR}/QJson/build
+      CMAKE_CACHE_ARGS -DBUILD_SHARED_LIBS:bool=Off -DCMAKE_INSTALL_PREFIX:path=${CMAKE_CURRENT_BINARY_DIR}/QJson/install
+      INSTALL_DIR ${CMAKE_CURRENT_BINARY_DIR}/QJson/install
+    )
+    list(APPEND CMAKE_PREFIX_PATH ${CMAKE_CURRENT_BINARY_DIR}/QJson/install)
+  endif(NOT QJSON-qt5_FOUND)
+  find_package(QJSON-qt5 REQUIRED)
+endif (QJSON_SERIALIZER)
+
 set(SRC
   baseconverters.cpp
   servicesmanager.cpp
