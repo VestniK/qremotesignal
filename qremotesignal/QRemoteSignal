@@ -1,5 +1,4 @@
-#ifndef _QRemoteSignal_H
-#define _QRemoteSignal_H
+#pragma once
 
 #include "qrsexport.h"
 
@@ -8,9 +7,9 @@
 
 #include "globalserializer.h"
 #include "absmessageserializer.h"
-// #include "jsonserializer.h"
+#ifdef QJSON_SERIALIZER
+#   include "qjsonserializer.h"
+#endif
 #include "qdatastreamserializer.h"
 
 #include "servicesmanager.h"
-
-#endif

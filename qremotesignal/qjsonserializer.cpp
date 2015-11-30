@@ -25,7 +25,7 @@ const QString RC_PARAMS_KEY = "params";
 
 using namespace qrs;
 
-QByteArray JsonSerializer::serialize ( const Message& msg )
+QByteArray QJsonSerializer::serialize ( const Message& msg )
       throw(UnsupportedTypeException) {
    QJson::Serializer serializer;
    QVariantMap message;
@@ -46,7 +46,7 @@ QByteArray JsonSerializer::serialize ( const Message& msg )
    return serializer.serialize( QVariant(jsonObject) );
 }
 
-MessageAP JsonSerializer::deserialize ( const QByteArray& msg )
+MessageAP QJsonSerializer::deserialize ( const QByteArray& msg )
       throw(MessageParsingException) {
    QJson::Parser parser;
    bool ok;

@@ -2,6 +2,30 @@ if(BUILD_SHARED_LIBS)
   add_definitions("-DQRS_SHARED")
 endif(BUILD_SHARED_LIBS)
 
+set(SRC
+  baseconverters.cpp
+  servicesmanager.cpp
+  message.cpp
+  qdatastreamserializer.cpp
+  devicemanager.cpp
+  absservice.cpp
+)
+
+set(PUB_HDR
+  QRemoteSignal
+  absservice.h
+  baseconverters.h
+  servicesmanager.h
+  baseexception.h
+  message.h
+  absmessageserializer.h
+  serializationexceptions.h
+  qrsexport.h
+  globalserializer.h
+  qdatastreamserializer.h
+  templateconverters.h
+)
+
 if (QJSON_SERIALIZER)
   find_package(QJSON-qt5 QUIET)
   if (NOT QJSON-qt5_FOUND)
@@ -18,21 +42,21 @@ if (QJSON_SERIALIZER)
     list(APPEND CMAKE_PREFIX_PATH ${CMAKE_CURRENT_BINARY_DIR}/QJson/install)
   endif(NOT QJSON-qt5_FOUND)
   find_package(QJSON-qt5 REQUIRED)
-endif (QJSON_SERIALIZER)
 
-set(SRC
-  baseconverters.cpp
-  servicesmanager.cpp
-  message.cpp
-  qdatastreamserializer.cpp
-  devicemanager.cpp
-  absservice.cpp
-#   jsonserializer.cpp
-)
+  list(APPEND SRC qjsonserializer.cpp)
+  list(APPEND PUB_HDR qjsonserializer.h)
+endif (QJSON_SERIALIZER)
 
 add_library(QRemoteSignal ${SRC})
 target_link_libraries(QRemoteSignal Qt5::Core)
-target_include_directories(QRemoteSignal PUBLIC $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}>)
+if (QJSON_SERIALIZER)
+  target_link_libraries(QRemoteSignal qjson-qt5)
+  target_compile_definitions(QRemoteSignal PUBLIC -DQJSON_SERIALIZER)
+endif(QJSON_SERIALIZER)
+target_include_directories(QRemoteSignal PUBLIC
+  $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}>
+  $<INSTALL_INTERFACE:${INCLUDE_INSTALL_DIR}>
+)
 set_target_properties(QRemoteSignal PROPERTIES
   VERSION   "${QRS_MAJOR_VERSION}.${QRS_MINOR_VERSION}"
   SOVERSION "${QRS_MAJOR_VERSION}"
@@ -45,18 +69,6 @@ install(TARGETS QRemoteSignal EXPORT ${QRS_CMAKE_PACKAGE}
   ARCHIVE DESTINATION ${LIB_INSTALL_DIR}
   INCLUDES DESTINATION "${INCLUDE_INSTALL_DIR}"
 )
-install(FILES
-  QRemoteSignal
-  absservice.h
-  baseconverters.h
-  servicesmanager.h
-  baseexception.h
-  message.h
-  absmessageserializer.h
-  serializationexceptions.h
-  qrsexport.h
-  globalserializer.h
-  qdatastreamserializer.h
-  templateconverters.h
-DESTINATION "${INCLUDE_INSTALL_DIR}" COMPONENT Devel
+install(FILES ${PUB_HDR}
+  DESTINATION "${INCLUDE_INSTALL_DIR}" COMPONENT Devel
 )

@@ -8,10 +8,10 @@
 #include <QtTest/QtTest>
 
 #include "serializerstestsuit.h"
-#include "jsonserializer.h"
+#include "qjsonserializer.h"
 
 int main(int argc, char** argv) {
-   SerializersTestSuit testsuit(jsonSerializer);
+   SerializersTestSuit testsuit(qjsonSerializer);
 
    testsuit.addDeserializationErrorTestCase("NotJson",(QByteArray)"12345");
    testsuit.addDeserializationErrorTestCase("EmptyMessage",(QByteArray)"{}");

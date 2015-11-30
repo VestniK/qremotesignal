@@ -5,10 +5,12 @@ set(commonSRC
   messagetesttools.cpp
 )
 
-# add_executable(TestJsonSerializer "json.cpp" ${commonSRC})
-# qt5_use_modules(TestJsonSerializer Core Test)
-# target_link_libraries(TestJsonSerializer QRemoteSignal)
-# qrs_qtest(TestJsonSerializer)
+if (QJSON_SERIALIZER)
+  add_executable(TestJsonSerializer "json.cpp" ${commonSRC})
+  qt5_use_modules(TestJsonSerializer Core Test)
+  target_link_libraries(TestJsonSerializer QRemoteSignal)
+  qrs_qtest(TestJsonSerializer)
+endif(QJSON_SERIALIZER)
 
 add_executable(TestQDataStreamSerializer "qdatastream.cpp" ${commonSRC})
 target_link_libraries(TestQDataStreamSerializer QRemoteSignal Qt5::Core Qt5::Test)
