@@ -5,8 +5,7 @@
  * @author VestniK (Sergey N.Vidyuk) sir.vestnik@gmail.com
  * @date 18 Sep 2009
  */
-#ifndef _SerializersTestSuit_H
-#define _SerializersTestSuit_H
+#pragma once
 
 #include <QtCore/QObject>
 #include <QtCore/QMap>
@@ -80,8 +79,8 @@ class SerializersTestSuit:public QObject{
       void testQMapSerialization_data();
       void testQMapSerialization();
 
-//       void testDeserializationError_data();
-//       void testDeserializationError();
+      void testDeserializationError_data();
+      void testDeserializationError();
    private:
       Q_DISABLE_COPY(SerializersTestSuit);
 
@@ -89,5 +88,3 @@ class SerializersTestSuit:public QObject{
       QMap<QString,qrs::Message*> mMessages;
       QMap<QString,QByteArray> mRawMessages;
 };
-
-#endif
