@@ -38,3 +38,23 @@ qrs_qtest(TestQDataStreamSerializer_4.4)
 add_executable(TestQDataStreamSerializer_4.5 "qdatastream_4.5.cpp" ${commonSRC})
 target_link_libraries(TestQDataStreamSerializer_4.5 QRemoteSignal Qt5::Core Qt5::Test)
 qrs_qtest(TestQDataStreamSerializer_4.5)
+
+add_executable(TestQDataStreamSerializer_4.6 "qdatastream_4.6.cpp" ${commonSRC})
+target_link_libraries(TestQDataStreamSerializer_4.6 QRemoteSignal Qt5::Core Qt5::Test)
+qrs_qtest(TestQDataStreamSerializer_4.6)
+
+add_executable(TestQDataStreamSerializer_4.7 "qdatastream_4.7.cpp" ${commonSRC})
+target_link_libraries(TestQDataStreamSerializer_4.7 QRemoteSignal Qt5::Core Qt5::Test)
+qrs_qtest(TestQDataStreamSerializer_4.7)
+
+add_executable(TestQDataStreamSerializer_4.8 "qdatastream_4.8.cpp" ${commonSRC})
+target_link_libraries(TestQDataStreamSerializer_4.8 QRemoteSignal Qt5::Core Qt5::Test)
+qrs_qtest(TestQDataStreamSerializer_4.8)
+
+add_executable(TestQDataStreamSerializer_4.9 "qdatastream_4.9.cpp" ${commonSRC})
+target_link_libraries(TestQDataStreamSerializer_4.9 QRemoteSignal Qt5::Core Qt5::Test)
+qrs_qtest(TestQDataStreamSerializer_4.9)
+
+add_executable(TestQDataStreamSerializer_5.0 "qdatastream_5.0.cpp" ${commonSRC})
+target_link_libraries(TestQDataStreamSerializer_5.0 QRemoteSignal Qt5::Core Qt5::Test)
+qrs_qtest(TestQDataStreamSerializer_5.0)

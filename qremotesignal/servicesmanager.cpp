@@ -40,7 +40,7 @@ public:
  */
 using namespace qrs;
 
-AbsMessageSerializer *ServicesManager::mDefaultSerializer = 0;
+AbsMessageSerializer *ServicesManager::mDefaultSerializer = nullptr;
 QReadWriteLock defaultSerializerLocker;
 
 /**
@@ -62,7 +62,7 @@ void ServicesManager::setDefaultSerializer(AbsMessageSerializer *serializer) {
  *
  * @note Until setDefaultSerializer is not explicitly called this function will
  * always return 0 and all serializer instances will use QDataStreamSerializer
- * using data stream protocol of verion QDataStream::Qt_4_5.
+ * using data stream protocol of verion QDataStream::Qt_5_0.
  *
  * @sa ServicesManager::setDefaultSerializer
  */
@@ -76,7 +76,7 @@ AbsMessageSerializer *ServicesManager::defaultSerializer() {
  *
  * By default new instance will use serializer set by the  static function
  * ServicesManager::setDefaultSerializer or QDataStreamSerializer with data
- * stream protocol version QDataStream::Qt_4_5 if default serializer wasn't
+ * stream protocol version QDataStream::Qt_5_0 if default serializer wasn't
  * set explicitly.
  *
  * @note This constructor accesses global data in thread safe way.
@@ -88,7 +88,7 @@ ServicesManager::ServicesManager(QObject *parent):
     d->mMessageSizeLimit = 0;
     QReadLocker locker(&defaultSerializerLocker);
     if ( mDefaultSerializer == 0 ) {
-        d->mSerializer = qDataStreamSerializer_4_5;
+        d->mSerializer = qDataStreamSerializer_5_0;
     } else {
         d->mSerializer = mDefaultSerializer;
     }

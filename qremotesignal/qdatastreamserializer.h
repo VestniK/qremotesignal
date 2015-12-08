@@ -5,8 +5,7 @@
  * @author VestniK (Sergey N.Vidyuk) sir.vestnik@gmail.com
  * @date 27 Jan 2010
  */
-#ifndef QDATASTREAMSERIALIZER_H
-#define QDATASTREAMSERIALIZER_H
+#pragma once
 
 #include <QtCore/QDataStream>
 
@@ -19,59 +18,57 @@ QDataStream &operator>>(QDataStream &stream, qrs::Message &msg);
 
 namespace qrs {
 
-    /**
-     * @brief Serializer based on QDataStream standard Qt class
-     * 
-     * This class serializes internal library remote call representation into
-     * a binary message using Qt4 QDataStream class. serialize and deserialize
-     * funtions are reentrant and thus you can use single instance of this
-     * class in different threads.
-     * 
-     * Order and format of serialization of qrs::Message class is the
-     * following:
-     *   -# Message type as @b qint8 number.
-     *   -# Error type as @b qint8 number.
-     *   -# Error string (even if empty) as @b QString.
-     *   -# Service name as @b QString.
-     *   -# Method name as @b QString.
-     *   -# Renote call parameters as @b QVariantMap.
-     * 
-     * You can create and manage instances of this class manually but it's more
-     * convivient to use predefined macroses which allows you to have one
-     * global instance of this class.
-     * 
-     * @note QDataStream protocol version older then QDataStream::Qt_3_3 can't
-     * pass tests from the serializers test suit. Ussage of such versions is
-     * depricated.
-     * 
-     * @sa qDataStreamSerializer_3_3
-     * @sa qDataStreamSerializer_4_0
-     * @sa qDataStreamSerializer_4_1
-     * @sa qDataStreamSerializer_4_2
-     * @sa qDataStreamSerializer_4_3
-     * @sa qDataStreamSerializer_4_4
-     * @sa qDataStreamSerializer_4_5
-     * @sa qDataStreamSerializer
-     */
-    class QRS_EXPORT QDataStreamSerializer : public AbsMessageSerializer {
-        public:
-            explicit QDataStreamSerializer(QObject *parent = 0):
-                AbsMessageSerializer(parent) {}
-            explicit QDataStreamSerializer(int version, QObject *parent = 0):
-                AbsMessageSerializer(version,parent) {}
-            virtual ~QDataStreamSerializer() {}
+/**
+ * @brief Serializer based on QDataStream standard Qt class
+ *
+ * This class serializes internal library remote call representation into
+ * a binary message using Qt5 QDataStream class. serialize and deserialize
+ * funtions are reentrant and thus you can use single instance of this
+ * class in different threads.
+ *
+ * Order and format of serialization of qrs::Message class is the
+ * following:
+ *   -# Message type as @b qint8 number.
+ *   -# Error type as @b qint8 number.
+ *   -# Error string (even if empty) as @b QString.
+ *   -# Service name as @b QString.
+ *   -# Method name as @b QString.
+ *   -# Renote call parameters as @b QVariantMap.
+ *
+ * You can create and manage instances of this class manually but it's more
+ * convivient to use predefined macroses which allows you to have one
+ * global instance of this class.
+ *
+ * @note QDataStream protocol version older then QDataStream::Qt_3_3 can't
+ * pass tests from the serializers test suit. Ussage of such versions is
+ * depricated.
+ *
+ * @sa qDataStreamSerializer_3_3
+ * @sa qDataStreamSerializer_4_0
+ * @sa qDataStreamSerializer_4_1
+ * @sa qDataStreamSerializer_4_2
+ * @sa qDataStreamSerializer_4_3
+ * @sa qDataStreamSerializer_4_4
+ * @sa qDataStreamSerializer_4_5
+ * @sa qDataStreamSerializer
+ */
+class QRS_EXPORT QDataStreamSerializer : public AbsMessageSerializer {
+    Q_DISABLE_COPY(QDataStreamSerializer);
+public:
+    explicit QDataStreamSerializer(QObject *parent = 0):
+        AbsMessageSerializer(parent) {}
+    explicit QDataStreamSerializer(int version, QObject *parent = 0):
+        AbsMessageSerializer(version, parent) {}
+    virtual ~QDataStreamSerializer() {}
 
-            /// @copydoc AbsMessageSerializer::deserialize
-            virtual MessageAP deserialize(const QByteArray& msg) 
-                throw(MessageParsingException);
+    /// @copydoc AbsMessageSerializer::deserialize
+    MessageAP deserialize(const QByteArray& msg)
+        throw(MessageParsingException) override;
 
-            /// @copydoc AbsMessageSerializer::serialize
-            virtual QByteArray serialize( const Message& msg )
-                throw(UnsupportedTypeException);
-                
-        private:
-            Q_DISABLE_COPY(QDataStreamSerializer);
-    };
+    /// @copydoc AbsMessageSerializer::serialize
+    QByteArray serialize(const Message &msg)
+        throw(UnsupportedTypeException) override;
+};
 
 }
 
@@ -119,13 +116,41 @@ namespace qrs {
 
 /**
  * Pointer to single global instance of QDataStreamSerializer class which uses
+ * Qt 4.6 version of the QDataStream protocol.
+ */
+#define qDataStreamSerializer_4_6 qrs::GlobalSerializer<qrs::QDataStreamSerializer,QDataStream::Qt_4_6>::instance()
+
+/**
+ * Pointer to single global instance of QDataStreamSerializer class which uses
+ * Qt 4.7 version of the QDataStream protocol.
+ */
+#define qDataStreamSerializer_4_7 qrs::GlobalSerializer<qrs::QDataStreamSerializer,QDataStream::Qt_4_7>::instance()
+
+/**
+ * Pointer to single global instance of QDataStreamSerializer class which uses
+ * Qt 4.8 version of the QDataStream protocol.
+ */
+#define qDataStreamSerializer_4_8 qrs::GlobalSerializer<qrs::QDataStreamSerializer,QDataStream::Qt_4_8>::instance()
+
+/**
+ * Pointer to single global instance of QDataStreamSerializer class which uses
+ * Qt 4.9 version of the QDataStream protocol.
+ */
+#define qDataStreamSerializer_4_9 qrs::GlobalSerializer<qrs::QDataStreamSerializer,QDataStream::Qt_4_9>::instance()
+
+/**
+ * Pointer to single global instance of QDataStreamSerializer class which uses
+ * Qt 5.0 version of the QDataStream protocol.
+ */
+#define qDataStreamSerializer_5_0 qrs::GlobalSerializer<qrs::QDataStreamSerializer,QDataStream::Qt_5_0>::instance()
+
+/**
+ * Pointer to single global instance of QDataStreamSerializer class which uses
  * latest version of the QDataStream protocol available in Qt library used to
  * build this library.
- * 
- * In general it's not recommended to use this macro since th version of the
- * underlying protocol used by serializer is depends on environment at build
+ *
+ * In general it's not recommended to use this macro since the version of the
+ * underlying protocol used by the serializer depends on environment at build
  * time and may be unpredictable.
  */
 #define qDataStreamSerializer qrs::GlobalSerializer<qrs::QDataStreamSerializer>::instance()
-
-#endif // QDATASTREAMSERIALIZER_H
