@@ -12,13 +12,13 @@ set(CMAKE_ARCHIVE_OUTPUT_DIRECTORY ${CMAKE_CURRENT_BINARY_DIR}/lib)
 set(CMAKE_LIBRARY_OUTPUT_DIRECTORY ${CMAKE_CURRENT_BINARY_DIR}/lib)
 
 # Configurable values
-option(BUILD_SHARED_LIBS "Specify to build shared or static library." ON)
-option(QRS_DOCS "Set to true if documentation should be generated (API-docs and man page)." ON)
+option(BUILD_SHARED_LIBS "Specify to build shared or static library." On)
+option(QRS_DOCS "Set to true if documentation should be generated (API-docs and man page)." Off)
 option(LIB_SUFFIX "Define the suffix of the library directory name (32/64)." "")
 option(LIB_INSTALL_DIR "Libraries installation directory." "lib${LIB_SUFFIX}")
 option(BIN_INSTALL_DIR "Binary executebles installation directory." "bin")
 option(INCLUDE_INSTALL_DIR "Public header installation directory." "include/${PROJECT_NAME}")
-option(QJSON_SERIALIZER "Build QJson serializer (kkeps protocol compatibility with 1.x versions)" ON)
+option(QJSON_SERIALIZER "Build QJson serializer (kkeps protocol compatibility with 1.x versions)" Off)
 
 add_definitions(-Wall -Werror -std=c++11)
 

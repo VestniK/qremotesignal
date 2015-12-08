@@ -43,8 +43,8 @@ if (QJSON_SERIALIZER)
   endif(NOT QJSON-qt5_FOUND)
   find_package(QJSON-qt5 REQUIRED)
 
-  list(APPEND SRC qjsonserializer.cpp)
-  list(APPEND PUB_HDR qjsonserializer.h)
+  list(APPEND SRC jsonserializer.cpp)
+  list(APPEND PUB_HDR jsonserializer.h)
 endif (QJSON_SERIALIZER)
 
 add_library(QRemoteSignal ${SRC})

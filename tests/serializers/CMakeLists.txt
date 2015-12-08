@@ -7,8 +7,7 @@ set(commonSRC
 
 if (QJSON_SERIALIZER)
   add_executable(TestJsonSerializer "json.cpp" ${commonSRC})
-  qt5_use_modules(TestJsonSerializer Core Test)
-  target_link_libraries(TestJsonSerializer QRemoteSignal)
+  target_link_libraries(TestJsonSerializer QRemoteSignal Qt5::Core Qt5::Test)
   qrs_qtest(TestJsonSerializer)
 endif(QJSON_SERIALIZER)
 

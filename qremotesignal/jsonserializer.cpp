@@ -5,7 +5,7 @@
  * @author VestniK (Sergey N.Vidyuk) sir.vestnik@gmail.com
  * @date 5 Sep 2009
  */
-#include "qjsonserializer.h"
+#include "jsonserializer.h"
 
 // QJson
 #include <qjson/parser.h>
@@ -25,7 +25,7 @@ const QString RC_PARAMS_KEY = "params";
 
 using namespace qrs;
 
-QByteArray QJsonSerializer::serialize ( const Message& msg )
+QByteArray JsonSerializer::serialize ( const Message& msg )
       throw(UnsupportedTypeException) {
    QJson::Serializer serializer;
    QVariantMap message;
@@ -46,7 +46,7 @@ QByteArray QJsonSerializer::serialize ( const Message& msg )
    return serializer.serialize( QVariant(jsonObject) );
 }
 
-MessageAP QJsonSerializer::deserialize ( const QByteArray& msg )
+MessageAP JsonSerializer::deserialize ( const QByteArray& msg )
       throw(MessageParsingException) {
    QJson::Parser parser;
    bool ok;

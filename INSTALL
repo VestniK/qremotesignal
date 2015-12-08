@@ -3,10 +3,11 @@ Build from source
  * Requirements
 
 To build QRemoteSignal you need to have:
-1. Qt 4.5.0 library or later
-2. QJson library (tested with svn snapshot)
+1. Qt 5.0.0 library or later
+2. QJson-qt5 library (optional)
 3. cmake
 4. help2man utility (optional)
+4. Doxygen utility (optional)
 
  * Build
 
@@ -16,19 +17,6 @@ $ mkdir build
 $ cd build
 $ cmake ..
 $ make
-
-NOTE: If the following error occurred when running cmake:
-  Could not find module FindQJSON.cmake or a configuration file for package
-  QJSON.
-
-  Adjust CMAKE_MODULE_PATH to find FindQJSON.cmake or set QJSON_DIR to the
-  directory containing a CMake configuration file for QJSON.  The file will
-  have one of the following names:
-
-you need to run cmake again with the flag -DCMAKE_MODULE_PATH="path to FindQJSON.cmake"
-for example on Ubuntu 10.04 with the qjson library from repository the following command
-required:
-$ cmake -DCMAKE_MODULE_PATH="/usr/share/apps/cmake/modules" ..
 
 On windows you can use cmake-gui to configure project
 
@@ -40,10 +28,8 @@ $ make install
 
 to install it.
 
- * For developers
+ * Build documentation
 
-By default library will be built  without unit tests compilation and will run
-doxygen each time you run make. The following configuration parameters are
-recomended to build this library for work on its development:
+Just enable QRS_DOCS cmake option:
 
-$ cmake -DCMAKE_BUILD_TYPE=Debug -DQRS_DOCS=False -DQRT_TEST=True ..
+$ cmake -DQRS_DOCS=On ..

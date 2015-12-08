@@ -8,7 +8,7 @@
 #include "globalserializer.h"
 #include "absmessageserializer.h"
 #ifdef QJSON_SERIALIZER
-#   include "qjsonserializer.h"
+#   include "jsonserializer.h"
 #endif
 #include "qdatastreamserializer.h"
 

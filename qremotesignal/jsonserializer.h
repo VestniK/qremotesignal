@@ -18,7 +18,7 @@ namespace qrs {
 *
 * This class serializes internal library message representation to a simple
 * JSON based protocol message. You can get pointer to single global
-* instance of this class with qjsonSerializer macro. It remains for
+* instance of this class with jsonSerializer macro. It remains for
 * compatibility with clients or servers using first version of this
 * library. This class is optional and can be disabled during the build.
 *
@@ -99,14 +99,14 @@ namespace qrs {
 * you want to call slot in application which is using this serializer for
 * remote calls from application which is not using QRemoteSignal library.
 */
-class QRS_EXPORT QJsonSerializer: public AbsMessageSerializer {
-    Q_DISABLE_COPY(QJsonSerializer);
+class QRS_EXPORT Q_DECL_DEPRECATED JsonSerializer: public AbsMessageSerializer {
+    Q_DISABLE_COPY(JsonSerializer);
 public:
-    explicit QJsonSerializer (QObject *parent=0):
+    explicit JsonSerializer (QObject *parent=0):
         AbsMessageSerializer(parent) {};
-    explicit QJsonSerializer (int version, QObject *parent=0):
+    explicit JsonSerializer (int version, QObject *parent=0):
         AbsMessageSerializer(version,parent) {};
-    virtual ~QJsonSerializer() {};
+    virtual ~JsonSerializer() {};
 
     /// @copydoc AbsMessageSerializer::serialize
     virtual QByteArray serialize ( const Message& msg )
@@ -121,4 +121,4 @@ public:
 /**
  * Pointer to single global instance of JsonSerializer class
  */
-#define qjsonSerializer qrs::GlobalSerializer<qrs::QJsonSerializer>::instance()
+#define jsonSerializer qrs::GlobalSerializer<qrs::JsonSerializer>::instance()
