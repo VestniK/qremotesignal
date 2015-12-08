@@ -1,3 +1,9 @@
+Development version
+	* Swtch to Qt5
+	* JsonSerializer marked as depricated
+	* Automatic download and build optional QJson dependency when needed
+	* Always build tests
+
 2012-10-20 Version 1.3.0
 	* Build system changed to cmake
 	* Added ability to limit maximum size of the received message.
