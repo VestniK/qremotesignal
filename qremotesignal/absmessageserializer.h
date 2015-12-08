@@ -19,7 +19,7 @@
 namespace qrs {
 
 /**
- * @brief Abstrac tinterface for all remote call serializers.
+ * @brief Abstrac interface for all remote call serializers.
  *
  * Serializer must provide two functions: serialize and deserialize. First
  * one converts instance of class qrs::Message (internal library message

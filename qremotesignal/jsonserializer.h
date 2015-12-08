@@ -18,9 +18,11 @@ namespace qrs {
 *
 * This class serializes internal library message representation to a simple
 * JSON based protocol message. You can get pointer to single global
-* instance of this class with jsonSerializer macro. It remains for
-* compatibility with clients or servers using first version of this
-* library. This class is optional and can be disabled during the build.
+* instance of this class with jsonSerializer macro.
+*
+* @deprecated It remains for compatibility with clients or servers using
+* first version of this library. This class is optional and can be disabled
+* during the build.
 *
 * Top level element of JSON object can be @b RemoteCall or @b Error it
 * contains child JSON object with detailed information about slot to be

@@ -10,13 +10,23 @@
 #include "serializerstestsuit.h"
 #include "jsonserializer.h"
 
+namespace
+{
+
+inline
+QByteArray asciz2bytearray(const char *str) {
+    return QByteArray::fromRawData(str, strlen(str));
+}
+
+}
+
 int main(int argc, char** argv) {
    SerializersTestSuit testsuit(jsonSerializer);
 
-   testsuit.addDeserializationErrorTestCase("NotJson",(QByteArray)"12345");
-   testsuit.addDeserializationErrorTestCase("EmptyMessage",(QByteArray)"{}");
-   testsuit.addDeserializationErrorTestCase("NoType", (QByteArray)"{\"service\":\"Example\",\"method\":\"voidMethod\"}");
-   testsuit.addDeserializationErrorTestCase("WrongType", (QByteArray)"{\"Wrong\":{\"service\":\"Example\",\"method\":\"voidMethod\"}}");
+   testsuit.addDeserializationErrorTestCase("NotJson", asciz2bytearray("12345"));
+   testsuit.addDeserializationErrorTestCase("EmptyMessage",asciz2bytearray("{}"));
+   testsuit.addDeserializationErrorTestCase("NoType", asciz2bytearray("{\"service\":\"Example\",\"method\":\"voidMethod\"}"));
+   testsuit.addDeserializationErrorTestCase("WrongType", asciz2bytearray("{\"Wrong\":{\"service\":\"Example\",\"method\":\"voidMethod\"}}"));
 
    return QTest::qExec(&testsuit,argc,argv);
 }
